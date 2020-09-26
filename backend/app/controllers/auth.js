@@ -444,7 +444,7 @@ const getUserIdFromToken = async (token) => {
  */
 exports.login = async (req, res) => {
   try {
-    const data = matchedData(req)
+    const data = matchedData(req) // request에서 값들 뽑아옴
     const user = await findUser(data.email)
     await userIsBlocked(user)
     await checkLoginAttemptsAndBlockExpires(user)
