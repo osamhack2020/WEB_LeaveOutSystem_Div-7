@@ -35,7 +35,7 @@ exports.getCountry = (req) =>
  * @param {Object} err - error object
  */
 exports.handleError = (res, err) => {
-  // Prints error in console
+  // 콘솔에 에러 출력
   if (process.env.NODE_ENV === 'development') {
     console.log(err)
   }
@@ -46,6 +46,8 @@ exports.handleError = (res, err) => {
     }
   })
 }
+
+exports.asyncRoute = (fn) => (...args) => fn(...args).catch(args[2])
 
 /**
  * Builds error object

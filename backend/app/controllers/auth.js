@@ -442,82 +442,66 @@ const getUserIdFromToken = async (token) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.login = async (req, res) => {
-  try {
-    const data = matchedData(req) // request에서 값들 뽑아옴
-    const user = await findUser(data.email)
-    await userIsBlocked(user)
-    await checkLoginAttemptsAndBlockExpires(user)
-    const isPasswordMatch = await auth.checkPassword(data.password, user)
-    if (!isPasswordMatch) {
-      utils.handleError(res, await passwordsDoNotMatch(user))
-    } else {
-      // all ok, register access and return token
-      user.loginAttempts = 0
-      await saveLoginAttemptsToDB(user)
-      res.status(200).json(await saveUserAccessAndReturnToken(req, user))
-    }
-  } catch (error) {
-    utils.handleError(res, error)
+exports.login = utils.asyncRoute(async (req, res) => {
+  const data = matchedData(req) // request에서 값들 뽑아옴
+  const user = await findUser(data.email)
+  await userIsBlocked(user)
+  await checkLoginAttemptsAndBlockExpires(user)
+  const isPasswordMatch = await auth.checkPassword(data.password, user)
+  if (!isPasswordMatch) {
+    utils.handleError(res, await passwordsDoNotMatch(user))
+  } else {
+    // all ok, register access and return token
+    user.loginAttempts = 0
+    await saveLoginAttemptsToDB(user)
+    res.status(200).json(await saveUserAccessAndReturnToken(req, user))
   }
-}
+})
 
 /**
  * Register function called by route
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.register = async (req, res) => {
-  try {
-    // Gets locale from header 'Accept-Language'
-    const locale = req.getLocale()
-    req = matchedData(req)
-    const doesEmailExists = await emailer.emailExists(req.email)
-    if (!doesEmailExists) {
-      const item = await registerUser(req)
-      const userInfo = setUserInfo(item)
-      const response = returnRegisterToken(item, userInfo)
-      emailer.sendRegistrationEmailMessage(locale, item)
-      res.status(201).json(response)
-    }
-  } catch (error) {
-    utils.handleError(res, error)
+exports.register = utils.asyncRoute(async (req, res) => {
+  // Gets locale from header 'Accept-Language'
+  const locale = req.getLocale()
+  req = matchedData(req)
+  const doesEmailExists = await emailer.emailExists(req.email)
+  if (!doesEmailExists) {
+    const item = await registerUser(req)
+    const userInfo = setUserInfo(item)
+    const response = returnRegisterToken(item, userInfo)
+    emailer.sendRegistrationEmailMessage(locale, item)
+    res.status(201).json(response)
   }
-}
+})
 
 /**
  * Verify function called by route
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.verify = async (req, res) => {
-  try {
-    req = matchedData(req)
-    const user = await verificationExists(req.id)
-    res.status(200).json(await verifyUser(user))
-  } catch (error) {
-    utils.handleError(res, error)
-  }
-}
+exports.verify = utils.asyncRoute(async (req, res) => {
+  req = matchedData(req)
+  const user = await verificationExists(req.id)
+  res.status(200).json(await verifyUser(user))
+})
 
 /**
  * Forgot password function called by route
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.forgotPassword = async (req, res) => {
-  try {
-    // Gets locale from header 'Accept-Language'
-    const locale = req.getLocale()
-    const data = matchedData(req)
-    await findUser(data.email)
-    const item = await saveForgotPassword(req)
-    emailer.sendResetPasswordEmailMessage(locale, item)
-    res.status(200).json(forgotPasswordResponse(item))
-  } catch (error) {
-    utils.handleError(res, error)
-  }
-}
+exports.forgotPassword = utils.asyncRoute(async (req, res) => {
+  // Gets locale from header 'Accept-Language'
+  const locale = req.getLocale()
+  const data = matchedData(req)
+  await findUser(data.email)
+  const item = await saveForgotPassword(req)
+  emailer.sendResetPasswordEmailMessage(locale, item)
+  res.status(200).json(forgotPasswordResponse(item))
+})
 
 /**
  * Reset password function called by route

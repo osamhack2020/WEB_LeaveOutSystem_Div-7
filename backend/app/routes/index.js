@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const fs = require('fs')
 const routesPath = `${__dirname}/`
-const { removeExtensionFromFile } = require('../middleware/utils')
+const { removeExtensionFromFile, handleError } = require('../middleware/utils')
 
 /*
  * Load routes statically and/or dynamically
@@ -37,6 +37,10 @@ router.use('*', (req, res) => {
       msg: 'URL_NOT_FOUND'
     }
   })
+})
+
+router.use((err, req, res, next) => {
+  handleError(res, err)
 })
 
 module.exports = router
