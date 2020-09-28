@@ -1,4 +1,5 @@
-_<template>
+_
+<template>
   <div>
     <v-data-table
       :loading="dataTableLoading"
