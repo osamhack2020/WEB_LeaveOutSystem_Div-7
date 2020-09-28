@@ -445,15 +445,20 @@ const getUserIdFromToken = async (token) => {
 exports.login = utils.asyncRoute(async (req, res) => {
   const data = matchedData(req) // request에서 값들 뽑아옴
   const user = await findUser(data.email)
-  await userIsBlocked(user)
-  await checkLoginAttemptsAndBlockExpires(user)
+
+  // 로그인 5회 차단기능 미사용
+  // await userIsBlocked(user)
+  // await checkLoginAttemptsAndBlockExpires(user)
+
   const isPasswordMatch = await auth.checkPassword(data.password, user)
   if (!isPasswordMatch) {
     utils.handleError(res, await passwordsDoNotMatch(user))
   } else {
-    // all ok, register access and return token
-    user.loginAttempts = 0
-    await saveLoginAttemptsToDB(user)
+    // 로그인 성공
+
+    // 로그인 차단 미사용
+    // user.loginAttempts = 0
+    // await saveLoginAttemptsToDB(user)
     res.status(200).json(await saveUserAccessAndReturnToken(req, user))
   }
 })
