@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema(
         validator: validator.isEmail,
         message: 'EMAIL_IS_NOT_VALID'
       },
+      lowercase: true
+    },
+    username: {
+      type: String,
       lowercase: true,
       unique: true,
       required: true
@@ -26,9 +30,14 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ['user', 'admin', 'moderator'],
       default: 'user'
     },
+    division: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Division'
+    },
+
     verification: {
       type: String
     },
