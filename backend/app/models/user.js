@@ -33,10 +33,18 @@ const UserSchema = new mongoose.Schema(
       enum: ['user', 'admin', 'moderator'],
       default: 'user'
     },
+    // 소속부대
     division: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Division'
     },
+    // 가지고있는 출타들
+    leaves: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'LeaveToken'
+      }
+    ],
 
     verification: {
       type: String

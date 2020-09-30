@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+// 사용하거나 신청한 출타들
+
 const LeaveSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,

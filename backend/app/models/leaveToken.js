@@ -3,14 +3,24 @@ const mongoose = require('mongoose')
 // 발행한 사용가능 출타들
 
 const LeaveTokenSchema = new mongoose.Schema({
+  // 해당 부대
   division: {
     type: mongoose.Types.ObjectId,
     ref: 'Division'
   },
+  // 출타 발행자
   issuer: {
     type: mongoose.Types.ObjectId,
     ref: 'User'
   },
+  // 출타 대상자
+  target: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
+
   type: {
     type: String,
     enum: [
