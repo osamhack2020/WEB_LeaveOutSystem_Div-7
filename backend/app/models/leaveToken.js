@@ -1,6 +1,16 @@
 const mongoose = require('mongoose')
 
+// 발행한 사용가능 출타들
+
 const LeaveTokenSchema = new mongoose.Schema({
+  division: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Division'
+  },
+  issuer: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User'
+  },
   type: {
     type: String,
     enum: [
@@ -19,7 +29,10 @@ const LeaveTokenSchema = new mongoose.Schema({
       'etc' // 기타 또는 공무
     ]
   },
-
+  amount: {
+    type: Number,
+    required: true
+  },
   reason: {
     type: String,
     default: ''
