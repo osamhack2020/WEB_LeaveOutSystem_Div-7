@@ -14,7 +14,7 @@ yarn install
 ### mongodb 도커 설치
 ```
 docker pull mongo
-docker run -d  --name mongo-on-docker  -p 27888:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=비밀번호 mongo
+docker run -d  --name mongo-on-docker  -p 27017:27017 mongo
 ```
 
 ### .env 파일 설정

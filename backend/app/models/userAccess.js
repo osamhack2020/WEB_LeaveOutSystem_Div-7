@@ -3,13 +3,8 @@ const validator = require('validator')
 
 const UserAccessSchema = new mongoose.Schema(
   {
-    email: {
+    username: {
       type: String,
-      validate: {
-        validator: validator.isEmail,
-        message: 'EMAIL_IS_NOT_VALID'
-      },
-      lowercase: true,
       required: true
     },
     ip: {

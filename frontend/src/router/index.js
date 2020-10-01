@@ -1,30 +1,29 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import VueMeta from 'vue-meta'
+import routes from './routes'
+import { triggerTokenRefresh } from '../utils/auth'
 
-Vue.use(VueRouter);
+import store from '../store'
 
-const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
-  }
-];
+Vue.use(VueRouter)
+Vue.use(VueMeta)
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
-  routes
-});
+  routes: [...routes]
+})
 
-export default router;
+router.beforeEach((to, from, next) => {
+  const noAuthRequired = to.matched.some(rou => rou.meta.noAuthRequired)
+  const isAuthed = store.getters.isAuthed
+
+  if (!noAuthRequired && !isAuthed) {
+    return next('/login')
+  }
+  triggerTokenRefresh()
+  return next()
+})
+
+export default router

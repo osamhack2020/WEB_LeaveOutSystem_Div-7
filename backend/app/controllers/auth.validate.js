@@ -38,14 +38,16 @@ exports.register = [
  * Validates login request
  */
 exports.login = [
-  check('email')
+  check('username')
     .exists()
     .withMessage('MISSING')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
-    .isEmail()
-    .withMessage('EMAIL_IS_NOT_VALID'),
+    .isLength({
+      min: 4
+    })
+    .withMessage('USERNAME_IS_NOT_VALID'),
   check('password')
     .exists()
     .withMessage('MISSING')

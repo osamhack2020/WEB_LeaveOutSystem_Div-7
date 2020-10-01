@@ -46,6 +46,7 @@ const setUserInfo = (req) => {
   let user = {
     _id: req._id,
     name: req.name,
+    username: req.username,
     email: req.email,
     role: req.role,
     verified: req.verified
@@ -68,7 +69,7 @@ const setUserInfo = (req) => {
 const saveUserAccessAndReturnToken = async (req, user) => {
   return new Promise((resolve, reject) => {
     const userAccess = new UserAccess({
-      email: user.email,
+      username: user.username,
       ip: utils.getIP(req),
       browser: utils.getBrowserInfo(req),
       country: utils.getCountry(req)
@@ -167,16 +168,16 @@ const userIsBlocked = async (user) => {
 }
 
 /**
- * Finds user by email
- * @param {string} email - user´s email
+ * Finds user by username
+ * @param {string} username - user´s username
  */
-const findUser = async (email) => {
+const findUser = async (username) => {
   return new Promise((resolve, reject) => {
     User.findOne(
       {
-        email
+        username
       },
-      'password loginAttempts blockExpires name email role verified verification',
+      'password loginAttempts blockExpires name username email role verified verification',
       (err, item) => {
         utils.itemNotFound(err, item, reject, 'USER_DOES_NOT_EXIST')
         resolve(item)
@@ -444,7 +445,7 @@ const getUserIdFromToken = async (token) => {
  */
 exports.login = utils.asyncRoute(async (req, res) => {
   const data = matchedData(req) // request에서 값들 뽑아옴
-  const user = await findUser(data.email)
+  const user = await findUser(data.username)
 
   // 로그인 5회 차단기능 미사용
   // await userIsBlocked(user)
