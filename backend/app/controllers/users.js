@@ -61,10 +61,10 @@ const createItem = async (req) => {
     throw utils.buildErrObject(422, err.message)
   }
 
-  if (req.division) {
-    const division = await db.getItem(req.division, Division)
-    await division.addUser(user)
-  }
+  //if (req.division) {
+  //  const division = await db.getItem(req.division, Division)
+  //  await division.addUser(user)
+  //}
 
   const removeProperties = ({
     // eslint-disable-next-line no-unused-vars

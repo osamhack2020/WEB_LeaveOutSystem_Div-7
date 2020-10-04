@@ -60,6 +60,7 @@ router.delete(
 /*
  * 부대 유저 추가
  */
+/*
 router.post(
   '/:division_id',
   requireAuth,
@@ -68,10 +69,12 @@ router.post(
   validate.addUserToDivision,
   controller.addUserToDivision
 )
+*/
 
 /*
  * 부대 유저 삭제
  */
+/*
 router.delete(
   '/:division_id/:user_id',
   requireAuth,
@@ -80,5 +83,6 @@ router.delete(
   trimRequest.all,
   controller.deleteUserFromDivision
 )
+*/
 
 module.exports = router
