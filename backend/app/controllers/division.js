@@ -1,8 +1,8 @@
 const Division = require('../models/division')
 const User = require('../models/user')
 const utils = require('../middleware/utils')
+const userUtils = require('../middleware/user')
 const { matchedData } = require('express-validator')
-const auth = require('../middleware/auth')
 const db = require('../middleware/db')
 
 /*********************
@@ -21,8 +21,10 @@ async function addModerators(divisions) {
   const result = []
   for (const divi of divisions) {
     const rusers = []
-    for (const { userId } of divi.users) {
-      const user = await db.getItem(userId, User)
+
+    const users = await userUtils.getUsersByDivision(divi._id)
+
+    for (const user of users) {
       if (user.role === 'moderator') {
         rusers.push(user)
       }
@@ -31,7 +33,7 @@ async function addModerators(divisions) {
       name: divi.name,
       parent: divi.parent,
       _id: divi._id,
-      usercnt: divi.users.length,
+      usercnt: users.length,
       moderators: rusers
     })
   }
@@ -68,6 +70,15 @@ async function addUserInDivisionFromDB(divisionId, userId) {
   }
 }
 
+async function completelyDeleteDivision(divisionId) {
+  const division = await db.getItem(divisionId, Division)
+  for (const { userId } of division.users) {
+    const user = await db.getItem(userId, User)
+    user.division = undefined
+    await user.save()
+  }
+}
+
 /********************
  * Public functions *
  ********************/
@@ -95,7 +106,8 @@ exports.getDivision = utils.asyncRoute(async (req, res) => {
 exports.deleteDivision = utils.asyncRoute(async (req, res) => {
   const data = matchedData(req)
   const divisionId = await utils.isIDGood(data.division_id)
-  res.status(200).json(await db.deleteItem(divisionId, Division))
+  // res.status(200).json(await db.deleteItem(divisionId, Division))
+  res.status(200).json(await completelyDeleteDivision(divisionId))
 })
 
 exports.addUserToDivision = utils.asyncRoute(async (req, res) => {
