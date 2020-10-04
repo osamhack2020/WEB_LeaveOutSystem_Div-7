@@ -11,6 +11,32 @@
 
       <v-form @submit.prevent="clickSubmit">
         <v-card-text>
+          <v-text-field
+            :value="curUserInfo.username"
+            class="mb-3"
+            label="아이디"
+            placeholder="20-12345678"
+            filled
+            dense
+            disabled
+            hide-details
+          ></v-text-field>
+          <v-checkbox
+            v-model="changingPassword"
+            label="비밀번호 변경"
+            class="mt-0 pt-0"
+            dense
+            hide-details
+          ></v-checkbox>
+          <v-text-field
+            type="password"
+            v-model="password"
+            label="새 비밀번호"
+            dense
+            filled
+            :disabled="!changingPassword"
+            placeholder="******"
+          ></v-text-field>
           <v-autocomplete
             v-model="division"
             :items="divisions"
@@ -24,32 +50,21 @@
             return-object
           ></v-autocomplete>
           <v-text-field
-            v-model="username"
-            label="아이디"
-            placeholder="20-12345678"
-            filled
-          ></v-text-field>
-          <v-checkbox
-            v-model="changingPassword"
-            label="비밀번호 변경"
-            class="mt-0 pt-0"
-            dense
-            hide-details
-          ></v-checkbox>
-          <v-text-field
-            type="password"
-            v-model="password"
-            label="새 비밀번호"
-            filled
-            :disabled="!changingPassword"
-            placeholder="******"
-          ></v-text-field>
-          <v-text-field
             v-model="name"
             label="이름"
             filled
+            dense
             placeholder="홍길동"
           ></v-text-field>
+          <v-select
+            v-model="role"
+            :items="roleItems"
+            label="권한"
+            item-text="text"
+            item-value="value"
+            filled
+            dense
+          ></v-select>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -97,12 +112,12 @@ export default {
     return {
       dialog: false,
       loading: false,
-      username: this.curUserInfo.username,
-      name: this.curUserInfo.name,
+      username: '',
+      name: '',
       changingPassword: false,
       password: '',
-      division: this.curUserInfo.division,
-      role: this.curUserInfo.role
+      division: {},
+      role: 'user'
     }
   },
   computed: {
@@ -118,6 +133,18 @@ export default {
         return null
       }
       return this.divisions.find(x => x._id === this.curUserInfo.division)
+    },
+    roleItems() {
+      const base = [
+        { text: '관리자', value: 'moderator' },
+        { text: '유저', value: 'user' }
+      ]
+
+      if (this.$store.getters.isAdmin) {
+        base.push({ text: '어드민', value: 'admin' })
+      }
+
+      return base
     }
   },
   methods: {
