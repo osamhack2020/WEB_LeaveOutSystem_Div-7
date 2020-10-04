@@ -17,7 +17,7 @@ const trimRequest = require('trim-request')
 router.get(
   '/',
   requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  AuthController.roleAuthorization(['moderator', 'admin']),
   trimRequest.all,
   controller.getAllDivisions
 )

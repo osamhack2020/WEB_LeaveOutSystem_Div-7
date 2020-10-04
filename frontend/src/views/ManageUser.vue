@@ -21,6 +21,7 @@
             clearable
             item-text="name"
             label="부대"
+            placeholder="소속 없음"
             outlined
             return-object
           ></v-autocomplete>
@@ -75,10 +76,18 @@
           </v-chip>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon small class="mr-2" @click="openEditUserDialog(item)"
+          <v-icon
+            v-if="!(item.role === 'admin' && !$store.getters.isAdmin)"
+            small
+            class="mr-2"
+            @click="openEditUserDialog(item)"
             >mdi-pencil</v-icon
           >
-          <v-icon small @click="clickDeleteUser(item)">
+          <v-icon
+            v-if="!(item.role === 'admin' && !$store.getters.isAdmin)"
+            small
+            @click="clickDeleteUser(item)"
+          >
             mdi-delete
           </v-icon>
         </template>
