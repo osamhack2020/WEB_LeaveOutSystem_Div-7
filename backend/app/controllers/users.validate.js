@@ -6,20 +6,19 @@ const { check } = require('express-validator')
  * Validates create new item request
  */
 exports.createItem = [
+  check('username')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
   check('name')
     .exists()
     .withMessage('MISSING')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('email')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY')
-    .isEmail()
-    .withMessage('EMAIL_IS_NOT_VALID'),
+  check('email').optional().isEmail().withMessage('EMAIL_IS_NOT_VALID'),
   check('password')
     .exists()
     .withMessage('MISSING')
@@ -30,43 +29,44 @@ exports.createItem = [
       min: 5
     })
     .withMessage('PASSWORD_TOO_SHORT_MIN_5'),
+  check('division').optional().trim(),
   check('role')
     .exists()
     .withMessage('MISSING')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
-    .isIn(['user', 'admin'])
+    .isIn(['user', 'moderator', 'admin'])
     .withMessage('USER_NOT_IN_KNOWN_ROLE'),
-  check('phone')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY')
-    .trim(),
-  check('city')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY')
-    .trim(),
-  check('country')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY')
-    .trim(),
-  check('urlTwitter')
-    .optional()
-    .custom((v) => (v === '' ? true : validator.isURL(v)))
-    .withMessage('NOT_A_VALID_URL'),
-  check('urlGitHub')
-    .optional()
-    .custom((v) => (v === '' ? true : validator.isURL(v)))
-    .withMessage('NOT_A_VALID_URL'),
+  // check('phone')
+  //   .exists()
+  //   .withMessage('MISSING')
+  //   .not()
+  //   .isEmpty()
+  //   .withMessage('IS_EMPTY')
+  //   .trim(),
+  // check('city')
+  //   .exists()
+  //   .withMessage('MISSING')
+  //   .not()
+  //   .isEmpty()
+  //   .withMessage('IS_EMPTY')
+  //   .trim(),
+  // check('country')
+  //   .exists()
+  //   .withMessage('MISSING')
+  //   .not()
+  //   .isEmpty()
+  //   .withMessage('IS_EMPTY')
+  //   .trim(),
+  // check('urlTwitter')
+  //   .optional()
+  //   .custom((v) => (v === '' ? true : validator.isURL(v)))
+  //   .withMessage('NOT_A_VALID_URL'),
+  // check('urlGitHub')
+  //   .optional()
+  //   .custom((v) => (v === '' ? true : validator.isURL(v)))
+  //   .withMessage('NOT_A_VALID_URL'),
   (req, res, next) => {
     validationResult(req, res, next)
   }
@@ -82,47 +82,22 @@ exports.updateItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('email')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY'),
+  check('email').optional().isEmail().withMessage('EMAIL_IS_NOT_VALID'),
+  check('password')
+    .optional()
+    .isLength({
+      min: 5
+    })
+    .withMessage('PASSWORD_TOO_SHORT_MIN_5'),
+  check('division').optional().trim(),
   check('role')
     .exists()
     .withMessage('MISSING')
     .not()
     .isEmpty()
-    .withMessage('IS_EMPTY'),
-  check('phone')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
     .withMessage('IS_EMPTY')
-    .trim(),
-  check('city')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY')
-    .trim(),
-  check('country')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY')
-    .trim(),
-  check('urlTwitter')
-    .optional()
-    .custom((v) => (v === '' ? true : validator.isURL(v)))
-    .withMessage('NOT_A_VALID_URL'),
-  check('urlGitHub')
-    .optional()
-    .custom((v) => (v === '' ? true : validator.isURL(v)))
-    .withMessage('NOT_A_VALID_URL'),
+    .isIn(['user', 'moderator', 'admin'])
+    .withMessage('USER_NOT_IN_KNOWN_ROLE'),
   check('id')
     .exists()
     .withMessage('MISSING')

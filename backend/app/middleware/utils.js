@@ -39,6 +39,12 @@ exports.handleError = (res, err) => {
   if (process.env.NODE_ENV === 'development') {
     console.log(err)
   }
+
+  if (!err.code) {
+    err.code = 500
+    err.message = 'UNKNOWN_ERROR'
+  }
+
   // Sends error to user
   res.status(err.code).json({
     errors: {

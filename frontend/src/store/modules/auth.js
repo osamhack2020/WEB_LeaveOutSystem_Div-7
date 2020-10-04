@@ -21,6 +21,15 @@ export default {
     },
     accessToken: state => {
       return state.accessToken
+    },
+    isAdmin: state => {
+      return !!state.user && state.user.role === 'admin'
+    },
+    isModerator: state => {
+      return !!state.user && state.user.role === 'moderator'
+    },
+    isUser: state => {
+      return !!state.user && state.user.role === 'user'
     }
   },
   mutations: {

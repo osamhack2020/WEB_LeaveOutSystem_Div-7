@@ -15,10 +15,6 @@ const LeaveSchema = new mongoose.Schema({
   startDate: {
     type: Date
   },
-  amount: {
-    type: Number,
-    default: 1
-  },
   status: {
     type: String,
     enum: [

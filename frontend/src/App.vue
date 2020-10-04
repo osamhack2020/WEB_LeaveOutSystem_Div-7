@@ -3,7 +3,9 @@
     <nav-bar></nav-bar>
     <v-main class="grey lighten-3">
       <v-container>
-        <router-view></router-view>
+        <v-fade-transition hide-on-leave>
+          <router-view></router-view>
+        </v-fade-transition>
       </v-container>
     </v-main>
   </v-app>

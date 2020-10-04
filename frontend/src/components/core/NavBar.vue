@@ -1,14 +1,16 @@
 <template>
-  <v-app-bar app color="white" flat>
+  <v-app-bar app color="primary" flat dark>
     <v-container class="py-0 fill-height">
-      <v-btn text :to="{ path: '/' }" active-class="no-active">
+      <v-btn text :to="{ path: '/' }" active-class="no-active" class="no-blink">
         <v-toolbar-title>출타관리체계</v-toolbar-title>
       </v-btn>
+
+      <!-- 링크들 렌더링 -->
       <template v-for="link of links">
         <v-btn
           text
           :to="{ path: link.path }"
-          active-class="no-active"
+          v-if="link.show && link.show()"
           :key="'navbar-link-' + link.path"
         >
           {{ link.name }}
@@ -17,7 +19,7 @@
 
       <v-spacer></v-spacer>
 
-      <!-- 로그인버튼 또는 사용자 -->
+      <!-- 로그인버튼 또는 사용자 정보 -->
       <v-menu
         v-if="$store.getters.isAuthed"
         v-model="userPopup"
@@ -59,21 +61,38 @@
           </v-card-actions>
         </v-card>
       </v-menu>
-      <v-btn v-else :to="{ path: '/login' }" active-class="no-active">
+      <v-btn
+        v-else
+        :to="{ path: '/login' }"
+        active-class="no-active"
+        class="no-blink"
+      >
         로그인
       </v-btn>
     </v-container>
+
+    <!-- 페이지 로딩 프로그레스바 -->
+    <v-progress-linear
+      :active="$store.getters.isAppLoading"
+      indeterminate
+      color="secondary"
+      absolute
+      bottom
+    ></v-progress-linear>
   </v-app-bar>
 </template>
 <style scoped>
 .no-active::before {
   background-color: transparent !important;
 }
+
+.no-blink::before {
+  background-color: transparent !important;
+}
 </style>
 <script>
 export default {
   data: () => ({
-    links: [{ name: '홈', path: '/' }],
     userPopup: false
   }),
   methods: {
@@ -87,6 +106,29 @@ export default {
       await this.$store.dispatch('logout')
     }
   },
-  computed: {}
+  computed: {
+    links() {
+      return [
+        { name: '홈', path: '/' },
+        {
+          name: '출타 관리',
+          path: '/manage-leave',
+          show: () =>
+            this.$store.getters.isModerator || this.$store.getters.isAdmin
+        },
+        {
+          name: '유저 관리',
+          path: '/manage-user',
+          show: () =>
+            this.$store.getters.isModerator || this.$store.getters.isAdmin
+        },
+        {
+          name: '부대 관리',
+          path: '/manage-division',
+          show: () => this.$store.getters.isAdmin
+        }
+      ]
+    }
+  }
 }
 </script>

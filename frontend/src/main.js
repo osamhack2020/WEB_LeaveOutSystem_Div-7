@@ -5,10 +5,16 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import './plugins/veevalidate'
+import VuetifyConfirm from 'vuetify-confirm'
 
 import VueMeta from 'vue-meta'
 
 Vue.use(VueMeta)
+Vue.use(VuetifyConfirm, {
+  vuetify,
+  buttonTrueText: '확인',
+  buttonFalseText: '취소'
+})
 
 Vue.config.productionTip = false
 

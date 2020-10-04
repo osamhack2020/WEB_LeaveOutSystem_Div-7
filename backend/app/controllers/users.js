@@ -1,4 +1,5 @@
 const model = require('../models/user')
+const Division = require('../models/division')
 const uuid = require('uuid')
 const { matchedData } = require('express-validator')
 const utils = require('../middleware/utils')
@@ -14,34 +15,87 @@ const emailer = require('../middleware/emailer')
  * @param {Object} req - request object
  */
 const createItem = async (req) => {
-  return new Promise((resolve, reject) => {
-    const user = new model({
-      name: req.name,
-      email: req.email,
-      password: req.password,
-      role: req.role,
-      phone: req.phone,
-      city: req.city,
-      country: req.country,
-      verification: uuid.v4()
-    })
-    user.save((err, item) => {
-      if (err) {
-        reject(utils.buildErrObject(422, err.message))
-      }
-      // Removes properties with rest operator
-      const removeProperties = ({
-        // eslint-disable-next-line no-unused-vars
-        password,
-        // eslint-disable-next-line no-unused-vars
-        blockExpires,
-        // eslint-disable-next-line no-unused-vars
-        loginAttempts,
-        ...rest
-      }) => rest
-      resolve(removeProperties(item.toObject()))
-    })
+  // return new Promise((resolve, reject) => {
+  //   const user = new model({
+  //     username: req.username,
+  //     name: req.name,
+  //     email: req.email,
+  //     password: req.password,
+  //     division: req.division,
+  //     role: req.role,
+  //     verification: uuid.v4()
+  //   })
+
+  //   user.save((err, item) => {
+  //     if (err) {
+  //       reject(utils.buildErrObject(422, err.message))
+  //     }
+  //     // Removes properties with rest operator
+  //     const removeProperties = ({
+  //       // eslint-disable-next-line no-unused-vars
+  //       password,
+  //       // eslint-disable-next-line no-unused-vars
+  //       blockExpires,
+  //       // eslint-disable-next-line no-unused-vars
+  //       loginAttempts,
+  //       ...rest
+  //     }) => rest
+  //     resolve(removeProperties(item.toObject()))
+  //   })
+  // })
+
+  const user = new model({
+    username: req.username,
+    name: req.name,
+    email: req.email,
+    password: req.password,
+    division: req.division,
+    role: req.role,
+    verification: uuid.v4()
   })
+
+  let item
+  try {
+    item = await user.save()
+  } catch (err) {
+    throw utils.buildErrObject(422, err.message)
+  }
+
+  if (req.division) {
+    const division = await db.getItem(req.division, Division)
+    await division.addUser(user)
+  }
+
+  const removeProperties = ({
+    // eslint-disable-next-line no-unused-vars
+    password,
+    // eslint-disable-next-line no-unused-vars
+    blockExpires,
+    // eslint-disable-next-line no-unused-vars
+    loginAttempts,
+    ...rest
+  }) => rest
+  return removeProperties(item.toObject())
+}
+
+const checkUserExists = async (username) => {
+  try {
+    const user = await model.findOne().where('username').equals(username)
+    if (user) {
+      return true
+    }
+  } catch {}
+
+  return false
+}
+
+const divisionExists = async (divisionId) => {
+  try {
+    divisionId = await utils.isIDGood(divisionId)
+    return await db.getItem(divisionId, Division)
+  } catch (error) {
+    throw utils.buildErrObject(422, 'DIVISION_NOT_EXISTS')
+  }
 }
 
 /********************
@@ -55,8 +109,9 @@ const createItem = async (req) => {
  */
 exports.getItems = async (req, res) => {
   try {
-    const query = await db.checkQueryString(req.query)
-    res.status(200).json(await db.getItems(req, model, query))
+    // const query = await db.checkQueryString(req.query)
+    // res.status(200).json(await db.getItems(req, model, query))
+    res.status(200).json(await db.getItems(req, model))
   } catch (error) {
     utils.handleError(res, error)
   }
@@ -86,13 +141,7 @@ exports.updateItem = async (req, res) => {
   try {
     req = matchedData(req)
     const id = await utils.isIDGood(req.id)
-    const doesEmailExists = await emailer.emailExistsExcludingMyself(
-      id,
-      req.email
-    )
-    if (!doesEmailExists) {
-      res.status(200).json(await db.updateItem(id, model, req))
-    }
+    res.status(200).json(await db.updateItem(id, model, req))
   } catch (error) {
     utils.handleError(res, error)
   }
@@ -103,21 +152,18 @@ exports.updateItem = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.createItem = async (req, res) => {
-  try {
-    // Gets locale from header 'Accept-Language'
-    const locale = req.getLocale()
-    req = matchedData(req)
-    const doesEmailExists = await emailer.emailExists(req.email)
-    if (!doesEmailExists) {
-      const item = await createItem(req)
-      emailer.sendRegistrationEmailMessage(locale, item)
-      res.status(201).json(item)
-    }
-  } catch (error) {
-    utils.handleError(res, error)
+exports.createItem = utils.asyncRoute(async (req, res) => {
+  const data = matchedData(req)
+  if (await checkUserExists(data.username)) {
+    throw utils.buildErrObject(422, 'USERNAME_ALREADY_EXISTS')
   }
-}
+  if (data.division) {
+    await divisionExists(data.division)
+  }
+
+  const item = await createItem(data)
+  res.status(201).json(item)
+})
 
 /**
  * Delete item function called by route

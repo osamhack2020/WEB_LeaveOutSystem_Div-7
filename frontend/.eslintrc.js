@@ -94,7 +94,8 @@ module.exports = {
     'space-before-function-paren': ['off', 2],
     'prettier/prettier': 'error',
 
-    'func-style': ['off']
+    'func-style': ['off'],
+    'vue/valid-v-slot': ['off']
   },
   parserOptions: {
     parser: 'babel-eslint'

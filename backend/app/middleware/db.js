@@ -94,12 +94,23 @@ module.exports = {
   async getItems(req, model, query) {
     const options = await listInitOptions(req)
     return new Promise((resolve, reject) => {
-      model.paginate(query, options, (err, items) => {
-        if (err) {
-          reject(buildErrObject(422, err.message))
-        }
-        resolve(cleanPaginationID(items))
-      })
+      if (query) {
+        model.paginate(query, options, (err, items) => {
+          if (err) {
+            reject(buildErrObject(422, err.message))
+          }
+          resolve(cleanPaginationID(items))
+        })
+      } else {
+        model
+          .find()
+          .then((items) => {
+            resolve({ docs: items })
+          })
+          .catch((err) => {
+            reject(buildErrObject(422, err.message))
+          })
+      }
     })
   },
 

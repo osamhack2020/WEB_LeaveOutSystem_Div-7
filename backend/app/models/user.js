@@ -51,15 +51,12 @@ const UserSchema = new mongoose.Schema(
     },
     verified: {
       type: Boolean,
-      default: false
+      default: true
     },
     phone: {
       type: String
     },
     city: {
-      type: String
-    },
-    country: {
       type: String
     },
     urlTwitter: {

@@ -16,6 +16,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  store.dispatch('startAppLoading')
   const noAuthRequired = to.matched.some(rou => rou.meta.noAuthRequired)
   const isAuthed = store.getters.isAuthed
 
@@ -24,6 +25,10 @@ router.beforeEach((to, from, next) => {
   }
   triggerTokenRefresh()
   return next()
+})
+
+router.afterEach((to, from, next) => {
+  store.dispatch('endAppLoading')
 })
 
 export default router

@@ -20,6 +20,16 @@ const LeaveTokenSchema = new mongoose.Schema({
       ref: 'User'
     }
   ],
+  // 유효 시작일
+  effectiveDate: {
+    type: Date,
+    required: true
+  },
+  // 유효 만료일
+  expirationDate: {
+    type: Date,
+    required: true
+  },
 
   type: {
     type: String,
@@ -39,6 +49,7 @@ const LeaveTokenSchema = new mongoose.Schema({
       'etc' // 기타 또는 공무
     ]
   },
+
   amount: {
     type: Number,
     required: true
