@@ -135,9 +135,11 @@ export default {
   },
   methods: {
     async submitCreateUser(userInfo) {
+      this.userLoading = true
       const res = await userAPI.createUser(userInfo)
       this.currentDivision = userInfo.division
       await this.loadUsers()
+      this.userLoading = false
     },
     async loadUsers(division) {
       division = division || this.currentDivision
