@@ -413,7 +413,7 @@ const checkPermissions = async (data, next) => {
       if (data.roles.indexOf(result.role) > -1) {
         return resolve(next())
       }
-      return reject(utils.buildErrObject(401, 'UNAUTHORIZED'))
+      return reject(utils.buildErrObject(403, 'FORBIDDEN'))
     })
   })
 }
