@@ -21,3 +21,12 @@ exports.getUsersByDivision = async (divisionId) => {
     handleError(422, err)
   }
 }
+
+exports.getDivision = async (divisionId) => {
+  try {
+    const divi = await Division.findById(divisionId)
+    return divi.toObject()
+  } catch (error) {
+    return null
+  }
+}

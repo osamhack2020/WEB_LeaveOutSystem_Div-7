@@ -43,10 +43,12 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
-                  {{ $store.getters.user.name }}
+                  {{ $store.getters.user.name }} ({{
+                    $store.getters.user.username
+                  }})
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ $store.getters.user.username }}
+                  {{ $store.getters.user.division | divisionName }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -128,6 +130,14 @@ export default {
           show: () => this.$store.getters.isAdmin
         }
       ]
+    }
+  },
+  filters: {
+    divisionName(value) {
+      if (!value || !value.name) {
+        return '소속 없음'
+      }
+      return value.name
     }
   }
 }
