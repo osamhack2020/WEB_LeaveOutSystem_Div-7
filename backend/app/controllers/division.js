@@ -71,12 +71,12 @@ async function addUserInDivisionFromDB(divisionId, userId) {
 }
 
 async function completelyDeleteDivision(divisionId) {
-  const division = await db.getItem(divisionId, Division)
-  for (const { userId } of division.users) {
-    const user = await db.getItem(userId, User)
+  const diviusers = await userUtils.getUsersByDivision(divisionId)
+  for (const user of diviusers) {
     user.division = undefined
     await user.save()
   }
+  return await db.deleteItem(divisionId, Division)
 }
 
 /********************
