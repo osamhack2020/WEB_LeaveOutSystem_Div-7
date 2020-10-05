@@ -1,0 +1,20 @@
+const faker = require('faker')
+const ObjectID = require('mongodb').ObjectID
+
+module.exports = [
+  {
+    _id: new ObjectID('5aa1c2c35ef7a4e97b5e9c55'),
+    division: '5aa1c2c35ef7a4e97b5e9a5c',
+    issuer: '5aa1c2c35ef7a4e97b5e995a',
+    target: ['5aa1c2c35ef7a4e97b5e995b'],
+    effectiveDate: new Date(2020,2,9),
+    expirationDate: new Date(2020,10,9),
+    type: '휴가',
+    kind: '포상',
+    amount: 5,
+    reason: '인성교육 우수',
+    message: '',
+    verified: true,
+    verification: '3d6e072c-0eaf-4239-bb5e-495e6486148d'
+  }
+]

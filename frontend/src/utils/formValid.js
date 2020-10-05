@@ -24,6 +24,14 @@ export function password(value) {
   return false
 }
 
+export function amount(value) {
+  if (_.isInteger(value)) {
+    return value > 0
+  }
+
+  return false
+}
+
 // export function division(division, divisionList) {
 //   if (_.isString(value)) {
 //     return divisionList.some(divi => divi.name === division)
