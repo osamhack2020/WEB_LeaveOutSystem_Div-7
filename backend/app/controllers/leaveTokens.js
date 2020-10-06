@@ -144,9 +144,9 @@ exports.getItem = async (req, res) => {
  */
 exports.updateItem = async (req, res) => {
   try {
-    req = matchedData(req)
-    const id = await utils.isIDGood(req.id)
-    res.status(200).json(await db.updateItem(id, model, req))
+//    req = matchedData(req)
+    const id = await utils.isIDGood(req.body._id)
+    res.status(200).json(await db.updateItem(id, model, req.body))
   } catch (error) {
     utils.handleError(res, error)
   }

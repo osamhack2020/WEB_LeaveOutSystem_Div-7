@@ -12,59 +12,63 @@
       <v-form @submit.prevent="clickSubmit">
         <v-card-text>
           <v-text-field
-            :value="curLeaveTokenInfo.username"
+            :value="curLeaveTokenInfo.issuer"
             class="mb-3"
-            label="아이디"
+            label="출타 발행자"
+            placeholder="admin"
+            filled
+            dense
+            disabled
+            hide-details
+          ></v-text-field>
+          <v-text-field
+            :value="curLeaveTokenInfo.target"
+            class="mb-3"
+            label="출타 대상자"
             placeholder="20-12345678"
             filled
             dense
             disabled
             hide-details
           ></v-text-field>
-          <v-checkbox
-            v-model="changingPassword"
-            label="비밀번호 변경"
-            class="mt-0 pt-0"
-            dense
-            hide-details
-          ></v-checkbox>
           <v-text-field
-            type="password"
-            v-model="password"
-            label="새 비밀번호"
-            dense
+            v-model="curLeaveTokenInfo.effectiveDate"
+            type="date"
+            label="유효 시작일"
             filled
-            :disabled="!changingPassword"
-            placeholder="******"
+          ></v-text-field>
+          <v-text-field
+            v-model="curLeaveTokenInfo.expirationDate"
+            type="date"
+            label="만료일"
+            filled
           ></v-text-field>
           <v-autocomplete
-            v-model="division"
-            :items="divisions"
-            hide-selected
-            clearable
-            item-text="name"
-            label="소속부대"
+            v-model="curLeaveTokenInfo.type"
+            :items="types"
+            label="종류"
             filled
-            dense
-            placeholder="없음"
-            return-object
+            placeholder="휴가"
+          ></v-autocomplete>
+          <v-autocomplete
+            v-model="curLeaveTokenInfo.kind"
+            :items="kinds"
+            label="세부 종류"
+            filled
+            placeholder="정기"
           ></v-autocomplete>
           <v-text-field
-            v-model="name"
-            label="이름"
+            v-model="curLeaveTokenInfo.amount"
+            label="부여일수"
             filled
-            dense
-            placeholder="홍길동"
+            placeholder="3"
           ></v-text-field>
-          <v-select
-            v-model="role"
-            :items="roleItems"
-            label="권한"
-            item-text="text"
-            item-value="value"
+          <v-text-field
+            v-model="curLeaveTokenInfo.reason"
+            label="근거"
             filled
-            dense
-          ></v-select>
+            placeholder="정기 휴가"
+          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -87,7 +91,6 @@
 <script>
 import * as formValid from '../utils/formValid'
 import divisionAPI from '../services/division'
-
 export default {
   props: {
     divisions: {
@@ -97,10 +100,14 @@ export default {
     curLeaveTokenInfo: {
       type: Object,
       default: () => ({
-        username: '',
-        password: '',
-        name: '',
-        division: null
+        issuer: '',
+        target: '',
+        effectiveDate: null,
+        expirationDate: null,
+        type: null,
+        kind: null,
+        reason: '',
+        amount: null
       })
     },
     value: {
@@ -112,56 +119,44 @@ export default {
     return {
       dialog: false,
       loading: false,
-      username: '',
-      name: '',
-      changingPassword: false,
-      password: '',
-      division: {},
-      role: 'user'
+      types: ['휴가', '외박', '외출'],
+      kinds: ['정기', '포상', '병가', '신병', '기타']
     }
   },
   computed: {
     canSubmit() {
-      const check =
-        formValid.username(this.username) &&
-        (!this.changingPassword || formValid.password(this.password)) &&
-        formValid.name(this.name)
+      const check = true
+      //        formValid.username(this.curLeaveTokenInfo.target)
+      //       formValid.amount(this.curLeaveTokenInfo.amount) &&
+      //        formValid.effectiveDate(this.effectiveDate) &&
+      //        formValid.expirationDate(this.expirationDate) &&
+      //      formValid.reason(this.curLeaveTokenInfo.reason)
       return check
-    },
-    currentDivision() {
-      if (!this.curUserInfo.division) {
-        return null
-      }
-      return this.divisions.find(x => x._id === this.curUserInfo.division)
-    },
-    roleItems() {
-      const base = [
-        { text: '관리자', value: 'moderator' },
-        { text: '유저', value: 'user' }
-      ]
-
-      if (this.$store.getters.isAdmin) {
-        base.push({ text: '어드민', value: 'admin' })
-      }
-
-      return base
     }
   },
   methods: {
     clickSubmit() {
       this.$emit('submit', {
-        username: this.username,
-        name: this.name,
-        password: this.password,
-        division: this.division,
-        role: this.role,
-        _id: this.curLeaveTokenInfo._id
+        _id: this.curLeaveTokenInfo._id,
+        division: JSON.parse(localStorage.getItem('user')).division,
+        issuer: JSON.parse(localStorage.getItem('user')).username,
+        target: this.curLeaveTokenInfo.target,
+        effectiveDate: this.curLeaveTokenInfo.effectiveDate,
+        expirationDate: this.curLeaveTokenInfo.expirationDate,
+        type: this.curLeaveTokenInfo.type,
+        kind: this.curLeaveTokenInfo.kind,
+        amount: this.curLeaveTokenInfo.amount,
+        reason: this.curLeaveTokenInfo.reason
       })
       this.dialog = false
-      this.username = ''
-      this.password = ''
-      this.name = ''
-      this.division = null
+      this.curLeaveTokenInfo.issuer = null
+      this.curLeaveTokenInfo.target = null
+      this.curLeaveTokenInfo.effectiveDate = null
+      this.curLeaveTokenInfo.expirationDate = null
+      this.curLeaveTokenInfo.type = null
+      this.curLeaveTokenInfo.kind = null
+      this.curLeaveTokenInfo.amount = null
+      this.curLeaveTokenInfo.reason = ''
     }
   },
   watch: {

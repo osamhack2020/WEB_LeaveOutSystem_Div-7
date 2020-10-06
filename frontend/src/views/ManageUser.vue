@@ -172,11 +172,13 @@ export default {
       this.divisionLoading = false
     },
     openEditUserDialog(user) {
+      console.log(user)
       user = this.populateDivision(user)
       this.currentItem = user
       this.isEditUserDialogOpen = true
     },
     async clickEditUser(userInfo) {
+      console.log(userInfo)
       const res = await userAPI.editUser(userInfo)
       // this.currentDivision = userInfo.division
 

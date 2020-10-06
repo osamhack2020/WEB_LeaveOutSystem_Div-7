@@ -127,7 +127,6 @@ export default {
   },
   methods: {
     async submitCreateLeaveToken(leaveTokenInfo) {
-      console.log(leaveTokenInfo)
       const res = await leaveTokenAPI.createLeaveToken(leaveTokenInfo)
       this.currentDivision = leaveTokenInfo.division
       await this.loadLeaveTokens()
@@ -149,13 +148,10 @@ export default {
       }
 
       this.leaveTokenLoading = false
-      console.log(res)
-
-      this.userLoading = false
     },
     openEditLeaveTokenDialog(leaveToken) {
+      leaveToken = this.populateDate(leaveToken)
       this.currentItem = leaveToken
-      console.log(leaveToken)
       this.isEditLeaveTokenDialogOpen = true
     },
     async clickEditLeaveToken(leaveTokenInfo) {
@@ -164,15 +160,28 @@ export default {
     },
     async clickDeleteLeaveToken(leaveTokenInfo) {
       if (
-        await this.$confirm(`다음 출타가 삭제됩니다 : ${leaveTokenInfo._id}`, {
-          color: 'error',
-          title: '출타를 삭제하시겠습니까?',
-          buttonTrueColor: 'error'
-        })
+        await this.$confirm(
+          `${leaveTokenInfo.target} 에게 부여된 ${leaveTokenInfo.kind}${leaveTokenInfo.type} ${leaveTokenInfo.amount}일을 삭제합니다.`,
+          {
+            color: 'error',
+            title: '출타를 삭제하시겠습니까?',
+            buttonTrueColor: 'error'
+          }
+        )
       ) {
         await leaveTokenAPI.deleteLeaveToken(leaveTokenInfo._id)
         await this.loadLeaveTokens()
       }
+    },
+    populateDate(leaveToken) {
+      leaveToken = { ...leaveToken }
+      leaveToken.effectiveDate = new Date(leaveToken.effectiveDate)
+        .toISOString()
+        .substring(0, 10)
+      leaveToken.expirationDate = new Date(leaveToken.expirationDate)
+        .toISOString()
+        .substring(0, 10)
+      return leaveToken
     }
   },
   watch: {},

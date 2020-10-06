@@ -55,14 +55,14 @@ exports.createItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('role')
+/*  check('role')
     .exists()
     .withMessage('MISSING')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
     .isIn(['user', 'moderator', 'admin'])
-    .withMessage('USER_NOT_IN_KNOWN_ROLE'),
+    .withMessage('USER_NOT_IN_KNOWN_ROLE'),*/
   // check('phone')
   //   .exists()
   //   .withMessage('MISSING')
@@ -101,34 +101,92 @@ exports.createItem = [
  * Validates update item request
  */
 exports.updateItem = [
-  check('name')
+  check('division').optional().trim(),
+  check('issuer')
     .exists()
     .withMessage('MISSING')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('email').optional().isEmail().withMessage('EMAIL_IS_NOT_VALID'),
-  check('password')
-    .optional()
-    .isLength({
-      min: 5
-    })
-    .withMessage('PASSWORD_TOO_SHORT_MIN_5'),
-  check('division').optional().trim(),
-  check('role')
+  check('target')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('effectiveDate')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('expirationDate')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('type')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('kind')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('amount')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('reason')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+/*  check('role')
     .exists()
     .withMessage('MISSING')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
     .isIn(['user', 'moderator', 'admin'])
-    .withMessage('USER_NOT_IN_KNOWN_ROLE'),
-  check('id')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY'),
+    .withMessage('USER_NOT_IN_KNOWN_ROLE'),*/
+  // check('phone')
+  //   .exists()
+  //   .withMessage('MISSING')
+  //   .not()
+  //   .isEmpty()
+  //   .withMessage('IS_EMPTY')
+  //   .trim(),
+  // check('city')
+  //   .exists()
+  //   .withMessage('MISSING')
+  //   .not()
+  //   .isEmpty()
+  //   .withMessage('IS_EMPTY')
+  //   .trim(),
+  // check('country')
+  //   .exists()
+  //   .withMessage('MISSING')
+  //   .not()
+  //   .isEmpty()
+  //   .withMessage('IS_EMPTY')
+  //   .trim(),
+  // check('urlTwitter')
+  //   .optional()
+  //   .custom((v) => (v === '' ? true : validator.isURL(v)))
+  //   .withMessage('NOT_A_VALID_URL'),
+  // check('urlGitHub')
+  //   .optional()
+  //   .custom((v) => (v === '' ? true : validator.isURL(v)))
+  //   .withMessage('NOT_A_VALID_URL'),
   (req, res, next) => {
     validationResult(req, res, next)
   }

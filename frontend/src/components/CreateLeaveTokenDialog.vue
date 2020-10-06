@@ -89,18 +89,17 @@ export default {
     kind: null,
     reason: '',
     amount: null,
-    types: ['휴가', '출타', '외박'],
+    types: ['휴가', '외박', '외출'],
     kinds: ['정기', '포상', '병가', '신병', '기타']
   }),
   computed: {
     canSubmit() {
-      const check =
-        formValid.username(this.target) &&
+      const check = true
+      formValid.username(this.target) &&
         formValid.amount(this.amount) &&
         //        formValid.effectiveDate(this.effectiveDate) &&
         //        formValid.expirationDate(this.expirationDate) &&
         formValid.reason(this.reason)
-      console.log(formValid.amount(this.amount))
       return check
     }
   },
