@@ -4,9 +4,9 @@ const ObjectID = require('mongodb').ObjectID
 module.exports = [
   {
     _id: new ObjectID('5aa1c2c35ef7a4e97b5e9c55'),
-    division: '5aa1c2c35ef7a4e97b5e9a5c',
-    issuer: '5aa1c2c35ef7a4e97b5e995a',
-    target: ['5aa1c2c35ef7a4e97b5e995b'],
+//    division: '5aa1c2c35ef7a4e97b5e9a5c',
+    issuer: 'admin',
+    target: ['20-11111235'],
     effectiveDate: new Date(2020,2,9),
     expirationDate: new Date(2020,10,9),
     type: '휴가',

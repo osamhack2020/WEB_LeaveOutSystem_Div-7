@@ -6,30 +6,55 @@ const { check } = require('express-validator')
  * Validates create new item request
  */
 exports.createItem = [
-  check('username')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY'),
-  check('name')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY'),
-  check('email').optional().isEmail().withMessage('EMAIL_IS_NOT_VALID'),
-  check('password')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY')
-    .isLength({
-      min: 5
-    })
-    .withMessage('PASSWORD_TOO_SHORT_MIN_5'),
   check('division').optional().trim(),
+  check('issuer')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('target')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('effectiveDate')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('expirationDate')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('type')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('kind')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('amount')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('reason')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
   check('role')
     .exists()
     .withMessage('MISSING')

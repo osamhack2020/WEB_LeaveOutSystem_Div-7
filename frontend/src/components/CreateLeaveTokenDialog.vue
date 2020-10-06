@@ -11,22 +11,16 @@
 
       <v-form @submit.prevent="clickSubmit">
         <v-card-text>
-          <v-autocomplete
-            v-model="division"
-            :items="divisions"
-            hide-selected
-            clearable
-            item-text="name"
-            label="대상부대"
-            filled
-            dense
-            placeholder="없음"
-            return-object
-          ></v-autocomplete>
           <v-text-field
-            v-model="username"
-            label="아이디"
+            v-model="target"
+            label="출타 대상자 ID"
             placeholder="20-12345678"
+            filled
+          ></v-text-field>
+          <v-text-field
+            v-model="effectiveDate"
+            type="date"
+            label="유효 시작일"
             filled
           ></v-text-field>
           <v-text-field
@@ -34,7 +28,6 @@
             type="date"
             label="만료일"
             filled
-            placeholder="홍길동"
           ></v-text-field>
           <v-autocomplete
             v-model="type"
@@ -85,49 +78,54 @@
 import * as formValid from '../utils/formValid'
 
 export default {
-  props: {
-    divisions: {
-      type: Array,
-      default: () => []
-    }
-  },
+  props: {},
   data: () => ({
     dialog: false,
     loading: false,
-    username: '',
-    password: '',
-    name: '',
-    division: null,
-    amount: null,
+    target: '',
+    effectiveDate: null,
     expirationDate: null,
     type: null,
     kind: null,
     reason: '',
+    amount: null,
     types: ['휴가', '출타', '외박'],
     kinds: ['정기', '포상', '병가', '신병', '기타']
   }),
   computed: {
     canSubmit() {
       const check =
-        formValid.username(this.username) &&
-        formValid.name(this.name) &&
-        formValid.amount(this.amount)
+        formValid.username(this.target) &&
+        formValid.amount(this.amount) &&
+        //        formValid.effectiveDate(this.effectiveDate) &&
+        //        formValid.expirationDate(this.expirationDate) &&
+        formValid.reason(this.reason)
+      console.log(formValid.amount(this.amount))
       return check
     }
   },
   methods: {
     clickSubmit() {
       this.$emit('submit', {
-        name: this.name,
-        username: this.username,
-        password: this.password,
-        division: this.division
+        division: JSON.parse(localStorage.getItem('user')).division,
+        issuer: JSON.parse(localStorage.getItem('user')).username,
+        target: this.target,
+        effectiveDate: this.effectiveDate,
+        expirationDate: this.expirationDate,
+        type: this.type,
+        kind: this.kind,
+        amount: this.amount,
+        reason: this.reason
       })
       this.dialog = false
-      this.username = ''
-      this.password = ''
-      this.name = ''
-      this.division = null
+      this.issuer = null
+      this.target = null
+      this.effectiveDate = null
+      this.expirationDate = null
+      this.type = null
+      this.kind = null
+      this.amount = null
+      this.reason = ''
     }
   }
 }

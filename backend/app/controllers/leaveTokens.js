@@ -85,6 +85,7 @@ const createItem = async (req) => {
 const checkUserExists = async (username) => {
   try {
     const user = await model.findOne().where('username').equals(username)
+    console.log(user)
     if (user) {
       return true
     }
@@ -157,10 +158,9 @@ exports.updateItem = async (req, res) => {
  * @param {Object} res - response object
  */
 exports.createItem = utils.asyncRoute(async (req, res) => {
+  console.log(req)
   const data = matchedData(req)
-  if (await checkUserExists(data.username)) {
-    throw utils.buildErrObject(422, 'USERNAME_ALREADY_EXISTS')
-  }
+  
   if (data.division) {
     await divisionExists(data.division)
   }

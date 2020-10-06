@@ -5,14 +5,14 @@
     </template>
     <v-card>
       <v-card-title>
-        유저 정보 수정
+        출타 정보 수정
       </v-card-title>
       <v-divider> </v-divider>
 
       <v-form @submit.prevent="clickSubmit">
         <v-card-text>
           <v-text-field
-            :value="curUserInfo.username"
+            :value="curLeaveTokenInfo.username"
             class="mb-3"
             label="아이디"
             placeholder="20-12345678"
@@ -94,7 +94,7 @@ export default {
       type: Array,
       default: () => []
     },
-    curUserInfo: {
+    curLeaveTokenInfo: {
       type: Object,
       default: () => ({
         username: '',
@@ -155,7 +155,7 @@ export default {
         password: this.password,
         division: this.division,
         role: this.role,
-        _id: this.curUserInfo._id
+        _id: this.curLeaveTokenInfo._id
       })
       this.dialog = false
       this.username = ''
@@ -171,7 +171,7 @@ export default {
     value(val) {
       this.dialog = val
     },
-    curUserInfo(val) {
+    curLeaveTokenInfo(val) {
       this.username = val.username
       this.division = val.division
       this.name = val.name

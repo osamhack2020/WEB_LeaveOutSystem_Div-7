@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <!-- 좌측 액션메뉴 -->
-    <v-col cols="18">
+    <v-col cols="12">
       <v-card
         :disabled="isAppLoading"
         class=""
@@ -16,7 +16,6 @@
           <CreateLeaveTokenDialog
             @submit="submitCreateLeaveToken"
             v-slot="{ on, attrs }"
-            :divisions="divisions"
           >
             <v-btn color="secondary" dark block v-bind="attrs" v-on="on">
               <v-icon>mdi-plus</v-icon>
@@ -28,7 +27,7 @@
     </v-col>
 
     <!-- 우측 리스트 -->
-    <v-col cols="18">
+    <v-col cols="12">
       <v-toolbar flat>
         <v-text-field
           v-model="leaveTokenSearch"
@@ -57,6 +56,12 @@
         :search="leaveTokenSearch"
         :loading="leaveTokenLoading"
       >
+        <template v-slot:[`item.effectiveDate`]="{ item }">
+          <span>{{ new Date(item.effectiveDate).toLocaleDateString() }}</span>
+        </template>
+        <template v-slot:[`item.expirationDate`]="{ item }">
+          <span>{{ new Date(item.expirationDate).toLocaleDateString() }}</span>
+        </template>
         <template v-slot:[`item.role`]="{ item }">
           <v-chip outlined dense>
             {{ item.role | formatRole }}
@@ -76,8 +81,7 @@
     <EditLeaveTokenDialog
       v-model="isEditLeaveTokenDialogOpen"
       @submit="clickEditLeaveToken"
-      :curUserInfo="currentItem"
-      :divisions="divisions"
+      :curLeaveTokenInfo="currentItem"
     >
     </EditLeaveTokenDialog>
   </v-row>
@@ -98,8 +102,6 @@ export default {
     leaveTokenLoading: false,
     divisionLoading: false,
     rawLeaveTokens: [],
-    currentDivision: null,
-    rawDivisions: [],
     leaveTokenSearch: '',
     isEditLeaveTokenDialogOpen: false,
     currentItem: {}
@@ -108,16 +110,13 @@ export default {
     leaveTokens() {
       return this.rawLeaveTokens
     },
-    divisions() {
-      return [...this.rawDivisions]
-    },
     isAppLoading() {
       return this.$store.getters.isAppLoading
     },
     headers: () => [
-      { text: 'ID', value: '_id', align: 'start' },
-      { text: '발행자', value: 'issuer' },
-      { text: '대상자', value: 'target' },
+      { text: '출타 발행자', value: 'issuer', align: 'start' },
+      { text: '출타 대상자', value: 'target' },
+      { text: '유효 시작일', value: 'effectiveDate' },
       { text: '만료일', value: 'expirationDate' },
       { text: '종류', value: 'type' },
       { text: '세부 종류', value: 'kind' },
@@ -133,24 +132,31 @@ export default {
       this.currentDivision = leaveTokenInfo.division
       await this.loadLeaveTokens()
     },
-    async loadLeaveTokens(division) {
-      division = division || this.currentDivision
+    async loadLeaveTokens() {
+      const division = JSON.parse(localStorage.getItem('user')).division
 
-      this.userLoading = true
+      this.leaveTokenLoading = true
       const res = await leaveTokenAPI.getLeaveTokens()
-      this.rawLeaveTokens = res.data.docs
+
+      if (division) {
+        this.rawLeaveTokens = res.data.docs.filter(
+          leaveToken => leaveToken.division === division._id
+        )
+      } else {
+        this.rawLeaveTokens = res.data.docs.filter(
+          leaveToken => !leaveToken.division
+        )
+      }
+
+      this.leaveTokenLoading = false
+      console.log(res)
 
       this.userLoading = false
     },
-    async fetchDivisions() {
-      this.divisionLoading = true
-      const res = await divisionAPI.getAllDivision()
-      this.rawDivisions = res.data
-      this.divisionLoading = false
-    },
     openEditLeaveTokenDialog(leaveToken) {
       this.currentItem = leaveToken
-      this.isEditUserDialogOpen = true
+      console.log(leaveToken)
+      this.isEditLeaveTokenDialogOpen = true
     },
     async clickEditLeaveToken(leaveTokenInfo) {
       const res = await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
@@ -169,16 +175,10 @@ export default {
       }
     }
   },
-  watch: {
-    async currentDivision(val) {
-      // await this.loadUsers(val ? val._id : undefined)
-      await this.loadUsers()
-    }
-  },
+  watch: {},
   async created() {
     this.$store.dispatch('startAppLoading')
 
-    await this.fetchDivisions()
     this.$store.dispatch('endAppLoading')
     await this.loadLeaveTokens()
   },
