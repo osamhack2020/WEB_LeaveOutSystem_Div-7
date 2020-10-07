@@ -3,7 +3,7 @@
     <CurrentLocation :location="location"></CurrentLocation>
 
     <v-row>
-      <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
+      <v-col cols="3"><DashboardLeaveTokenCard /></v-col>
       <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
       <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
       <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
@@ -13,11 +13,13 @@
 <script>
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
 import DashboardCard from '../../components/myleave/DashboardCard.vue'
+import DashboardLeaveTokenCard from '../../components/myleave/DashboardLeaveTokenCard.vue'
 
 export default {
   components: {
     CurrentLocation,
-    DashboardCard
+    DashboardCard,
+    DashboardLeaveTokenCard
   },
   data: () => ({}),
   computed: {
