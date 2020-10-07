@@ -3,7 +3,9 @@
     <CurrentLocation :location="location"></CurrentLocation>
 
     <v-row>
-      <v-col cols="3"><DashboardLeaveTokenCard /></v-col>
+      <v-col cols="3">
+        <DashboardLeaveTokenCard to="/myleave/leave-available" />
+      </v-col>
       <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
       <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
       <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
@@ -23,7 +25,7 @@ export default {
   },
   data: () => ({}),
   computed: {
-    location: () => [{ text: '대시보드', path: '/dashboard' }]
+    location: () => [{ text: '대시보드', path: '/myleave' }]
   }
 }
 </script>

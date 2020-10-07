@@ -6,7 +6,8 @@
       <v-btn
         color="secondary"
         text
-        :to="{ path: item.path }"
+        :to="{ path: item.href }"
+        exact
         :key="`curloc-btn-${idx}`"
         >{{ item.text }}
       </v-btn>
@@ -14,7 +15,7 @@
         >mdi-chevron-right</v-icon
       >
     </template>
-    <v-btn :to="{ path: last(locs).path }" color="secondary" text active>{{
+    <v-btn :to="{ path: last(locs).path }" exact color="secondary" text>{{
       last(locs).text
     }}</v-btn>
   </v-sheet>
@@ -42,7 +43,7 @@ export default {
       return this.location.map(item => ({
         text: item.text,
         disabled: false,
-        href: this.pathBase + item.path
+        href: item.path
       }))
     }
   },
