@@ -13,12 +13,10 @@ exports.createItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('target')
-    .exists()
-    .withMessage('MISSING')
-    .not()
+  check('target').exists().withMessage('MISSING'),
+  /*    .not()
     .isEmpty()
-    .withMessage('IS_EMPTY'),
+    .withMessage('IS_EMPTY'),*/
   check('effectiveDate')
     .exists()
     .withMessage('MISSING')
@@ -55,7 +53,7 @@ exports.createItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-/*  check('role')
+  /*  check('role')
     .exists()
     .withMessage('MISSING')
     .not()
@@ -108,12 +106,10 @@ exports.updateItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('target')
-    .exists()
-    .withMessage('MISSING')
-    .not()
+  check('target').exists().withMessage('MISSING'),
+  /*    .not()
     .isEmpty()
-    .withMessage('IS_EMPTY'),
+    .withMessage('IS_EMPTY'),*/
   check('effectiveDate')
     .exists()
     .withMessage('MISSING')
@@ -150,7 +146,7 @@ exports.updateItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-/*  check('role')
+  /*  check('role')
     .exists()
     .withMessage('MISSING')
     .not()

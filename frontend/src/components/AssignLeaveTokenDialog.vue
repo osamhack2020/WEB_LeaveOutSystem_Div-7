@@ -1,65 +1,48 @@
 <template>
-  <v-dialog v-model="dialog" max-width="300px">
+  <v-dialog v-model="dialog" max-width="320px">
     <template v-slot:activator="acti">
       <slot v-bind="acti"></slot>
     </template>
     <v-card>
       <v-card-title>
-        출타 정보 수정
+        출타 부여 대상자 선택
       </v-card-title>
       <v-divider> </v-divider>
-
       <v-form @submit.prevent="clickSubmit">
-        <v-card-text>
-          <v-text-field
-            :value="curLeaveTokenInfo.issuer"
-            class="mb-3"
-            label="출타 발행자"
-            placeholder="admin"
-            filled
-            dense
-            disabled
-            hide-details
-          ></v-text-field>
-          <v-text-field
-            v-model="curLeaveTokenInfo.effectiveDate"
-            type="date"
-            label="유효 시작일"
-            filled
-          ></v-text-field>
-          <v-text-field
-            v-model="curLeaveTokenInfo.expirationDate"
-            type="date"
-            label="만료일"
-            filled
-          ></v-text-field>
-          <v-autocomplete
-            v-model="curLeaveTokenInfo.type"
-            :items="types"
-            label="종류"
-            filled
-            placeholder="휴가"
-          ></v-autocomplete>
-          <v-autocomplete
-            v-model="curLeaveTokenInfo.kind"
-            :items="kinds"
-            label="세부 종류"
-            filled
-            placeholder="정기"
-          ></v-autocomplete>
-          <v-text-field
-            v-model="curLeaveTokenInfo.amount"
-            label="부여일수"
-            filled
-            placeholder="3"
-          ></v-text-field>
-          <v-text-field
-            v-model="curLeaveTokenInfo.reason"
-            label="근거"
-            filled
-            placeholder="정기 휴가"
-          ></v-text-field>
-        </v-card-text>
+        <v-list shaped>
+        <v-list-item-group
+            v-model="target"
+            multiple
+        >
+            <template v-for="(item, i) in this.userList">
+            <v-divider
+                v-if="!item"
+                :key="`divider-${i}`"
+            ></v-divider>
+
+            <v-list-item
+                v-else
+                :key="`item-${i}`"
+                :value="item"
+                active-class="deep-purple--text text--accent-4"
+            >
+                <template v-slot:default="{ active }">
+                <v-list-item-content>
+                    <v-list-item-title v-text="item"></v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                    <v-checkbox
+                    :input-value="active"
+                    color="deep-purple accent-4"
+                    ></v-checkbox>
+                </v-list-item-action>
+                </template>
+            </v-list-item>
+            </template>
+        </v-list-item-group>
+        </v-list>
+      
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="secondary" text @click="dialog = false">
@@ -71,7 +54,7 @@
             color="blue darken-1"
             text
           >
-            수정
+            부여
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -79,19 +62,27 @@
   </v-dialog>
 </template>
 <script>
+
 import * as formValid from '../utils/formValid'
+import userAPI from '../services/user'
 import divisionAPI from '../services/division'
 export default {
   props: {
-    divisions: {
+    userList2: {
       type: Array,
-      default: () => []
+      default: () => [
+        '20-11111235',
+        '20-11111236',
+        '20-11111237',
+        '20-11111238',
+        '20-11111239',
+      ],
     },
     curLeaveTokenInfo: {
       type: Object,
       default: () => ({
         issuer: '',
-        target: '',
+        target: [],
         effectiveDate: null,
         expirationDate: null,
         type: null,
@@ -110,7 +101,9 @@ export default {
       dialog: false,
       loading: false,
       types: ['휴가', '외박', '외출'],
-      kinds: ['정기', '포상', '병가', '신병', '기타']
+      kinds: ['정기', '포상', '병가', '신병', '기타'],
+      target: [],
+      userList: []
     }
   },
   computed: {
@@ -125,12 +118,27 @@ export default {
     }
   },
   methods: {
+    async getUserList() {
+      const division = JSON.parse(localStorage.getItem('user')).division
+      let res = await userAPI.getUsers()
+      if (division) {
+        res = res.data.docs.filter(
+          user => user.division === division._id
+        )
+      } else {
+        res = res.data.docs.filter(user => !user.division)
+      }
+      for(var idx = 0; idx < res.length; idx++){
+        res[idx] = res[idx].username
+      }
+      this.userList = res
+    },
     clickSubmit() {
       this.$emit('submit', {
         _id: this.curLeaveTokenInfo._id,
         division: JSON.parse(localStorage.getItem('user')).division,
         issuer: JSON.parse(localStorage.getItem('user')).username,
-        target: this.curLeaveTokenInfo.target.sort(),
+        target: this.target.sort(),
         effectiveDate: this.curLeaveTokenInfo.effectiveDate,
         expirationDate: this.curLeaveTokenInfo.expirationDate,
         type: this.curLeaveTokenInfo.type,
@@ -156,12 +164,14 @@ export default {
     value(val) {
       this.dialog = val
     },
-    curLeaveTokenInfo(val) {
+    async curLeaveTokenInfo(val) {
       this.username = val.username
       this.division = val.division
       this.name = val.name
       this.role = val.role
-    }
+      this.target = val.target
+      await this.getUserList()
+    },
   }
 }
 </script>

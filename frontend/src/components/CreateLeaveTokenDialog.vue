@@ -5,18 +5,12 @@
     </template>
     <v-card>
       <v-card-title>
-        출타 부여
+        출타 생성
       </v-card-title>
       <v-divider> </v-divider>
 
       <v-form @submit.prevent="clickSubmit">
         <v-card-text>
-          <v-text-field
-            v-model="target"
-            label="출타 대상자 ID"
-            placeholder="20-12345678"
-            filled
-          ></v-text-field>
           <v-text-field
             v-model="effectiveDate"
             type="date"
@@ -108,7 +102,7 @@ export default {
       this.$emit('submit', {
         division: JSON.parse(localStorage.getItem('user')).division,
         issuer: JSON.parse(localStorage.getItem('user')).username,
-        target: this.target,
+        target: [],
         effectiveDate: this.effectiveDate,
         expirationDate: this.expirationDate,
         type: this.type,

@@ -19,7 +19,7 @@
           >
             <v-btn color="secondary" dark block v-bind="attrs" v-on="on">
               <v-icon>mdi-plus</v-icon>
-              출타 부여
+              출타 생성
             </v-btn>
           </CreateLeaveTokenDialog>
         </v-card-text>
@@ -56,6 +56,7 @@
         :search="leaveTokenSearch"
         :loading="leaveTokenLoading"
       >
+        
         <template v-slot:[`item.effectiveDate`]="{ item }">
           <span>{{ new Date(item.effectiveDate).toLocaleDateString() }}</span>
         </template>
@@ -74,16 +75,32 @@
           <v-icon small @click="clickDeleteLeaveToken(item)">
             mdi-delete
           </v-icon>
+          &nbsp;
+          <v-chip class="mr-2" @click="openAssignLeaveTokenDialog(item)">
+            출타 부여
+          </v-chip>
+        </template>
+        <template v-slot:[`item.target`]="{ item }">
+          <template v-for="username in item.target">
+            {{username}} <br>
+          </template>
         </template>
       </v-data-table>
     </v-col>
-
+    <AssignLeaveTokenDialog
+      v-model="isAssignLeaveTokenDialogOpen"
+      @submit="clickAssignLeaveToken"
+      :curLeaveTokenInfo="currentItem"
+    >
+    </AssignLeaveTokenDialog>
     <EditLeaveTokenDialog
       v-model="isEditLeaveTokenDialogOpen"
       @submit="clickEditLeaveToken"
       :curLeaveTokenInfo="currentItem"
     >
     </EditLeaveTokenDialog>
+
+    
   </v-row>
 </template>
 <script>
@@ -92,11 +109,13 @@ import userAPI from '../services/user'
 import divisionAPI from '../services/division'
 import CreateLeaveTokenDialog from '../components/CreateLeaveTokenDialog.vue'
 import EditLeaveTokenDialog from '../components/EditLeaveTokenDialog.vue'
+import AssignLeaveTokenDialog from '../components/AssignLeaveTokenDialog.vue'
 
 export default {
   components: {
     CreateLeaveTokenDialog,
-    EditLeaveTokenDialog
+    EditLeaveTokenDialog,
+    AssignLeaveTokenDialog
   },
   data: () => ({
     leaveTokenLoading: false,
@@ -104,6 +123,7 @@ export default {
     rawLeaveTokens: [],
     leaveTokenSearch: '',
     isEditLeaveTokenDialogOpen: false,
+    isAssignLeaveTokenDialogOpen: false,
     currentItem: {}
   }),
   computed: {
@@ -115,15 +135,16 @@ export default {
     },
     headers: () => [
       { text: '출타 발행자', value: 'issuer', align: 'start' },
-      { text: '출타 대상자', value: 'target' },
       { text: '유효 시작일', value: 'effectiveDate' },
       { text: '만료일', value: 'expirationDate' },
       { text: '종류', value: 'type' },
       { text: '세부 종류', value: 'kind' },
       { text: '부여일수', value: 'amount', align: 'center' },
       { text: '근거', value: 'reason' },
-      { text: '', value: 'actions', sortable: false }
-    ]
+      { text: '', value: 'actions' },
+      { text: '출타 대상자', value: 'target' },
+    ],
+    
   },
   methods: {
     async submitCreateLeaveToken(leaveTokenInfo) {
@@ -155,6 +176,14 @@ export default {
       this.isEditLeaveTokenDialogOpen = true
     },
     async clickEditLeaveToken(leaveTokenInfo) {
+      const res = await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
+      await this.loadLeaveTokens()
+    },
+    openAssignLeaveTokenDialog(leaveToken) {
+      this.currentItem = leaveToken
+      this.isAssignLeaveTokenDialogOpen = true
+    },
+    async clickAssignLeaveToken(leaveTokenInfo) {
       const res = await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
       await this.loadLeaveTokens()
     },
