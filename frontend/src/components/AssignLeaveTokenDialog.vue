@@ -131,7 +131,7 @@ export default {
       for(var idx = 0; idx < res.length; idx++){
         res[idx] = res[idx].username
       }
-      this.userList = res
+      this.userList = res.sort()
     },
     clickSubmit() {
       this.$emit('submit', {
