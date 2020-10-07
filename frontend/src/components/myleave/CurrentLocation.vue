@@ -4,16 +4,14 @@
   <v-sheet color="primary lighten-1" class="pa-3">
     <template v-for="(item, idx) of exceptLast(locs)">
       <v-btn
-        color="secondary"
+        dark
         text
         :to="{ path: item.href }"
         exact
         :key="`curloc-btn-${idx}`"
         >{{ item.text }}
       </v-btn>
-      <v-icon color="secondary" :key="`curloc-divider-${idx}`"
-        >mdi-chevron-right</v-icon
-      >
+      <v-icon dark :key="`curloc-divider-${idx}`">mdi-chevron-right</v-icon>
     </template>
     <v-btn :to="{ path: last(locs).path }" exact color="secondary" text>{{
       last(locs).text

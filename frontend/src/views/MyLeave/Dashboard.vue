@@ -3,25 +3,29 @@
     <CurrentLocation :location="location"></CurrentLocation>
 
     <v-row>
-      <v-col cols="3">
+      <v-col cols="4">
         <DashboardLeaveTokenCard to="/myleave/leave-available" />
       </v-col>
-      <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
-      <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
-      <v-col cols="3"><DashboardCard>asdf</DashboardCard></v-col>
+      <v-col cols="4"> <DashboardLeaveStatusCard /></v-col>
+      <v-col cols="4"><DashboardLeaveHistoryCard /></v-col>
+      <v-col cols="8"><DashboardLeaveCalendar /></v-col>
     </v-row>
   </div>
 </template>
 <script>
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
-import DashboardCard from '../../components/myleave/DashboardCard.vue'
 import DashboardLeaveTokenCard from '../../components/myleave/DashboardLeaveTokenCard.vue'
+import DashboardLeaveStatusCard from '../../components/myleave/DashboardLeaveStatusCard.vue'
+import DashboardLeaveHistoryCard from '../../components/myleave/DashboardLeaveHistoryCard.vue'
+import DashboardLeaveCalendar from '../../components/myleave/DashboardLeaveCalendarCard.vue'
 
 export default {
   components: {
     CurrentLocation,
-    DashboardCard,
-    DashboardLeaveTokenCard
+    DashboardLeaveTokenCard,
+    DashboardLeaveStatusCard,
+    DashboardLeaveHistoryCard,
+    DashboardLeaveCalendar
   },
   data: () => ({}),
   computed: {
