@@ -1,22 +1,24 @@
 const mongoose = require('mongoose')
+const user = require('./user')
+const division = require('./division')
 
 // 발행한 사용가능 출타들
 
 const LeaveTokenSchema = new mongoose.Schema({
   // 해당 부대
   division: {
-    type: mongoose.Types.ObjectId,
+    type: String,
     ref: 'Division'
   },
   // 출타 발행자
   issuer: {
-    type: mongoose.Types.ObjectId,
+    type: String,
     ref: 'User'
   },
   // 출타 대상자
   target: [
     {
-      type: mongoose.Types.ObjectId,
+      type: String,
       ref: 'User'
     }
   ],
@@ -34,20 +36,20 @@ const LeaveTokenSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: [
-      'leave', // 휴가
-      'sleepover', // 외박
-      'goout' // 외출
+      '휴가', // leave
+      '외박', // sleepover
+      '외출' // goout
     ]
   },
   kind: {
     type: String,
     enum: [
-      'regular', // 정기
-      'sick', // 병가
-      'reward', // 포상
-      'comfort', // 위로
-      'recruit', // 신병
-      'etc' // 기타 또는 공무
+      '정기', // regular
+      '병가', // sick
+      '포상', // reward
+      '위로', // comfort
+      '신병', // recruit
+      '기타' // etc
     ]
   },
 
