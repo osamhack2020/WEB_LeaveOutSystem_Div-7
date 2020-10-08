@@ -3,6 +3,7 @@ const User = require('../models/user')
 const UserAccess = require('../models/userAccess')
 const ForgotPassword = require('../models/forgotPassword')
 const utils = require('../middleware/utils')
+const userUtils = require('../middleware/user')
 const uuid = require('uuid')
 const { addHours } = require('date-fns')
 const { matchedData } = require('express-validator')
@@ -49,7 +50,8 @@ const setUserInfo = (req) => {
     username: req.username,
     email: req.email,
     role: req.role,
-    verified: req.verified
+    verified: req.verified,
+    division: req.division
   }
   // Adds verification for testing purposes
   if (process.env.NODE_ENV !== 'production') {
@@ -67,25 +69,27 @@ const setUserInfo = (req) => {
  * @param {Object} user - user object
  */
 const saveUserAccessAndReturnToken = async (req, user) => {
-  return new Promise((resolve, reject) => {
-    const userAccess = new UserAccess({
-      username: user.username,
-      ip: utils.getIP(req),
-      browser: utils.getBrowserInfo(req),
-      country: utils.getCountry(req)
-    })
-    userAccess.save((err) => {
-      if (err) {
-        reject(utils.buildErrObject(422, err.message))
-      }
-      const userInfo = setUserInfo(user)
-      // Returns data with access token
-      resolve({
-        token: generateToken(user._id),
-        user: userInfo
-      })
-    })
+  const userAccess = new UserAccess({
+    username: user.username,
+    ip: utils.getIP(req),
+    browser: utils.getBrowserInfo(req),
+    country: utils.getCountry(req)
   })
+  try {
+    await userAccess.save()
+    const userInfo = setUserInfo(user)
+
+    if (userInfo.division) {
+      userInfo.division = await userUtils.getDivision(userInfo.division)
+    }
+
+    return {
+      token: generateToken(user._id),
+      user: userInfo
+    }
+  } catch (err) {
+    throw utils.buildErrObject(422, err.message)
+  }
 }
 
 /**
@@ -177,7 +181,7 @@ const findUser = async (username) => {
       {
         username
       },
-      'password loginAttempts blockExpires name username email role verified verification',
+      'password loginAttempts blockExpires name division username email role verified verification',
       (err, item) => {
         utils.itemNotFound(err, item, reject, 'USER_DOES_NOT_EXIST')
         resolve(item)

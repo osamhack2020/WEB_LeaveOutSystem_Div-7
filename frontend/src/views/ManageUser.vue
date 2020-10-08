@@ -218,6 +218,8 @@ export default {
     this.$store.dispatch('startAppLoading')
 
     await this.fetchDivisions()
+    this.currentDivision = this.$store.getters.user.division
+
     this.$store.dispatch('endAppLoading')
     await this.loadUsers()
   },
