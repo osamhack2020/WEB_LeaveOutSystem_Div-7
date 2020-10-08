@@ -45,6 +45,7 @@ const LeaveTokenSchema = new mongoose.Schema({
       'regular', // 정기
       'sick', // 병가
       'reward', // 포상
+      'comfort', // 위로
       'recruit', // 신병
       'etc' // 기타 또는 공무
     ]
