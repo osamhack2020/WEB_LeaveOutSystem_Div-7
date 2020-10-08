@@ -101,7 +101,7 @@
   </v-row>
 </template>
 <script>
-import leaveTokenAPI from '../services/leaveToken'
+import leaveTokenAPI from '../services/leaveTokenManage'
 import userAPI from '../services/user'
 import divisionAPI from '../services/division'
 import CreateLeaveTokenDialog from '../components/CreateLeaveTokenDialog.vue'
