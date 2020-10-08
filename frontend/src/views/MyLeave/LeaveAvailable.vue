@@ -29,12 +29,26 @@
         </v-card>
       </v-col>
       <v-col cols="4">
-        <v-card v-for="(item, idx) of currentAvailables" :key="idx">
-          <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
-          <v-card-text>
-            <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
-          </v-card-text>
-        </v-card>
+        <template v-if="availableLoading">
+          <v-skeleton-loader
+            v-for="i in 4"
+            class="mb-3"
+            type="article, actions"
+            :key="`loader-${i}`"
+          ></v-skeleton-loader>
+        </template>
+        <template v-else>
+          <v-card v-for="(item, idx) of currentAvailables" :key="idx">
+            <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
+            <v-card-text>
+              <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text>사용하기</v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
       </v-col>
       <v-col cols="4"> </v-col>
     </v-row>
@@ -49,7 +63,8 @@ export default {
     CurrentLocation
   },
   data: () => ({
-    availables: []
+    availables: [],
+    availableLoading: false
   }),
   computed: {
     location: () => [
@@ -70,12 +85,16 @@ export default {
   },
   methods: {
     async loadAvailables() {
+      this.availableLoading = true
       const res = await leaveAPI.getAvailables()
       this.availables = res.data
+      this.availableLoading = false
     }
   },
   async created() {
-    this.loadAvailables()
+    this.$store.dispatch('startAppLoading')
+    await this.loadAvailables()
+    this.$store.dispatch('endAppLoading')
   }
 }
 </script>

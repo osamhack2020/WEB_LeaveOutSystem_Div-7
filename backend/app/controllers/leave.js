@@ -14,7 +14,6 @@ const db = require('../middleware/db')
  ********************/
 
 exports.getAvailables = utils.asyncRoute(async (req, res) => {
-  console.log(req.user.username)
   const data = await LeaveToken.find({ target: req.user.username })
   res.status(200).json(data)
 })
