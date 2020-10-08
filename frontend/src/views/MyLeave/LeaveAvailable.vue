@@ -2,7 +2,7 @@
   <div>
     <CurrentLocation :location="location"></CurrentLocation>
     <v-row>
-      <v-col cols="5">
+      <v-col cols="4">
         <v-card>
           <v-list>
             <v-subheader>출타 종류</v-subheader>
@@ -28,18 +28,29 @@
           </v-list>
         </v-card>
       </v-col>
-      <v-col cols="7"> </v-col>
+      <v-col cols="4">
+        <v-card v-for="(item, idx) of currentAvailables" :key="idx">
+          <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
+          <v-card-text>
+            <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="4"> </v-col>
     </v-row>
   </div>
 </template>
 <script>
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
+import leaveAPI from '../../services/leave'
 
 export default {
   components: {
     CurrentLocation
   },
-  data: () => ({}),
+  data: () => ({
+    availables: []
+  }),
   computed: {
     location: () => [
       { text: '대시보드', path: '/myleave' },
@@ -52,7 +63,19 @@ export default {
       { text: '위로', value: 'comfort' },
       { text: '신병', value: 'recruit' },
       { text: '기타', value: 'etc' }
-    ]
+    ],
+    currentAvailables() {
+      return this.availables
+    }
+  },
+  methods: {
+    async loadAvailables() {
+      const res = await leaveAPI.getAvailables()
+      this.availables = res.data
+    }
+  },
+  async created() {
+    this.loadAvailables()
   }
 }
 </script>

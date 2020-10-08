@@ -47,8 +47,7 @@ exports.createItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('reason')
-    .optional()
+  check('reason').optional(),
   /*  check('role')
     .exists()
     .withMessage('MISSING')
@@ -57,35 +56,7 @@ exports.createItem = [
     .withMessage('IS_EMPTY')
     .isIn(['user', 'moderator', 'admin'])
     .withMessage('USER_NOT_IN_KNOWN_ROLE'),*/
-  // check('phone')
-  //   .exists()
-  //   .withMessage('MISSING')
-  //   .not()
-  //   .isEmpty()
-  //   .withMessage('IS_EMPTY')
-  //   .trim(),
-  // check('city')
-  //   .exists()
-  //   .withMessage('MISSING')
-  //   .not()
-  //   .isEmpty()
-  //   .withMessage('IS_EMPTY')
-  //   .trim(),
-  // check('country')
-  //   .exists()
-  //   .withMessage('MISSING')
-  //   .not()
-  //   .isEmpty()
-  //   .withMessage('IS_EMPTY')
-  //   .trim(),
-  // check('urlTwitter')
-  //   .optional()
-  //   .custom((v) => (v === '' ? true : validator.isURL(v)))
-  //   .withMessage('NOT_A_VALID_URL'),
-  // check('urlGitHub')
-  //   .optional()
-  //   .custom((v) => (v === '' ? true : validator.isURL(v)))
-  //   .withMessage('NOT_A_VALID_URL'),
+
   (req, res, next) => {
     validationResult(req, res, next)
   }
