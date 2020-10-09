@@ -14,16 +14,7 @@
             <v-divider></v-divider>
             <v-subheader>필터</v-subheader>
             <v-list-item>
-              <v-chip-group multiple column>
-                <v-chip
-                  v-for="item of kindList"
-                  :key="`kind-${item.value}`"
-                  outlined
-                  filter
-                >
-                  {{ item.text }}
-                </v-chip>
-              </v-chip-group>
+              <KindFilter v-model="kindFilterOptions" />
             </v-list-item>
           </v-list>
         </v-card>
@@ -56,29 +47,25 @@
 </template>
 <script>
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
+import KindFilter from '../../components/myleave/KindFilter.vue'
 import leaveAPI from '../../services/leave'
 
 export default {
   components: {
-    CurrentLocation
+    CurrentLocation,
+    KindFilter
   },
   data: () => ({
     availables: [],
-    availableLoading: false
+    availableLoading: false,
+    kindFilterOptions: []
   }),
   computed: {
     location: () => [
       { text: '대시보드', path: '/myleave' },
       { text: '사용 가능 출타', path: '/myleave/leave-available' }
     ],
-    kindList: () => [
-      { text: '정기', value: 'regular' },
-      { text: '병가', value: 'sick' },
-      { text: '포상', value: 'reward' },
-      { text: '위로', value: 'comfort' },
-      { text: '신병', value: 'recruit' },
-      { text: '기타', value: 'etc' }
-    ],
+
     currentAvailables() {
       return this.availables
     }
