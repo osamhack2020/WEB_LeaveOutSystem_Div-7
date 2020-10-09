@@ -4,42 +4,41 @@
     <v-row>
       <v-col cols="4">
         <v-card>
-          <v-list>
-            <v-subheader>출타 종류</v-subheader>
-            <v-list-item-group mandatory>
-              <v-list-item>휴가</v-list-item>
-              <v-list-item>외출</v-list-item>
-              <v-list-item>외박</v-list-item>
-            </v-list-item-group>
-            <v-divider></v-divider>
-            <v-subheader>필터</v-subheader>
-            <v-list-item>
-              <KindFilter v-model="kindFilterOptions" />
-            </v-list-item>
-          </v-list>
+          <v-tabs>
+            <v-tab>휴가</v-tab>
+            <v-tab>외출</v-tab>
+            <v-tab>외박</v-tab>
+          </v-tabs>
+          <KindFilter v-model="kindFilterOptions" />
         </v-card>
-      </v-col>
-      <v-col cols="4">
-        <template v-if="availableLoading">
-          <v-skeleton-loader
-            v-for="i in 4"
-            class="mb-3"
-            type="article, actions"
-            :key="`loader-${i}`"
-          ></v-skeleton-loader>
-        </template>
-        <template v-else>
-          <v-card v-for="(item, idx) of currentAvailables" :key="idx">
-            <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
-            <v-card-text>
-              <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text>사용하기</v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
+        <v-tabs-items>
+          <v-tab-item>
+            <template v-if="availableLoading">
+              <v-skeleton-loader
+                v-for="i in 4"
+                class="mb-3"
+                type="article, actions"
+                :key="`loader-${i}`"
+              ></v-skeleton-loader>
+            </template>
+            <template v-else>
+              <v-card
+                v-for="(item, idx) of currentAvailables"
+                :key="idx"
+                class="mt-3"
+              >
+                <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
+                <v-card-text>
+                  <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn text>사용하기</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-tab-item>
+        </v-tabs-items>
       </v-col>
       <v-col cols="4"> </v-col>
     </v-row>
