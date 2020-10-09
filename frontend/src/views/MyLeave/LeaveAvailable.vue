@@ -2,6 +2,7 @@
   <div>
     <CurrentLocation :location="location"></CurrentLocation>
     <v-row>
+      <!-- 현재 보유한 출타 -->
       <v-col cols="4">
         <v-card>
           <v-tabs v-model="currentType">
@@ -45,14 +46,16 @@
           <v-tab-item>asdf</v-tab-item> -->
         </v-tabs-items>
       </v-col>
-      <v-col>
+
+      <!-- 휴가 신청 전 선택 -->
+      <v-col v-if="availableTypes[currentType].value === '휴가'">
         <v-toolbar flat>
           <v-toolbar-title>휴가 신청</v-toolbar-title>
           <v-spacer />
           <v-btn color="primary">신청하기</v-btn>
         </v-toolbar>
         <div>
-          <v-calendar />
+          <DateRangeSelect :length="totalApplyLength" type="휴가" />
         </div>
         <v-card
           outlined
@@ -66,7 +69,6 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text>사용하기</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -77,12 +79,14 @@
 <script>
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
 import KindFilter from '../../components/myleave/KindFilter.vue'
+import DateRangeSelect from '../../components/DateRangeSelect.vue'
 import leaveAPI from '../../services/leave'
 
 export default {
   components: {
     CurrentLocation,
-    KindFilter
+    KindFilter,
+    DateRangeSelect
   },
   data: () => ({
     availables: [],
@@ -116,6 +120,10 @@ export default {
     },
     currentVacations() {
       return this.availables.filter(ava => ava.type === '휴가')
+    },
+    // 선택한 출타의 총 일수
+    totalApplyLength() {
+      return this.applyList.reduce((sum, { amount }) => sum + amount, 0)
     }
   },
   methods: {
