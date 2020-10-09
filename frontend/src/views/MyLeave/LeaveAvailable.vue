@@ -37,13 +37,38 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text>사용하기</v-btn>
+                <v-btn text @click="clickApplyLeave(item)">사용하기</v-btn>
               </v-card-actions>
             </v-card>
           </v-tab-item>
           <!-- <v-tab-item>asdf</v-tab-item>
           <v-tab-item>asdf</v-tab-item> -->
         </v-tabs-items>
+      </v-col>
+      <v-col>
+        <v-toolbar flat>
+          <v-toolbar-title>휴가 신청</v-toolbar-title>
+          <v-spacer />
+          <v-btn color="primary">신청하기</v-btn>
+        </v-toolbar>
+        <div>
+          <v-calendar />
+        </div>
+        <v-card
+          outlined
+          v-for="(item, idx) of applyList"
+          :key="`apply-card-${idx}`"
+          class="mb-2"
+        >
+          <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
+          <v-card-text>
+            <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text>사용하기</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-col>
       <v-col cols="4"> </v-col>
     </v-row>
@@ -63,8 +88,8 @@ export default {
     availables: [],
     availableLoading: false,
     kindFilterOptions: [],
-
-    currentType: 0
+    currentType: 0,
+    applyList: []
   }),
   computed: {
     location: () => [
@@ -99,6 +124,11 @@ export default {
       const res = await leaveAPI.getAvailables()
       this.availables = res.data
       this.availableLoading = false
+    },
+    clickApplyLeave(item) {
+      if (!this.applyList.includes(item)) {
+        this.applyList.push(item)
+      }
     }
   },
   async created() {
