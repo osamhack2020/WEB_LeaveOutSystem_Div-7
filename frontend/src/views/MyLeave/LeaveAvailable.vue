@@ -52,10 +52,10 @@
         <v-toolbar flat>
           <v-toolbar-title>휴가 신청</v-toolbar-title>
           <v-spacer />
-          <v-btn color="primary">신청하기</v-btn>
         </v-toolbar>
         <div>
           <DateRangeSelect :length="totalApplyLength" type="휴가" />
+          <v-btn color="primary">신청하기</v-btn>
         </div>
         <v-card
           outlined
@@ -63,7 +63,13 @@
           :key="`apply-card-${idx}`"
           class="mb-2"
         >
-          <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
+          <v-toolbar flat>
+            <v-toolbar-title>{{ item.kind }} {{ item.type }}</v-toolbar-title>
+            <v-spacer />
+            <v-btn fab text @click="deleteFromApplyList(idx)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </v-toolbar>
           <v-card-text>
             <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
           </v-card-text>
@@ -137,6 +143,9 @@ export default {
       if (!this.applyList.includes(item)) {
         this.applyList.push(item)
       }
+    },
+    deleteFromApplyList(idx) {
+      this.applyList.splice(idx, 1)
     }
   },
   async created() {

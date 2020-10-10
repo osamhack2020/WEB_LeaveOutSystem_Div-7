@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>{{ departure }} 부터 ~ {{ arrival }} 까지 총 {{ length }}일</div>
     <v-sheet class="d-flex justify-space-between align-center ">
       <v-btn fab text small color="grey darken-2" @click="prevMonth">
         <v-icon small>
@@ -24,6 +23,8 @@
         @moved="monthChanged"
       ></v-calendar>
     </v-sheet>
+    <div>총 {{ length }}일</div>
+    <div>{{ departure }} 부터 ~ {{ arrival }} 까지</div>
   </div>
 </template>
 <style scoped>
