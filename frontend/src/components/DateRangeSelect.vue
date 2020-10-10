@@ -23,8 +23,13 @@
         @moved="monthChanged"
       ></v-calendar>
     </v-sheet>
-    <div>총 {{ length }}일</div>
-    <div>{{ departure }} 부터 ~ {{ arrival }} 까지</div>
+    <template v-if="range">
+      <div>총 {{ length }}일</div>
+      <div>{{ departure }} 부터 ~ {{ arrival }} 까지</div>
+    </template>
+    <template v-else>
+      <div>{{ departure }}</div>
+    </template>
   </div>
 </template>
 <style scoped>
@@ -54,6 +59,10 @@ export default {
         arrival: format(new Date(), 'yyyy-MM-dd'),
         length: 0
       })
+    },
+    range: {
+      type: Boolean,
+      default: true
     }
   },
   data: () => ({
