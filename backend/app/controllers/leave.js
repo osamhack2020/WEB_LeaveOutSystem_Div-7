@@ -24,9 +24,9 @@ exports.applyLeave = utils.asyncRoute(async (req, res) => {
 
   const newleave = new Leave()
 
-  console.log(req.user)
   newleave.user = req.user._id
   newleave.startDate = parse(data.departure, 'yyyy-MM-dd', new Date())
+  newleave.division = req.user.division
 
   for (const tokenId of data.tokens) {
     newleave.tokens.push(tokenId)
@@ -36,3 +36,5 @@ exports.applyLeave = utils.asyncRoute(async (req, res) => {
 
   res.status(201).json(newleave)
 })
+
+exports.adminGetApplies = utils.asyncRoute(async (req, res) => {})

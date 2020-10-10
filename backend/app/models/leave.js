@@ -13,7 +13,9 @@ const LeaveSchema = new mongoose.Schema({
       ref: 'LeaveToken'
     }
   ],
-
+  division: {
+    type: mongoose.Schema.Types.ObjectId
+  },
   startDate: {
     type: Date
   },

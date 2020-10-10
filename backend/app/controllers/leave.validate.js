@@ -17,3 +17,5 @@ exports.applyLeave = [
     validationResult(req, res, next)
   }
 ]
+
+exports.adminGetApplies = []

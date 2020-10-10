@@ -172,7 +172,6 @@ export default {
       this.divisionLoading = false
     },
     openEditUserDialog(user) {
-      console.log(user)
       user = this.populateDivision(user)
       this.currentItem = user
       this.isEditUserDialogOpen = true
