@@ -48,8 +48,12 @@ export default {
       default: ''
     },
     value: {
-      type: String,
-      default: format(new Date(), 'yyyy-MM-dd')
+      type: Object,
+      default: () => ({
+        departure: format(new Date(), 'yyyy-MM-dd'),
+        arrival: format(new Date(), 'yyyy-MM-dd'),
+        length: 0
+      })
     }
   },
   data: () => ({

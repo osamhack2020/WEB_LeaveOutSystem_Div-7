@@ -23,7 +23,8 @@ const LeaveSchema = new mongoose.Schema({
       'accepted', // 승인됨
       'denied', // 거부됨
       'pending' // 대기중
-    ]
+    ],
+    default: 'pending'
   },
   message: {
     type: String,

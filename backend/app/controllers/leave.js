@@ -1,9 +1,11 @@
 const LeaveToken = require('../models/leaveToken')
+const Leave = require('../models/leave')
 const User = require('../models/user')
 const utils = require('../middleware/utils')
 const userUtils = require('../middleware/user')
 const { matchedData } = require('express-validator')
 const db = require('../middleware/db')
+const parse = require('date-fns/parse')
 
 /*********************
  * Private functions *
@@ -23,5 +25,17 @@ exports.applyLeave = utils.asyncRoute(async (req, res) => {
 
   data.tokens.forEach(async (tokenId) => await utils.isIDGood(tokenId))
 
-  res.status(201).json({})
+  const newleave = new Leave()
+
+  console.log(req.user)
+  newleave.user = req.user._id
+  newleave.startDate = parse(data.departure, 'yyyy-MM-dd', new Date())
+
+  for (const tokenId of data.tokens) {
+    newleave.tokens.push(tokenId)
+  }
+
+  await newleave.save()
+
+  res.status(201).json(newleave)
 })

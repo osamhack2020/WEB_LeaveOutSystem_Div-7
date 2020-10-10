@@ -4,6 +4,13 @@ const { body, param } = require('express-validator')
 const _ = require('lodash')
 
 exports.applyLeave = [
+  body('departure')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY')
+    .trim(),
   body('tokens')
     .custom((item) => _.isArray(item))
     .withMessage('MISSING'),

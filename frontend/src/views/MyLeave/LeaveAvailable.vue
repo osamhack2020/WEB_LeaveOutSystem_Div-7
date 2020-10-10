@@ -53,10 +53,20 @@
           <v-toolbar-title>휴가 신청</v-toolbar-title>
           <v-spacer />
         </v-toolbar>
-        <div>
-          <DateRangeSelect :length="totalApplyLength" type="휴가" />
-          <v-btn color="primary">신청하기</v-btn>
-        </div>
+        <v-sheet class="pa-3 mb-2">
+          <DateRangeSelect
+            v-if="totalApplyLength > 0"
+            v-model="applyPlan"
+            :length="totalApplyLength"
+            type="휴가"
+          />
+          <v-btn
+            :disabled="totalApplyLength < 1"
+            color="primary"
+            @click="applyLeave"
+            >신청하기</v-btn
+          >
+        </v-sheet>
         <v-card
           outlined
           v-for="(item, idx) of applyList"
@@ -87,6 +97,7 @@ import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
 import KindFilter from '../../components/myleave/KindFilter.vue'
 import DateRangeSelect from '../../components/DateRangeSelect.vue'
 import leaveAPI from '../../services/leave'
+import { format } from 'date-fns'
 
 export default {
   components: {
@@ -99,7 +110,10 @@ export default {
     availableLoading: false,
     kindFilterOptions: [],
     currentType: 0,
-    applyList: []
+    applyList: [],
+    applyPlan: {
+      departure: format(new Date(), 'yyyy-MM-dd')
+    }
   }),
   computed: {
     location: () => [
@@ -146,6 +160,30 @@ export default {
     },
     deleteFromApplyList(idx) {
       this.applyList.splice(idx, 1)
+    },
+    async applyLeave() {
+      if (
+        await this.$confirm(
+          `총 ${this.totalApplyLength - 1}박 ${
+            this.totalApplyLength
+          }일의 휴가를 신청하시겠습니까?`,
+          {
+            color: 'primary',
+            title: '부대를 삭제하시겠습니까?',
+            buttonTrueColor: 'success'
+          }
+        )
+      ) {
+        this.loading = true
+        this.$store.dispatch('startAppLoading')
+
+        const res = await leaveAPI.applyLeave(
+          this.applyPlan.departure,
+          this.applyList.map(app => app._id)
+        )
+        this.$store.dispatch('endAppLoading')
+        this.applyList = []
+      }
     }
   },
   async created() {

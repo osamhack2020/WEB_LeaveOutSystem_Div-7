@@ -107,8 +107,7 @@ exports.updateItem = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
-  check('reason')
-    .optional(),
+  check('reason').optional(),
   /*  check('role')
     .exists()
     .withMessage('MISSING')
