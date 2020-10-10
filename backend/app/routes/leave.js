@@ -20,4 +20,13 @@ router.get(
   controller.getAvailables
 )
 
+router.post(
+  '/apply',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  validate.applyLeave,
+  controller.applyLeave
+)
+
 module.exports = router

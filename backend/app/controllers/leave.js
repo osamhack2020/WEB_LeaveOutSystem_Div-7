@@ -17,3 +17,11 @@ exports.getAvailables = utils.asyncRoute(async (req, res) => {
   const data = await LeaveToken.find({ target: req.user.username })
   res.status(200).json(data)
 })
+
+exports.applyLeave = utils.asyncRoute(async (req, res) => {
+  const data = matchedData(req)
+
+  data.tokens.forEach(async (tokenId) => await utils.isIDGood(tokenId))
+
+  res.status(201).json({})
+})

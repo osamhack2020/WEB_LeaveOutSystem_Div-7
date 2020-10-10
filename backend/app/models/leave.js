@@ -7,10 +7,12 @@ const LeaveSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  token: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'LeaveToken'
-  },
+  tokens: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'LeaveToken'
+    }
+  ],
 
   startDate: {
     type: Date
