@@ -18,7 +18,7 @@ exports.getUsersByDivision = async (divisionId) => {
     return users
     // return removeProperties(users.toObject())
   } catch (err) {
-    handleError(422, err)
+    return handleError(422, err)
   }
 }
 

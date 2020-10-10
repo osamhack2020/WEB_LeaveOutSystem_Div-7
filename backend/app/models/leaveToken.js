@@ -36,9 +36,9 @@ const LeaveTokenSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: [
-      '휴가', //leave
-      '외박', //sleepover
-      '외출' //goout
+      '휴가', // leave
+      '외박', // sleepover
+      '외출' // goout
     ]
   },
   kind: {
@@ -47,6 +47,7 @@ const LeaveTokenSchema = new mongoose.Schema({
       '정기', // regular
       '병가', // sick
       '포상', // reward
+      '위로', // comfort
       '신병', // recruit
       '기타' // etc
     ]

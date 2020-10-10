@@ -16,11 +16,15 @@
 
   "rules": {
     "callback-return": [
-      "error", ["done", "proceed", "next", "onwards", "callback", "cb"]
+      "error",
+      ["done", "proceed", "next", "onwards", "callback", "cb"]
     ],
-    "camelcase": ["warn", {
-      "properties": "always"
-    }],
+    "camelcase": [
+      "warn",
+      {
+        "properties": "always"
+      }
+    ],
     "comma-style": ["warn", "last"],
     "curly": ["error"],
     "eqeqeq": ["error", "always"],
@@ -54,14 +58,20 @@
         "caughtErrorsIgnorePattern": "^unused($|[A-Z].*$)"
       }
     ],
-    "no-use-before-define": ["error", {
-      "functions": false
-    }],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false
+      }
+    ],
     "no-var": 2,
     "one-var": ["warn", "never"],
-    "prefer-arrow-callback": ["warn", {
-      "allowNamedFunctions": true
-    }],
+    "prefer-arrow-callback": [
+      "warn",
+      {
+        "allowNamedFunctions": true
+      }
+    ],
     "quotes": [
       "warn",
       "single",
@@ -71,13 +81,17 @@
       }
     ],
     "semi": ["error", "never"],
-    "semi-spacing": ["warn", {
-      "before": false,
-      "after": true
-    }],
+    "semi-spacing": [
+      "warn",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
     "semi-style": ["warn", "last"],
     "space-before-function-paren": ["off", 2],
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "func-style": ["off"]
   },
   "extends": [
     "formidable/rules/eslint/best-practices/on",
@@ -89,7 +103,5 @@
     "formidable/rules/eslint/variables/on",
     "prettier"
   ],
-  "plugins": [
-    "prettier"
-  ]
+  "plugins": ["prettier"]
 }

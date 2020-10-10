@@ -1,4 +1,3 @@
-const faker = require('faker')
 const ObjectId = require('mongodb').ObjectID
 
 const json = [

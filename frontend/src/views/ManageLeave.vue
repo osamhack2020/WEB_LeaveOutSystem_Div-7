@@ -56,7 +56,6 @@
         :search="leaveTokenSearch"
         :loading="leaveTokenLoading"
       >
-        
         <template v-slot:[`item.effectiveDate`]="{ item }">
           <span>{{ new Date(item.effectiveDate).toLocaleDateString() }}</span>
         </template>
@@ -81,9 +80,9 @@
           </v-chip>
         </template>
         <template v-slot:[`item.target`]="{ item }">
-          <template v-for="username in item.target">
-            {{username}} <br>
-          </template>
+          <div v-for="(username, idx) in item.target" :key="`${idx}`">
+            {{ username }}
+          </div>
         </template>
       </v-data-table>
     </v-col>
@@ -99,14 +98,10 @@
       :curLeaveTokenInfo="currentItem"
     >
     </EditLeaveTokenDialog>
-
-    
   </v-row>
 </template>
 <script>
-import leaveTokenAPI from '../services/leaveToken'
-import userAPI from '../services/user'
-import divisionAPI from '../services/division'
+import leaveTokenAPI from '../services/leaveTokenManage'
 import CreateLeaveTokenDialog from '../components/CreateLeaveTokenDialog.vue'
 import EditLeaveTokenDialog from '../components/EditLeaveTokenDialog.vue'
 import AssignLeaveTokenDialog from '../components/AssignLeaveTokenDialog.vue'
@@ -142,13 +137,12 @@ export default {
       { text: '부여일수', value: 'amount', align: 'center' },
       { text: '근거', value: 'reason' },
       { text: '', value: 'actions' },
-      { text: '출타 대상자', value: 'target' },
-    ],
-    
+      { text: '출타 대상자', value: 'target' }
+    ]
   },
   methods: {
     async submitCreateLeaveToken(leaveTokenInfo) {
-      const res = await leaveTokenAPI.createLeaveToken(leaveTokenInfo)
+      await leaveTokenAPI.createLeaveToken(leaveTokenInfo)
       this.currentDivision = leaveTokenInfo.division
       await this.loadLeaveTokens()
     },
@@ -176,7 +170,7 @@ export default {
       this.isEditLeaveTokenDialogOpen = true
     },
     async clickEditLeaveToken(leaveTokenInfo) {
-      const res = await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
+      await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
       await this.loadLeaveTokens()
     },
     openAssignLeaveTokenDialog(leaveToken) {
@@ -184,7 +178,7 @@ export default {
       this.isAssignLeaveTokenDialogOpen = true
     },
     async clickAssignLeaveToken(leaveTokenInfo) {
-      const res = await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
+      await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
       await this.loadLeaveTokens()
     },
     async clickDeleteLeaveToken(leaveTokenInfo) {

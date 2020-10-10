@@ -80,7 +80,6 @@
 </template>
 <script>
 import * as formValid from '../utils/formValid'
-import divisionAPI from '../services/division'
 export default {
   props: {
     divisions: {

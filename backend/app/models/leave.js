@@ -7,10 +7,12 @@ const LeaveSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  token: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'LeaveToken'
-  },
+  tokens: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'LeaveToken'
+    }
+  ],
 
   startDate: {
     type: Date
@@ -21,7 +23,8 @@ const LeaveSchema = new mongoose.Schema({
       'accepted', // 승인됨
       'denied', // 거부됨
       'pending' // 대기중
-    ]
+    ],
+    default: 'pending'
   },
   message: {
     type: String,

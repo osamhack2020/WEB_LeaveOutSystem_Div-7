@@ -145,7 +145,7 @@ export default {
   methods: {
     async submitCreateUser(userInfo) {
       this.userLoading = true
-      const res = await userAPI.createUser(userInfo)
+      await userAPI.createUser(userInfo)
       this.currentDivision = userInfo.division
       await this.loadUsers()
       this.userLoading = false
@@ -179,7 +179,7 @@ export default {
     },
     async clickEditUser(userInfo) {
       console.log(userInfo)
-      const res = await userAPI.editUser(userInfo)
+      await userAPI.editUser(userInfo)
       // this.currentDivision = userInfo.division
 
       await this.loadUsers()
@@ -209,7 +209,7 @@ export default {
     }
   },
   watch: {
-    async currentDivision(val) {
+    async currentDivision() {
       // await this.loadUsers(val ? val._id : undefined)
       await this.loadUsers()
     }

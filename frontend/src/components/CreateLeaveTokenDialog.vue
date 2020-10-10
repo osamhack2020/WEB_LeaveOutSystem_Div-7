@@ -89,12 +89,12 @@ export default {
   }),
   computed: {
     canSubmit() {
-      const check = true
-      formValid.username(this.target) &&
-        formValid.amount(this.amount) &&
-        //        formValid.effectiveDate(this.effectiveDate) &&
-        //        formValid.expirationDate(this.expirationDate) &&
-        formValid.reason(this.reason)
+      const check =
+        // formValid.username(this.target) &&
+        formValid.amount(this.amount)
+      //        formValid.effectiveDate(this.effectiveDate) &&
+      //        formValid.expirationDate(this.expirationDate) &&
+      // formValid.reason(this.reason)
       return check
     },
     isAmountDisabled() {

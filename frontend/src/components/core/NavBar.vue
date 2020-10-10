@@ -113,6 +113,11 @@ export default {
       return [
         { name: '홈', path: '/' },
         {
+          name: '내 출타',
+          path: '/myleave',
+          show: () => this.$store.getters.isAuthed
+        },
+        {
           name: '출타 관리',
           path: '/manage-leave',
           show: () =>

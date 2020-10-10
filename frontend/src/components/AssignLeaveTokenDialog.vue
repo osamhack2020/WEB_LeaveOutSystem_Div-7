@@ -10,39 +10,33 @@
       <v-divider> </v-divider>
       <v-form @submit.prevent="clickSubmit">
         <v-list shaped>
-        <v-list-item-group
-            v-model="target"
-            multiple
-        >
+          <v-list-item-group v-model="target" multiple>
             <template v-for="(item, i) in this.userList">
-            <v-divider
-                v-if="!item"
-                :key="`divider-${i}`"
-            ></v-divider>
+              <v-divider v-if="!item" :key="`divider-${i}`"></v-divider>
 
-            <v-list-item
+              <v-list-item
                 v-else
                 :key="`item-${i}`"
                 :value="item"
                 active-class="deep-purple--text text--accent-4"
-            >
+              >
                 <template v-slot:default="{ active }">
-                <v-list-item-content>
+                  <v-list-item-content>
                     <v-list-item-title v-text="item"></v-list-item-title>
-                </v-list-item-content>
+                  </v-list-item-content>
 
-                <v-list-item-action>
+                  <v-list-item-action>
                     <v-checkbox
-                    :input-value="active"
-                    color="deep-purple accent-4"
+                      :input-value="active"
+                      color="deep-purple accent-4"
                     ></v-checkbox>
-                </v-list-item-action>
+                  </v-list-item-action>
                 </template>
-            </v-list-item>
+              </v-list-item>
             </template>
-        </v-list-item-group>
+          </v-list-item-group>
         </v-list>
-      
+
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="secondary" text @click="dialog = false">
@@ -62,10 +56,9 @@
   </v-dialog>
 </template>
 <script>
-
 import * as formValid from '../utils/formValid'
 import userAPI from '../services/user'
-import divisionAPI from '../services/division'
+
 export default {
   props: {
     userList2: {
@@ -75,8 +68,8 @@ export default {
         '20-11111236',
         '20-11111237',
         '20-11111238',
-        '20-11111239',
-      ],
+        '20-11111239'
+      ]
     },
     curLeaveTokenInfo: {
       type: Object,
@@ -122,13 +115,11 @@ export default {
       const division = JSON.parse(localStorage.getItem('user')).division
       let res = await userAPI.getUsers()
       if (division) {
-        res = res.data.docs.filter(
-          user => user.division === division._id
-        )
+        res = res.data.docs.filter(user => user.division === division._id)
       } else {
         res = res.data.docs.filter(user => !user.division)
       }
-      for(var idx = 0; idx < res.length; idx++){
+      for (let idx = 0; idx < res.length; idx++) {
         res[idx] = res[idx].username
       }
       this.userList = res.sort()
@@ -171,7 +162,7 @@ export default {
       this.role = val.role
       this.target = val.target
       await this.getUserList()
-    },
+    }
   }
 }
 </script>
