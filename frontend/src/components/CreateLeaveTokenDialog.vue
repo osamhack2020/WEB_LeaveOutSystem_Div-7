@@ -39,6 +39,7 @@
           ></v-autocomplete>
           <v-text-field
             v-model="amount"
+            :disabled="isAmountDisabled"
             label="부여일수"
             filled
             placeholder="3"
@@ -77,8 +78,8 @@ export default {
     dialog: false,
     loading: false,
     target: '',
-    effectiveDate: null,
-    expirationDate: null,
+    effectiveDate: new Date().toISOString().split("T")[0],
+    expirationDate: new Date(new Date().getFullYear(), new Date().getMonth() + 6, new Date().getDate(), 0, 0, 0).toISOString().split("T")[0],
     type: null,
     kind: null,
     reason: '',
@@ -95,6 +96,18 @@ export default {
       //        formValid.expirationDate(this.expirationDate) &&
       // formValid.reason(this.reason)
       return check
+    },
+    isAmountDisabled() {
+      if (this.type === '외출') {
+        this.amount = 1
+        return true
+      }
+
+      if (this.type === '외박') {
+        this.amount = 2
+        return true
+      }
+      return false
     }
   },
   methods: {
