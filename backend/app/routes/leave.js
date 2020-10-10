@@ -10,7 +10,7 @@ const requireAuth = passport.authenticate('jwt', {
 const trimRequest = require('trim-request')
 
 /*
- * 모든 부대 조회
+ * 내 출타 조회
  */
 router.get(
   '/available',
@@ -20,6 +20,9 @@ router.get(
   controller.getAvailables
 )
 
+/**
+ * 내 출타 신청
+ */
 router.post(
   '/apply',
   requireAuth,
@@ -27,6 +30,15 @@ router.post(
   trimRequest.all,
   validate.applyLeave,
   controller.applyLeave
+)
+
+router.get(
+  '/admin/apply',
+  requireAuth,
+  AuthController.roleAuthorization(['moderator', 'admin']),
+  trimRequest.all,
+  validate.adminGetApplies,
+  controller.adminGetApplies
 )
 
 module.exports = router
