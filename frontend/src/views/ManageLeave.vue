@@ -102,8 +102,6 @@
 </template>
 <script>
 import leaveTokenAPI from '../services/leaveTokenManage'
-import userAPI from '../services/user'
-import divisionAPI from '../services/division'
 import CreateLeaveTokenDialog from '../components/CreateLeaveTokenDialog.vue'
 import EditLeaveTokenDialog from '../components/EditLeaveTokenDialog.vue'
 import AssignLeaveTokenDialog from '../components/AssignLeaveTokenDialog.vue'
@@ -144,7 +142,7 @@ export default {
   },
   methods: {
     async submitCreateLeaveToken(leaveTokenInfo) {
-      const res = await leaveTokenAPI.createLeaveToken(leaveTokenInfo)
+      await leaveTokenAPI.createLeaveToken(leaveTokenInfo)
       this.currentDivision = leaveTokenInfo.division
       await this.loadLeaveTokens()
     },
@@ -172,7 +170,7 @@ export default {
       this.isEditLeaveTokenDialogOpen = true
     },
     async clickEditLeaveToken(leaveTokenInfo) {
-      const res = await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
+      await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
       await this.loadLeaveTokens()
     },
     openAssignLeaveTokenDialog(leaveToken) {
@@ -180,7 +178,7 @@ export default {
       this.isAssignLeaveTokenDialogOpen = true
     },
     async clickAssignLeaveToken(leaveTokenInfo) {
-      const res = await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
+      await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
       await this.loadLeaveTokens()
     },
     async clickDeleteLeaveToken(leaveTokenInfo) {

@@ -1,10 +1,7 @@
 const LeaveToken = require('../models/leaveToken')
 const Leave = require('../models/leave')
-const User = require('../models/user')
 const utils = require('../middleware/utils')
-const userUtils = require('../middleware/user')
 const { matchedData } = require('express-validator')
-const db = require('../middleware/db')
 const parse = require('date-fns/parse')
 
 /*********************

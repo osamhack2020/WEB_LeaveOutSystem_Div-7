@@ -177,7 +177,7 @@ export default {
         this.loading = true
         this.$store.dispatch('startAppLoading')
 
-        const res = await leaveAPI.applyLeave(
+        await leaveAPI.applyLeave(
           this.applyPlan.departure,
           this.applyList.map(app => app._id)
         )

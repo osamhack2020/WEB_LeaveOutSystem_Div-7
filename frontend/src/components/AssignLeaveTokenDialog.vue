@@ -58,7 +58,7 @@
 <script>
 import * as formValid from '../utils/formValid'
 import userAPI from '../services/user'
-import divisionAPI from '../services/division'
+
 export default {
   props: {
     userList2: {

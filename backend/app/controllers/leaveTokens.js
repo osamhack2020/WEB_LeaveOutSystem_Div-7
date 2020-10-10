@@ -15,47 +15,18 @@ const emailer = require('../middleware/emailer')
  * @param {Object} req - request object
  */
 const createItem = async (req) => {
-  // return new Promise((resolve, reject) => {
-  //   const user = new model({
-  //     username: req.username,
-  //     name: req.name,
-  //     email: req.email,
-  //     password: req.password,
-  //     division: req.division,
-  //     role: req.role,
-  //     verification: uuid.v4()
-  //   })
-
-  //   user.save((err, item) => {
-  //     if (err) {
-  //       reject(utils.buildErrObject(422, err.message))
-  //     }
-  //     // Removes properties with rest operator
-  //     const removeProperties = ({
-  //       // eslint-disable-next-line no-unused-vars
-  //       password,
-  //       // eslint-disable-next-line no-unused-vars
-  //       blockExpires,
-  //       // eslint-disable-next-line no-unused-vars
-  //       loginAttempts,
-  //       ...rest
-  //     }) => rest
-  //     resolve(removeProperties(item.toObject()))
-  //   })
-  // })
-
   const leaveToken = new model({
-      division: req.division,
-      issuer: req.issuer,
-      target: req.target,
-      effectiveDate: req.effectiveDate,
-      expirationDate: req.expirationDate,
-      type: req.type,
-      kind: req.kind,
-      amount: req.amount,
-      reason: req.reason,
-      message: req.message,
-      verification: uuid.v4()
+    division: req.division,
+    issuer: req.issuer,
+    target: req.target,
+    effectiveDate: req.effectiveDate,
+    expirationDate: req.expirationDate,
+    type: req.type,
+    kind: req.kind,
+    amount: req.amount,
+    reason: req.reason,
+    message: req.message,
+    verification: uuid.v4()
   })
 
   let item
@@ -65,10 +36,10 @@ const createItem = async (req) => {
     throw utils.buildErrObject(422, err.message)
   }
 
-  //if (req.division) {
+  // if (req.division) {
   //  const division = await db.getItem(req.division, Division)
   //  await division.addUser(user)
-  //}
+  // }
 
   const removeProperties = ({
     // eslint-disable-next-line no-unused-vars
@@ -89,7 +60,9 @@ const checkUserExists = async (username) => {
     if (user) {
       return true
     }
-  } catch {}
+  } catch (unusederr) {
+    //
+  }
 
   return false
 }
@@ -144,7 +117,7 @@ exports.getItem = async (req, res) => {
  */
 exports.updateItem = async (req, res) => {
   try {
-//    req = matchedData(req)
+    //    req = matchedData(req)
     const id = await utils.isIDGood(req.body._id)
     res.status(200).json(await db.updateItem(id, model, req.body))
   } catch (error) {
@@ -160,7 +133,7 @@ exports.updateItem = async (req, res) => {
 exports.createItem = utils.asyncRoute(async (req, res) => {
   console.log(req)
   const data = matchedData(req)
-  
+
   if (data.division) {
     await divisionExists(data.division)
   }
