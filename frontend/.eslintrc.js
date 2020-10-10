@@ -95,7 +95,8 @@ module.exports = {
     'prettier/prettier': 'error',
 
     'func-style': ['off'],
-    'vue/valid-v-slot': ['off']
+    'vue/valid-v-slot': ['off'],
+    'max-statements': ['off']
   },
   parserOptions: {
     parser: 'babel-eslint'
