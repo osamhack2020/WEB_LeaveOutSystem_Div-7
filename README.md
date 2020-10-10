@@ -57,10 +57,11 @@ $ ./setup.sh
  ```
 
 ## 팀 정보 (Team Information)
-- 박건영 (tekiter8@gmail.com), 
+박건영 (tekiter8@gmail.com)<br>
 <a href="https://github.com/Tekiter"><img src="https://img.shields.io/badge/Github-Tekiter-green?style=flat&logo=github" alt="Tekiter"></a>
-- 백도원 (bkdo1006@naver.com), 
-<a href="https://github.com/Tekiter"><img src="https://img.shields.io/badge/Github-ask--to--answer-green?style=flat&logo=github" alt="Tekiter"></a>
+
+백도원 (bkdo1006@naver.com)<br>
+<a href="https://github.com/ask-to-answer"><img src="https://img.shields.io/badge/Github-ask--to--answer-green?style=flat&logo=github" alt="ask-to-answer"></a>
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
 <a href="LICENSE.md"><img src="https://img.shields.io/github/license/osamhack2020/WEB_LeaveOutSystem_Div-7?label=%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4" alt="License"></a>
