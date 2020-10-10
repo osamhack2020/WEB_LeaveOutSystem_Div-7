@@ -1,12 +1,27 @@
 <template>
   <div>
-    <div>출발일 : {{ departure }}</div>
-    <div>도착일 : {{ arrival }}</div>
+    <div>{{ departure }} 부터 ~ {{ arrival }} 까지 총 {{ length }}일</div>
+    <v-sheet class="d-flex justify-space-between align-center ">
+      <v-btn fab text small color="grey darken-2" @click="prevMonth">
+        <v-icon small>
+          mdi-chevron-left
+        </v-icon>
+      </v-btn>
+      <div>{{ currentDate.year }}년 {{ currentDate.month }}월</div>
+      <v-btn fab text small color="grey darken-2" @click="nextMonth">
+        <v-icon small>
+          mdi-chevron-right
+        </v-icon>
+      </v-btn>
+    </v-sheet>
     <v-sheet height="400">
       <v-calendar
+        ref="calendar"
         v-model="departure"
         :events="events"
         event-color="secondary"
+        :disabled="length < 1"
+        @moved="monthChanged"
       ></v-calendar>
     </v-sheet>
   </div>
@@ -37,7 +52,11 @@ export default {
     }
   },
   data: () => ({
-    departure: format(new Date(), 'yyyy-MM-dd')
+    departure: format(new Date(), 'yyyy-MM-dd'),
+    currentDate: {
+      year: format(new Date(), 'yyyy'),
+      month: format(new Date(), 'MM')
+    }
   }),
   computed: {
     arrival() {
@@ -66,13 +85,22 @@ export default {
     strToDate(str) {
       return parse(str, 'yyyy-MM-dd', new Date())
     },
-    recalcArrival() {}
+    prevMonth() {
+      this.$refs.calendar.prev()
+    },
+    nextMonth() {
+      this.$refs.calendar.next()
+    },
+    monthChanged({ year, month }) {
+      this.currentDate = { year, month }
+    }
   },
   watch: {
     departure() {
       this.$emit('input', {
         departure: this.departure,
-        arrival: this.arrival
+        arrival: this.arrival,
+        length: this.length
       })
     }
   },
