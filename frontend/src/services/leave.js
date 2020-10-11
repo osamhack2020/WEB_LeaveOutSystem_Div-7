@@ -9,5 +9,8 @@ export default {
   },
   async adminGetApplies() {
     return await axios.get('/leave/admin/apply')
+  },
+  async adminDecideApply(apply, status) {
+    return await axios.post('/leave/admin/decide', { apply, status })
   }
 }

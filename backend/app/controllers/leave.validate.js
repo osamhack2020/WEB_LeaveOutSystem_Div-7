@@ -19,3 +19,21 @@ exports.applyLeave = [
 ]
 
 exports.adminGetApplies = []
+
+exports.adminDecideApply = [
+  body('status')
+    .exists()
+    .withMessage('MISSING')
+    .isIn(['accepted', 'denied', 'pending'])
+    .trim(),
+  body('apply')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY')
+    .trim(),
+  (req, res, next) => {
+    validationResult(req, res, next)
+  }
+]

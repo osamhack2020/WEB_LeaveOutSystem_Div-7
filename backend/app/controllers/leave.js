@@ -62,3 +62,14 @@ exports.adminGetApplies = utils.asyncRoute(async (req, res) => {
 
   res.status(200).json(ret)
 })
+
+exports.adminDecideApply = utils.asyncRoute(async (req, res) => {
+  const data = matchedData(req)
+
+  await utils.isIDGood(data.apply)
+
+  const apply = await Leave.findById(data.apply)
+  apply.status = data.status
+  await apply.save()
+  res.status(200).json(apply)
+})

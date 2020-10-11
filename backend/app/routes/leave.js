@@ -41,4 +41,13 @@ router.get(
   controller.adminGetApplies
 )
 
+router.post(
+  '/admin/decide',
+  requireAuth,
+  AuthController.roleAuthorization(['moderator', 'admin']),
+  trimRequest.all,
+  validate.adminDecideApply,
+  controller.adminDecideApply
+)
+
 module.exports = router
