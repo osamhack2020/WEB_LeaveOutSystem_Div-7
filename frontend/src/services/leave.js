@@ -6,5 +6,8 @@ export default {
   },
   async applyLeave(departure, tokens) {
     return await axios.post('/leave/apply', { departure, tokens })
+  },
+  async adminGetApplies() {
+    return await axios.get('/leave/admin/apply')
   }
 }

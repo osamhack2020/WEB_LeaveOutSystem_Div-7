@@ -37,4 +37,10 @@ exports.applyLeave = utils.asyncRoute(async (req, res) => {
   res.status(201).json(newleave)
 })
 
-exports.adminGetApplies = utils.asyncRoute(async (req, res) => {})
+exports.adminGetApplies = utils.asyncRoute(async (req, res) => {
+  const leaves = await Leave.find({ division: req.user.division }).populate(
+    'tokens'
+  )
+
+  res.status(200).json(leaves)
+})
