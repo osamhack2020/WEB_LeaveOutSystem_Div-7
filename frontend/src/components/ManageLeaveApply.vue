@@ -19,16 +19,17 @@
               </v-chip>
             </v-list-item>
           </v-list-item-group>
+          <v-btn @click="loadApplies">새로고침</v-btn>
         </v-list>
       </v-card>
     </v-col>
     <v-col cols="9">
       <v-data-table
         v-model="applySelected"
-        show-select
         :headers="headers[currentType]"
         :items="applies[currentType]"
         item-key="_id"
+        :loading="applyLoading"
       >
         <template v-slot:[`item.startDate`]="{ item }">
           <span>{{ item.startDate | formatDate }}</span>
@@ -39,19 +40,52 @@
         <template v-slot:[`item.length`]="{ item }">
           <span>{{ item.length - 1 }}박 {{ item.length }}일</span>
         </template>
-        <template v-slot:item.actions="{ item }">
-          <v-btn @click="clickViewLeaveTokens(item)" outlined
-            >사용된 출타</v-btn
+        <template v-slot:[`item.status`]="{ item }">
+          <span>{{ item.status | formatStatus }}</span>
+        </template>
+        <template v-slot:[`item.detail`]="{ item }">
+          <v-btn @click="clickViewLeaveTokens(item)" outlined small>
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+        </template>
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-btn
+            @click="clickApply(item)"
+            class="ml-2"
+            outlined
+            fab
+            x-small
+            color="success"
           >
-          <v-btn @click="clickApply(item)" outlined>승인</v-btn>
-          <v-btn @click="clickDeny(item)" outlined>거부</v-btn>
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+          <v-btn
+            @click="clickDeny(item)"
+            class="ml-2"
+            outlined
+            fab
+            x-small
+            color="error"
+          >
+            <v-icon>mdi-cancel</v-icon>
+          </v-btn>
         </template>
       </v-data-table>
     </v-col>
 
-    <v-dialog v-model="isDialogApply" v-if="currentDialogApply">
+    <v-dialog v-model="isDialogApply" v-if="currentDialogApply" max-width="300">
       <v-card>
-        {{ currentDialogApply }}
+        <v-card-text>
+          <v-card
+            v-for="token of currentDialogApply.tokens"
+            :key="`token-dialog-${token._id}`"
+            outlined
+          >
+            <v-card-text>
+              {{ token.kind }} {{ token.type }} {{ token.amount }} 일
+            </v-card-text>
+          </v-card>
+        </v-card-text>
       </v-card>
     </v-dialog>
   </v-row>
@@ -67,26 +101,33 @@ export default {
     typeSelected: 0,
     applySelected: [],
     currentDialogApply: null,
-    isDialogApply: false
+    isDialogApply: false,
+    applyLoading: false
   }),
   computed: {
     headers() {
       return {
         휴가: [
+          { text: '', value: 'detail' },
           { text: '대상', value: 'user.name' },
           { text: '출발일', value: 'startDate' },
           { text: '도착일', value: 'endDate' },
           { text: '기간', value: 'length' },
+          { text: '상태', value: 'status' },
           { text: '', value: 'actions' }
         ],
         외출: [
+          { text: '', value: 'detail' },
           { text: '대상', value: 'user.name' },
           { text: '날짜', value: 'startDate' },
+          { text: '상태', value: 'status' },
           { text: '', value: 'actions' }
         ],
         외박: [
+          { text: '', value: 'detail' },
           { text: '대상', value: 'user.name' },
           { text: '날짜', value: 'startDate' },
+          { text: '상태', value: 'status' },
           { text: '', value: 'actions' }
         ]
       }
@@ -107,11 +148,19 @@ export default {
   },
   methods: {
     async loadApplies() {
+      this.applyLoading = true
       const res = await leaveAPI.adminGetApplies()
       this.rawApplies = res.data
+      this.applyLoading = false
     },
-    async clickApply() {},
-    async clickDeny() {},
+    async clickApply(apply) {
+      await leaveAPI.adminDecideApply(apply._id, 'accepted')
+      await this.loadApplies()
+    },
+    async clickDeny(apply) {
+      await leaveAPI.adminDecideApply(apply._id, 'denied')
+      await this.loadApplies()
+    },
     clickViewLeaveTokens(apply) {
       this.currentDialogApply = apply
       this.isDialogApply = true
@@ -123,6 +172,18 @@ export default {
   filters: {
     formatDate(value) {
       return format(parseISO(value), 'yyyy-MM-dd')
+    },
+    formatStatus(value) {
+      if (value === 'accepted') {
+        return '승인됨'
+      }
+      if (value === 'denied') {
+        return '거부됨'
+      }
+      if (value === 'pending') {
+        return '대기중'
+      }
+      return ''
     }
   }
 }
