@@ -3,10 +3,19 @@ const Leave = require('../models/leave')
 const utils = require('../middleware/utils')
 const { matchedData } = require('express-validator')
 const parse = require('date-fns/parse')
+const addDays = require('date-fns/addDays')
 
 /*********************
  * Private functions *
  *********************/
+
+function getLeaveLength(leave) {
+  return leave.tokens.reduce((acc, token) => acc + token.amount, 0)
+}
+
+// function getLeaveEndDate(startDate, length) {
+
+// }
 
 /********************
  * Public functions *
@@ -38,9 +47,18 @@ exports.applyLeave = utils.asyncRoute(async (req, res) => {
 })
 
 exports.adminGetApplies = utils.asyncRoute(async (req, res) => {
-  const leaves = await Leave.find({ division: req.user.division }).populate(
-    'tokens'
-  )
+  const leaves = await Leave.find({ division: req.user.division })
+    .populate('tokens')
+    .populate('user')
 
-  res.status(200).json(leaves)
+  const ret = leaves.map((leave) => {
+    const newleave = leave.toObject()
+
+    newleave.length = getLeaveLength(leave)
+    newleave.endDate = addDays(newleave.startDate, newleave.length - 1)
+
+    return newleave
+  })
+
+  res.status(200).json(ret)
 })
