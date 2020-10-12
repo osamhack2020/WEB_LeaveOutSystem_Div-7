@@ -210,7 +210,9 @@ export default {
     },
     populateDivision(leaveToken) {
       leaveToken = { ...leaveToken }
-      leaveToken.division = leaveToken.division._id
+      if (leaveToken.division) {
+        leaveToken.division = leaveToken.division._id
+      }
       return leaveToken
     }
   },
