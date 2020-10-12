@@ -73,3 +73,8 @@ exports.adminDecideApply = utils.asyncRoute(async (req, res) => {
   await apply.save()
   res.status(200).json(apply)
 })
+
+exports.getLeaves = utils.asyncRoute(async (req, res) => {
+  const data = await Leave.find()
+  res.status(200).json(data)
+})

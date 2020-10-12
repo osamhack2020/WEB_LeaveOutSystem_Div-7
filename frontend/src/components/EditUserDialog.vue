@@ -156,7 +156,6 @@ export default {
         role: this.role,
         _id: this.curUserInfo._id
       })
-      console.log(this.division)
       this.dialog = false
       this.username = ''
       this.password = ''

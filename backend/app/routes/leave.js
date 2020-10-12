@@ -49,5 +49,17 @@ router.post(
   validate.adminDecideApply,
   controller.adminDecideApply
 )
+/*
+  출타 신청 기록 조회
+*/
+
+router.get(
+  '/apply',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  validate.getLeaves,
+  controller.getLeaves
+)
 
 module.exports = router
