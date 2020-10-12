@@ -78,8 +78,17 @@ export default {
     dialog: false,
     loading: false,
     target: '',
-    effectiveDate: new Date().toISOString().split("T")[0],
-    expirationDate: new Date(new Date().getFullYear(), new Date().getMonth() + 6, new Date().getDate(), 0, 0, 0).toISOString().split("T")[0],
+    effectiveDate: new Date().toISOString().split('T')[0],
+    expirationDate: new Date(
+      new Date().getFullYear(),
+      new Date().getMonth() + 6,
+      new Date().getDate(),
+      0,
+      0,
+      0
+    )
+      .toISOString()
+      .split('T')[0],
     type: null,
     kind: null,
     reason: '',
@@ -126,8 +135,17 @@ export default {
       this.dialog = false
       this.issuer = null
       this.target = null
-      this.effectiveDate = null
-      this.expirationDate = null
+      this.effectiveDate = new Date().toISOString().split('T')[0]
+      this.expirationDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 6,
+        new Date().getDate(),
+        0,
+        0,
+        0
+      )
+        .toISOString()
+        .split('T')[0]
       this.type = null
       this.kind = null
       this.amount = null

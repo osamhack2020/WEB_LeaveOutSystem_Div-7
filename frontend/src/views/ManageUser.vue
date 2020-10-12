@@ -177,7 +177,6 @@ export default {
       this.isEditUserDialogOpen = true
     },
     async clickEditUser(userInfo) {
-      console.log(userInfo)
       await userAPI.editUser(userInfo)
       // this.currentDivision = userInfo.division
 

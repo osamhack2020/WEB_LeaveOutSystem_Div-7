@@ -37,3 +37,5 @@ exports.adminDecideApply = [
     validationResult(req, res, next)
   }
 ]
+
+exports.getLeaves = []

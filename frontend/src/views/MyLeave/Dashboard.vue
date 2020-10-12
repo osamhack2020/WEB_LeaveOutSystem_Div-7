@@ -6,8 +6,12 @@
       <v-col cols="4">
         <DashboardLeaveTokenCard to="/myleave/leave-available" />
       </v-col>
-      <v-col cols="4"> <DashboardLeaveStatusCard /></v-col>
-      <v-col cols="4"><DashboardLeaveHistoryCard /></v-col>
+      <v-col cols="4">
+        <DashboardLeaveStatusCard to="/myleave/leave-status"
+      /></v-col>
+      <v-col cols="4"
+        ><DashboardLeaveHistoryCard to="/myleave/leave-history"
+      /></v-col>
       <v-col cols="8"><DashboardLeaveCalendar /></v-col>
     </v-row>
   </div>
