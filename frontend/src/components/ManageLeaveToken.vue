@@ -142,8 +142,8 @@ export default {
   },
   methods: {
     async submitCreateLeaveToken(leaveTokenInfo) {
+      leaveTokenInfo = this.populateDivision(leaveTokenInfo)
       await leaveTokenAPI.createLeaveToken(leaveTokenInfo)
-      this.currentDivision = leaveTokenInfo.division
       await this.loadLeaveTokens()
     },
     async loadLeaveTokens() {
@@ -170,6 +170,7 @@ export default {
       this.isEditLeaveTokenDialogOpen = true
     },
     async clickEditLeaveToken(leaveTokenInfo) {
+      leaveTokenInfo = this.populateDivision(leaveTokenInfo)
       await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
       await this.loadLeaveTokens()
     },
@@ -178,6 +179,7 @@ export default {
       this.isAssignLeaveTokenDialogOpen = true
     },
     async clickAssignLeaveToken(leaveTokenInfo) {
+      leaveTokenInfo = this.populateDivision(leaveTokenInfo)
       await leaveTokenAPI.editLeaveToken(leaveTokenInfo)
       await this.loadLeaveTokens()
     },
@@ -204,6 +206,11 @@ export default {
       leaveToken.expirationDate = new Date(leaveToken.expirationDate)
         .toISOString()
         .substring(0, 10)
+      return leaveToken
+    },
+    populateDivision(leaveToken) {
+      leaveToken = { ...leaveToken }
+      leaveToken.division = leaveToken.division._id
       return leaveToken
     }
   },
