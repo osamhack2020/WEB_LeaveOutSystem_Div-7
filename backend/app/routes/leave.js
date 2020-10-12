@@ -20,6 +20,18 @@ router.get(
   controller.getAvailables
 )
 
+/*
+  내 출타 기록 조회
+*/
+
+router.get(
+  '/apply',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  validate.getLeaves,
+  controller.getLeaves
+)
 /**
  * 내 출타 신청
  */
@@ -48,18 +60,6 @@ router.post(
   trimRequest.all,
   validate.adminDecideApply,
   controller.adminDecideApply
-)
-/*
-  출타 신청 기록 조회
-*/
-
-router.get(
-  '/apply',
-  requireAuth,
-  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
-  trimRequest.all,
-  validate.getLeaves,
-  controller.getLeaves
 )
 
 module.exports = router

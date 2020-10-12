@@ -143,10 +143,10 @@ exports.updateItem = async (req, res) => {
   try {
     req = matchedData(req)
     const id = await utils.isIDGood(req.id)
-    
+
     const user = await model.findByIdAndUpdate(id, req)
-    
-    if (!req.division)  {
+
+    if (!req.division) {
       user.division = undefined
       await user.save()
     }

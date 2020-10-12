@@ -17,6 +17,18 @@ function getLeaveLength(leave) {
 
 // }
 
+function leaveAdditionalInfo(leaves) {
+  const ret = leaves.map((leave) => {
+    const newleave = leave.toObject()
+
+    newleave.length = getLeaveLength(leave)
+    newleave.endDate = addDays(newleave.startDate, newleave.length - 1)
+
+    return newleave
+  })
+  return ret
+}
+
 /********************
  * Public functions *
  ********************/
@@ -51,14 +63,7 @@ exports.adminGetApplies = utils.asyncRoute(async (req, res) => {
     .populate('tokens')
     .populate('user')
 
-  const ret = leaves.map((leave) => {
-    const newleave = leave.toObject()
-
-    newleave.length = getLeaveLength(leave)
-    newleave.endDate = addDays(newleave.startDate, newleave.length - 1)
-
-    return newleave
-  })
+  const ret = leaveAdditionalInfo(leaves)
 
   res.status(200).json(ret)
 })
@@ -75,6 +80,6 @@ exports.adminDecideApply = utils.asyncRoute(async (req, res) => {
 })
 
 exports.getLeaves = utils.asyncRoute(async (req, res) => {
-  const data = await Leave.find()
-  res.status(200).json(data)
+  const data = await Leave.find({ user: req.user._id }).populate('tokens')
+  res.status(200).json(leaveAdditionalInfo(data))
 })
