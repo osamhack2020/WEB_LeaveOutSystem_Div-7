@@ -2,53 +2,46 @@
   <div>
     <CurrentLocation :location="location"></CurrentLocation>
     <v-sheet class="pa-3">
-      <h2 class="text-h4">확정된 출타</h2>
-      <v-card
+      <h2 class="text-h5">확정된 출타</h2>
+      <LeaveInfoCard
         v-for="leave of acceptedLeaves"
         :key="`accepted-${leave._id}`"
-        outlined
-      >
-        <v-card-title>
-          {{ leave.startDate | formatDate }} 출발 휴가
-        </v-card-title>
-        <v-card-text> </v-card-text>
-      </v-card>
+        :leave="leave"
+        class="mt-2"
+      />
     </v-sheet>
     <v-sheet class="pa-3">
-      <h2 class="text-h4">거부된 출타</h2>
-      <v-card
+      <h2 class="text-h5">거부된 출타</h2>
+      <LeaveInfoCard
         v-for="leave of deniedLeaves"
         :key="`denied-${leave._id}`"
-        outlined
-      >
-        <v-card-text>
-          {{ leave }}
-        </v-card-text>
-      </v-card>
+        :leave="leave"
+        class="mt-2"
+      />
     </v-sheet>
     <v-sheet class="pa-3">
-      <h2 class="text-h4">승인 대기중</h2>
-      <v-card
+      <h2 class="text-h5">승인 대기중</h2>
+      <LeaveInfoCard
         v-for="leave of pendingLeaves"
         :key="`pending-${leave._id}`"
-        outlined
-      >
-        <v-card-text>
-          {{ leave }}
-        </v-card-text>
-      </v-card>
+        :leave="leave"
+        class="mt-2"
+      />
     </v-sheet>
   </div>
 </template>
 <script>
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
+import LeaveInfoCard from '../../components/myleave/LeaveInfoCard.vue'
+
 import leaveTokenAPI from '../../services/leaveTokenManage'
 import leaveAPI from '../../services/leave'
 import { format, add, parseISO } from 'date-fns'
 
 export default {
   components: {
-    CurrentLocation
+    CurrentLocation,
+    LeaveInfoCard
   },
   data: () => ({
     rawLeaves: [],
@@ -104,7 +97,7 @@ export default {
   },
   filters: {
     formatDate(value) {
-      return format(parseISO(value), 'yyyy-MM-dd')
+      return format(parseISO(value), 'yyyy년 MM월 dd일')
     }
   }
 }
