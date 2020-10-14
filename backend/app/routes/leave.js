@@ -62,4 +62,13 @@ router.post(
   controller.adminDecideApply
 )
 
+// 대시보드
+router.get(
+  '/dashboard/token-count',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.dashboardGetAvailableCount
+)
+
 module.exports = router
