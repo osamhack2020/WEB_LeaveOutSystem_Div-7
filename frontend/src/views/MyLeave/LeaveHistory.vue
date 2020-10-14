@@ -16,6 +16,9 @@
           <template v-slot:[`item.endDate`]="{ item }">
             <span>{{ new Date(item.endDate).toLocaleDateString() }}</span>
           </template>
+          <template v-slot:[`item.status`]="{ item }">
+            <span>{{ item.status | formatStatus }}</span>
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -59,6 +62,7 @@ export default {
       { text: '출타 종류', value: 'type', align: 'start' },
       { text: '출발 일자', value: 'startDate' },
       { text: '도착 일자', value: 'endDate' },
+      { text: '상태', value: 'status' },
       { text: '기타', value: 'message' }
     ]
   },
@@ -75,7 +79,6 @@ export default {
       const temp = { type: '휴가', amount: '3' }
       for (let i = 0; i < this.rawLeaves.length; i++) {
         this.rawLeaves[i].type = temp.type
-        console.log(parseInt(temp.amount))
         this.rawLeaves[i].endDate = new Date(
           new Date(this.rawLeaves[i].startDate).getFullYear(),
           new Date(this.rawLeaves[i].startDate).getMonth(),
@@ -94,6 +97,20 @@ export default {
     this.$store.dispatch('startAppLoading')
     await this.loadLeaves()
     this.$store.dispatch('endAppLoading')
+  },
+  filters: {
+    formatStatus(value) {
+      if (value === 'accepted') {
+        return '승인됨'
+      }
+      if (value === 'denied') {
+        return '거부됨'
+      }
+      if (value === 'pending') {
+        return '대기중'
+      }
+      return ''
+    }
   }
 }
 </script>
