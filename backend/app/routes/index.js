@@ -39,7 +39,7 @@ router.use('*', (req, res) => {
   })
 })
 
-router.use((err, req, res, next) => {
+router.use((err, req, res) => {
   handleError(res, err)
 })
 

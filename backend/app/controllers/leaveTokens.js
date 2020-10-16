@@ -1,4 +1,4 @@
-const model = require('../models/user')
+const model = require('../models/leaveToken')
 const Division = require('../models/division')
 const uuid = require('uuid')
 const { matchedData } = require('express-validator')
@@ -15,48 +15,23 @@ const emailer = require('../middleware/emailer')
  * @param {Object} req - request object
  */
 const createItem = async (req) => {
-  // return new Promise((resolve, reject) => {
-  //   const user = new model({
-  //     username: req.username,
-  //     name: req.name,
-  //     email: req.email,
-  //     password: req.password,
-  //     division: req.division,
-  //     role: req.role,
-  //     verification: uuid.v4()
-  //   })
-
-  //   user.save((err, item) => {
-  //     if (err) {
-  //       reject(utils.buildErrObject(422, err.message))
-  //     }
-  //     // Removes properties with rest operator
-  //     const removeProperties = ({
-  //       // eslint-disable-next-line no-unused-vars
-  //       password,
-  //       // eslint-disable-next-line no-unused-vars
-  //       blockExpires,
-  //       // eslint-disable-next-line no-unused-vars
-  //       loginAttempts,
-  //       ...rest
-  //     }) => rest
-  //     resolve(removeProperties(item.toObject()))
-  //   })
-  // })
-
-  const user = new model({
-    username: req.username,
-    name: req.name,
-    email: req.email,
-    password: req.password,
+  const leaveToken = new model({
     division: req.division,
-    role: req.role,
+    issuer: req.issuer,
+    target: req.target,
+    effectiveDate: req.effectiveDate,
+    expirationDate: req.expirationDate,
+    type: req.type,
+    kind: req.kind,
+    amount: req.amount,
+    reason: req.reason,
+    message: req.message,
     verification: uuid.v4()
   })
 
   let item
   try {
-    item = await user.save()
+    item = await leaveToken.save()
   } catch (err) {
     throw utils.buildErrObject(422, err.message)
   }
@@ -84,7 +59,7 @@ const checkUserExists = async (username) => {
     if (user) {
       return true
     }
-  } catch (unused) {
+  } catch (unusederr) {
     //
   }
 
@@ -141,9 +116,9 @@ exports.getItem = async (req, res) => {
  */
 exports.updateItem = async (req, res) => {
   try {
-    req = matchedData(req)
-    const id = await utils.isIDGood(req.id)
-    res.status(200).json(await db.updateItem(id, model, req))
+    //    req = matchedData(req)
+    const id = await utils.isIDGood(req.body._id)
+    res.status(200).json(await db.updateItem(id, model, req.body))
   } catch (error) {
     utils.handleError(res, error)
   }
@@ -156,9 +131,7 @@ exports.updateItem = async (req, res) => {
  */
 exports.createItem = utils.asyncRoute(async (req, res) => {
   const data = matchedData(req)
-  if (await checkUserExists(data.username)) {
-    throw utils.buildErrObject(422, 'USERNAME_ALREADY_EXISTS')
-  }
+
   if (data.division) {
     await divisionExists(data.division)
   }

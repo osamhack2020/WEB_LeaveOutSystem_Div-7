@@ -1,4 +1,3 @@
-const faker = require('faker')
 const ObjectID = require('mongodb').ObjectID
 
 module.exports = [
