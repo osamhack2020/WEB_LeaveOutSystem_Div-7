@@ -108,12 +108,10 @@ export default {
     },
     isAmountDisabled() {
       if (this.type === '외출') {
-        this.amount = 1
         return true
       }
 
       if (this.type === '외박') {
-        this.amount = 2
         return true
       }
       return false
@@ -150,6 +148,15 @@ export default {
       this.kind = null
       this.amount = null
       this.reason = ''
+    }
+  },
+  watch: {
+    type(val) {
+      if (val === '외출') {
+        this.amount = 1
+      } else if (val === '외박') {
+        this.amount = 2
+      }
     }
   }
 }
