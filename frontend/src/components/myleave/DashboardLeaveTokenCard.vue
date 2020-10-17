@@ -1,5 +1,5 @@
 <template>
-  <DashboardCard :loading="loading">
+  <DashboardCard :loading="loading" title="보유한 출타">
     <v-row class="mx-3 main-area">
       <template v-if="tokenCount">
         <v-col>
