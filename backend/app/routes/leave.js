@@ -71,4 +71,12 @@ router.get(
   controller.dashboardGetAvailableCount
 )
 
+router.get(
+  '/dashboard/leave-count',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.dashboardGetLeaveCount
+)
+
 module.exports = router

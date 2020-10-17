@@ -128,3 +128,16 @@ exports.dashboardGetAvailableCount = utils.asyncRoute(async (req, res) => {
 
   res.status(200).json(ret)
 })
+
+const leaveStatusEnum = Object.freeze(['accepted', 'denied', 'pending'])
+exports.dashboardGetLeaveCount = utils.asyncRoute(async (req, res) => {
+
+  const ret = {}
+  for (const status of leaveStatusEnum) {
+    const count = await Leave.countDocuments({ $and: [ {user: req.user._id}, {status: status} ] })
+    ret[status] = count
+  }
+
+  res.status(200).json(ret)
+
+})

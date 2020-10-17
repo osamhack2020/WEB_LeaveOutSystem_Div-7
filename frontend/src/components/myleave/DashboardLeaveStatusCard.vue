@@ -1,9 +1,17 @@
 <template>
-  <DashboardCard>
-    <v-card-text>
-      <div>1개 출타 대기중</div>
-      <div>0개 출타 승인</div>
-    </v-card-text>
+  <DashboardCard :loading="loading">
+    <div v-if="count" class="pa-3">
+      <div>
+        <span class="h2">{{ count.accepted }}</span>
+        개 출타 승인됨
+      </div>
+      <div>
+        <span class="h2">{{ count.denied }}</span> 개 출타 거부됨
+      </div>
+      <div>
+        <span class="h2">{{ count.pending }}</span> 개 출타 대기중
+      </div>
+    </div>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn text :to="to">
@@ -15,6 +23,8 @@
 <script>
 import DashboardCard from './DashboardCard.vue'
 
+import leaveDashboardAPI from '../../services/leaveDashboard'
+
 export default {
   components: {
     DashboardCard
@@ -24,6 +34,21 @@ export default {
       type: String,
       default: ''
     }
+  },
+  data: () => ({
+    count: null,
+    loading: false
+  }),
+  methods: {
+    async loadLeaveCount() {
+      this.loading = true
+      const res = await leaveDashboardAPI.getLeaveCount()
+      this.count = res.data
+      this.loading = false
+    }
+  },
+  async created() {
+    await this.loadLeaveCount()
   }
 }
 </script>
