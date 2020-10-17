@@ -129,15 +129,35 @@ exports.dashboardGetAvailableCount = utils.asyncRoute(async (req, res) => {
   res.status(200).json(ret)
 })
 
+// 출타 현황 정보
 const leaveStatusEnum = Object.freeze(['accepted', 'denied', 'pending'])
 exports.dashboardGetLeaveCount = utils.asyncRoute(async (req, res) => {
-
   const ret = {}
   for (const status of leaveStatusEnum) {
-    const count = await Leave.countDocuments({ $and: [ {user: req.user._id}, {status: status} ] })
+    const count = await Leave.countDocuments({
+      $and: [{ user: req.user._id }, { status }]
+    })
     ret[status] = count
   }
 
   res.status(200).json(ret)
+})
 
+// 출타 히스토리
+
+exports.dashboardGetLeaveHistory = utils.asyncRoute(async (req, res) => {
+  const ret = {}
+
+  const leaves = leaveAdditionalInfo(
+    await Leave.find({ user: req.user._id }).populate('tokens')
+  )
+  for (const leave of leaves) {
+    if (ret[leave.type] === undefined) {
+      ret[leave.type] = { amount: 0, count: 0 }
+    }
+    ret[leave.type].amount += leave.length
+    ret[leave.type].count += 1
+  }
+
+  res.status(200).json(ret)
 })

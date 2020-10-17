@@ -3,7 +3,7 @@
     <v-row class="mx-3 main-area">
       <template v-if="tokenCount">
         <v-col>
-          <h3 class="primary--text text--lighten-2">휴가</h3>
+          <h3 class="text-h6 primary--text text--lighten-2">휴가</h3>
           <template v-if="tokenCount['휴가']">
             <div
               v-for="kind of Object.keys(tokenCount['휴가'])"
@@ -14,7 +14,7 @@
           </template>
         </v-col>
         <v-col v-if="tokenCount['외출']">
-          <h3 class="primary--text text--lighten-2">외출</h3>
+          <h3 class="text-h6 primary--text text--lighten-2">외출</h3>
           <template>
             <div
               v-for="kind of Object.keys(tokenCount['외출'])"
@@ -25,7 +25,7 @@
           </template>
         </v-col>
         <v-col v-if="tokenCount['외박']">
-          <h3 class="primary--text text--lighten-2">외박</h3>
+          <h3 class="text-h6 primary--text text--lighten-2">외박</h3>
           <template>
             <div
               v-for="kind of Object.keys(tokenCount['외박'])"

@@ -63,6 +63,8 @@ router.post(
 )
 
 // 대시보드
+
+// 사용 가능한 출타토큰 개수 조회
 router.get(
   '/dashboard/token-count',
   requireAuth,
@@ -71,12 +73,22 @@ router.get(
   controller.dashboardGetAvailableCount
 )
 
+// 출타 현황 개수 조회
 router.get(
   '/dashboard/leave-count',
   requireAuth,
   AuthController.roleAuthorization(['user', 'moderator', 'admin']),
   trimRequest.all,
   controller.dashboardGetLeaveCount
+)
+
+// 출타 히스토리 개수 조회
+router.get(
+  '/dashboard/leave-history-count',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.dashboardGetLeaveHistory
 )
 
 module.exports = router

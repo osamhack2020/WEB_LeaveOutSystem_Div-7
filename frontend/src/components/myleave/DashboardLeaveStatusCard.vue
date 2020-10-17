@@ -1,17 +1,18 @@
 <template>
-  <DashboardCard :loading="loading">
-    <div v-if="count" class="pa-3">
-      <div>
-        <span class="h2">{{ count.accepted }}</span>
-        개 출타 승인됨
-      </div>
-      <div>
-        <span class="h2">{{ count.denied }}</span> 개 출타 거부됨
-      </div>
-      <div>
-        <span class="h2">{{ count.pending }}</span> 개 출타 대기중
-      </div>
-    </div>
+  <DashboardCard :loading="loading" title="출타 현황">
+    <v-row v-if="count" class="px-4 mt-2" no-gutters>
+      <v-col cols="6">
+        <span class="text-h4 success--text"> {{ count.accepted }} </span>개
+        승인됨
+      </v-col>
+      <v-col cols="6">
+        <span class="text-h4 error--text"> {{ count.denied }} </span>개 거부됨
+      </v-col>
+      <v-col cols="12">
+        <span class="text-h4 primary--text"> {{ count.pending }} </span>개 출타
+        승인 대기중
+      </v-col>
+    </v-row>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn text :to="to">
