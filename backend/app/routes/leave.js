@@ -20,6 +20,18 @@ router.get(
   controller.getAvailables
 )
 
+/*
+  내 출타 기록 조회
+*/
+
+router.get(
+  '/apply',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  validate.getLeaves,
+  controller.getLeaves
+)
 /**
  * 내 출타 신청
  */
@@ -49,17 +61,34 @@ router.post(
   validate.adminDecideApply,
   controller.adminDecideApply
 )
-/*
-  출타 신청 기록 조회
-*/
 
+// 대시보드
+
+// 사용 가능한 출타토큰 개수 조회
 router.get(
-  '/apply',
+  '/dashboard/token-count',
   requireAuth,
   AuthController.roleAuthorization(['user', 'moderator', 'admin']),
   trimRequest.all,
-  validate.getLeaves,
-  controller.getLeaves
+  controller.dashboardGetAvailableCount
+)
+
+// 출타 현황 개수 조회
+router.get(
+  '/dashboard/leave-count',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.dashboardGetLeaveCount
+)
+
+// 출타 히스토리 개수 조회
+router.get(
+  '/dashboard/leave-history-count',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.dashboardGetLeaveHistory
 )
 
 module.exports = router
