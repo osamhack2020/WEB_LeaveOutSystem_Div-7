@@ -71,21 +71,26 @@
           </v-chip>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon small class="mr-2" @click="openEditLeaveTokenDialog(item)"
+          <v-icon
+            small
+            class="mr-2"
+            color="primary"
+            @click="openEditLeaveTokenDialog(item)"
             >mdi-pencil</v-icon
           >
-          <v-icon small @click="clickDeleteLeaveToken(item)">
+          <v-icon small color="error" @click="clickDeleteLeaveToken(item)">
             mdi-delete
           </v-icon>
-          &nbsp;
-          <v-chip class="mr-2" @click="openAssignLeaveTokenDialog(item)">
-            출타 부여
-          </v-chip>
         </template>
         <template v-slot:[`item.target`]="{ item }">
-          <div v-for="(username, idx) in item.target" :key="`${idx}`">
-            {{ username }}
-          </div>
+          <v-chip
+            class="mr-2"
+            :color="item.target.length === 0 ? '' : 'secondary'"
+            @click="openAssignLeaveTokenDialog(item)"
+            label
+          >
+            {{ item.target.length }}명
+          </v-chip>
         </template>
         <template v-slot:footer>
           <v-divider></v-divider>
@@ -146,11 +151,11 @@ export default {
     },
     headers: () => [
       { text: '출타 발행자', value: 'issuer', align: 'start' },
-      { text: '유효 시작일', value: 'effectiveDate' },
-      { text: '만료일', value: 'expirationDate' },
       { text: '종류', value: 'type' },
       { text: '세부 종류', value: 'kind' },
       { text: '부여일수', value: 'amount', align: 'center' },
+      { text: '유효 시작일', value: 'effectiveDate' },
+      { text: '만료일', value: 'expirationDate' },
       { text: '근거', value: 'reason' },
       { text: '', value: 'actions' },
       { text: '출타 대상자', value: 'target' }
@@ -163,7 +168,8 @@ export default {
       await this.loadLeaveTokens()
     },
     async loadLeaveTokens() {
-      const division = JSON.parse(localStorage.getItem('user')).division
+      // const division = JSON.parse(localStorage.getItem('user')).division
+      const division = this.$store.getters.user.division
 
       this.leaveTokenLoading = true
       const res = await leaveTokenAPI.getLeaveTokens()
@@ -202,7 +208,7 @@ export default {
     async clickDeleteLeaveToken(leaveTokenInfo) {
       if (
         await this.$confirm(
-          `${leaveTokenInfo.target} 에게 부여된 ${leaveTokenInfo.kind}${leaveTokenInfo.type} ${leaveTokenInfo.amount}일을 삭제합니다.`,
+          `${leaveTokenInfo.target.length}명 에게 부여된 ${leaveTokenInfo.kind}${leaveTokenInfo.type} ${leaveTokenInfo.amount}일을 삭제합니다.`,
           {
             color: 'error',
             title: '출타를 삭제하시겠습니까?',

@@ -7,14 +7,19 @@
         </h3>
       </div>
     </slot>
-    <div v-if="loading" class="d-flex flex-row justify-center">
-      <v-progress-circular
-        :width="3"
-        color="primary"
-        indeterminate
-      ></v-progress-circular>
-    </div>
-    <slot v-else></slot>
+    <v-fade-transition>
+      <div v-if="loading" class="d-flex flex-row justify-center">
+        <v-progress-circular
+          class="my-4"
+          :width="3"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+        <slot></slot>
+      </div>
+    </v-fade-transition>
   </v-card>
 </template>
 <script>
