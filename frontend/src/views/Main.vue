@@ -34,15 +34,18 @@
         <h1 style="font-size:4em">용사들도 출타를 <br />조회할 수 있는 체계</h1>
         <br />
         <p class="text-right" style="font-size:2em">
-          기존에 수기 종합, 연대 통합행정업무시스템, 국방인사정보체계에 분산되어
-          있던 출타 관련 작업들을 단일 시스템으로 통합하였습니다.
+          용사들은 더 이상 본인의 출타를 정리하느라 머리를 앓을 필요가 없습니다!
+          모든 출타 기록이 본 체계에 등록되어 있고 조회 가능합니다.
         </p>
       </div>
     </v-card>
 
     <v-card color="grey lighten-2">
       <div class="odd-entry">
-        <h1 style="font-size:4em">간단하고 직관적인 <br />사용자 인터페이스</h1>
+        <h1 style="font-size:4em">
+          간단하고 직관적인 <br />
+          사용자 인터페이스
+        </h1>
         <br />
         <p class="text-left" style="font-size:2em">
           출타관리체계로 출타를 신청하기 위해 특별히 배워야 할 것은 없습니다!
