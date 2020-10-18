@@ -30,6 +30,9 @@
         :items="applies[currentType]"
         item-key="_id"
         :loading="applyLoading"
+        :page="page"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
       >
         <template v-slot:[`item.startDate`]="{ item }">
           <span>{{ item.startDate | formatDate }}</span>
@@ -70,6 +73,14 @@
             <v-icon>mdi-cancel</v-icon>
           </v-btn>
         </template>
+        <template v-slot:footer>
+          <v-divider></v-divider>
+          <Pagination-footer
+            v-model="page"
+            :item-count="(applies[currentType] || []).length"
+            :items-per-page.sync="itemsPerPage"
+          />
+        </template>
       </v-data-table>
     </v-col>
 
@@ -91,18 +102,23 @@
   </v-row>
 </template>
 <script>
+import PaginationFooter from '../components/PaginationFooter.vue'
+
 import { format, parseISO } from 'date-fns'
 import leaveAPI from '../services/leave'
 
 export default {
-  components: {},
+  components: { PaginationFooter },
   data: () => ({
     rawApplies: [],
     typeSelected: 0,
     applySelected: [],
     currentDialogApply: null,
     isDialogApply: false,
-    applyLoading: false
+    applyLoading: false,
+
+    itemsPerPage: 10,
+    page: 1
   }),
   computed: {
     headers() {

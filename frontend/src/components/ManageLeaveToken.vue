@@ -55,6 +55,9 @@
         :items="leaveTokens"
         :search="leaveTokenSearch"
         :loading="leaveTokenLoading"
+        :page="page"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
       >
         <template v-slot:[`item.effectiveDate`]="{ item }">
           <span>{{ new Date(item.effectiveDate).toLocaleDateString() }}</span>
@@ -84,6 +87,14 @@
             {{ username }}
           </div>
         </template>
+        <template v-slot:footer>
+          <v-divider></v-divider>
+          <Pagination-footer
+            v-model="page"
+            :item-count="leaveTokens.length"
+            :items-per-page.sync="itemsPerPage"
+          />
+        </template>
       </v-data-table>
     </v-col>
     <AssignLeaveTokenDialog
@@ -105,12 +116,14 @@ import leaveTokenAPI from '../services/leaveTokenManage'
 import CreateLeaveTokenDialog from '../components/CreateLeaveTokenDialog.vue'
 import EditLeaveTokenDialog from '../components/EditLeaveTokenDialog.vue'
 import AssignLeaveTokenDialog from '../components/AssignLeaveTokenDialog.vue'
+import PaginationFooter from '../components/PaginationFooter.vue'
 
 export default {
   components: {
     CreateLeaveTokenDialog,
     EditLeaveTokenDialog,
-    AssignLeaveTokenDialog
+    AssignLeaveTokenDialog,
+    PaginationFooter
   },
   data: () => ({
     leaveTokenLoading: false,
@@ -119,7 +132,10 @@ export default {
     leaveTokenSearch: '',
     isEditLeaveTokenDialogOpen: false,
     isAssignLeaveTokenDialogOpen: false,
-    currentItem: {}
+    currentItem: {},
+
+    itemsPerPage: 10,
+    page: 1
   }),
   computed: {
     leaveTokens() {
