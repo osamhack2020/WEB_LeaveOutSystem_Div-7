@@ -42,9 +42,7 @@
 
     <v-card color="grey lighten-2">
       <div class="odd-entry">
-        <h1 style="font-size:4em">
-          간단하고 직관적인 UI
-        </h1>
+        <h1 style="font-size:4em">간단하고 직관적인 <br />사용자 인터페이스</h1>
         <br />
         <p class="text-left" style="font-size:2em">
           출타관리체계로 출타를 신청하기 위해 특별히 배워야 할 것은 없습니다!
