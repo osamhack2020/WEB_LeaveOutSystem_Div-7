@@ -80,14 +80,11 @@ export default {
     },
     getEventColor(event) {
       if (event.status === 'pending') {
-        console.log('grey')
         return 'grey'
       }
       if (compareAsc(parseISO(event.start), new Date()) === 1) {
-        console.log('suc')
         return 'success'
       }
-      console.log('pri')
       return 'primary'
     },
     async loadLeaves() {
