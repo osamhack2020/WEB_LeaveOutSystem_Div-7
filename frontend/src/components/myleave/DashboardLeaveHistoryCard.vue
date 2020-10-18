@@ -44,8 +44,17 @@ export default {
   methods: {
     async loadLeaveHistory() {
       this.loading = true
-      const res = await LeaveDashboardAPI.getHistroyCount()
+      const res = await LeaveDashboardAPI.getHistoryCount()
       this.history = res.data
+      if (this.history['휴가'] === undefined) {
+        this.history['휴가'] = { count: 0, amount: 0 }
+      }
+      if (this.history['외출'] === undefined) {
+        this.history['외출'] = { count: 0 }
+      }
+      if (this.history['외박'] === undefined) {
+        this.history['외박'] = { count: 0 }
+      }
       this.loading = false
     }
   },

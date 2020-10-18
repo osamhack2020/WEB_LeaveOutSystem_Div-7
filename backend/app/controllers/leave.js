@@ -158,6 +158,6 @@ exports.dashboardGetLeaveHistory = utils.asyncRoute(async (req, res) => {
     ret[leave.type].amount += leave.length
     ret[leave.type].count += 1
   }
-
+  
   res.status(200).json(ret)
 })
