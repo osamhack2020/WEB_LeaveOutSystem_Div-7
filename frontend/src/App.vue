@@ -8,11 +8,13 @@
         </v-fade-transition>
       </v-container>
     </v-main>
+    <footer-bar></footer-bar>
   </v-app>
 </template>
 
 <script>
 import NavBar from './components/core/NavBar.vue'
+import FooterBar from './components/core/FooterBar.vue'
 
 export default {
   name: 'App',
@@ -20,7 +22,7 @@ export default {
     return {}
   },
 
-  components: { NavBar },
+  components: { NavBar, FooterBar },
 
   data: () => ({
     //
