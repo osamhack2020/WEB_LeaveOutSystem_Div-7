@@ -9,6 +9,9 @@
           :items="leaves"
           :search="leaveSearch"
           :loading="leaveLoading"
+          :page="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
         >
           <template v-slot:[`item.startDate`]="{ item }">
             <span>{{ new Date(item.startDate).toLocaleDateString() }}</span>
@@ -19,6 +22,14 @@
           <template v-slot:[`item.status`]="{ item }">
             <span>{{ item.status | formatStatus }}</span>
           </template>
+          <template v-slot:footer>
+            <v-divider></v-divider>
+            <Pagination-footer
+              v-model="page"
+              :item-count="leaves.length"
+              :items-per-page.sync="itemsPerPage"
+            />
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -26,13 +37,15 @@
 </template>
 <script>
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
+import PaginationFooter from '../../components/PaginationFooter.vue'
 import leaveTokenAPI from '../../services/leaveTokenManage'
 import leaveAPI from '../../services/leave'
 import { format, add } from 'date-fns'
 
 export default {
   components: {
-    CurrentLocation
+    CurrentLocation,
+    PaginationFooter
   },
   data: () => ({
     rawLeaves: [],
@@ -45,7 +58,10 @@ export default {
     applyPlan: {
       departure: format(new Date(), 'yyyy-MM-dd')
     },
-    successAlert: false
+    successAlert: false,
+
+    page: 1,
+    itemsPerPage: 10
   }),
   computed: {
     location: () => [

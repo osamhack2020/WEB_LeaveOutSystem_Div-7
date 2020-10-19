@@ -36,7 +36,7 @@ import LeaveInfoCard from '../../components/myleave/LeaveInfoCard.vue'
 
 import leaveTokenAPI from '../../services/leaveTokenManage'
 import leaveAPI from '../../services/leave'
-import { format, add, parseISO } from 'date-fns'
+import { format, add, parseISO, compareDesc } from 'date-fns'
 
 export default {
   components: {
@@ -65,13 +65,25 @@ export default {
       return this.rawLeaves
     },
     acceptedLeaves() {
-      return this.rawLeaves.filter(leave => leave.status === 'accepted')
+      return this.rawLeaves
+        .filter(leave => leave.status === 'accepted')
+        .sort((a, b) =>
+          compareDesc(parseISO(a.startDate), parseISO(b.startDate))
+        )
     },
     pendingLeaves() {
-      return this.rawLeaves.filter(leave => leave.status === 'pending')
+      return this.rawLeaves
+        .filter(leave => leave.status === 'pending')
+        .sort((a, b) =>
+          compareDesc(parseISO(a.startDate), parseISO(b.startDate))
+        )
     },
     deniedLeaves() {
-      return this.rawLeaves.filter(leave => leave.status === 'denied')
+      return this.rawLeaves
+        .filter(leave => leave.status === 'denied')
+        .sort((a, b) =>
+          compareDesc(parseISO(a.startDate), parseISO(b.startDate))
+        )
     },
     headers: () => [
       { text: '출타 종류', value: 'type', align: 'start' },

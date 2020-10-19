@@ -1,8 +1,11 @@
 <template>
   <v-row>
     <v-col cols="3">
-      <v-card>
-        <v-list>
+      <v-card color="primary lighten-1" dark>
+        <v-card-title>
+          출타 승인/거부
+        </v-card-title>
+        <v-list color="primary lighten-1" dark>
           <v-list-item-group v-model="typeSelected" mandatory>
             <v-list-item
               v-for="(type, idx) of availableTypes"
@@ -12,14 +15,28 @@
               <v-chip
                 class="ml-2"
                 small
-                color="primary"
-                v-if="(applies[type] || []).length"
+                color="secondary"
+                dark
+                v-if="
+                  (applies[type] || []).filter(
+                    item => item.status === 'pending'
+                  ).length
+                "
               >
-                {{ (applies[type] || []).length }}
+                {{
+                  (applies[type] || []).filter(
+                    item => item.status === 'pending'
+                  ).length
+                }}
               </v-chip>
             </v-list-item>
           </v-list-item-group>
-          <v-btn @click="loadApplies">새로고침</v-btn>
+          <div class="px-3 pt-3">
+            <!-- <v-spacer></v-spacer> -->
+            <v-btn @click="loadApplies" color="secondary" block>
+              <v-icon class="mr-1">mdi-refresh</v-icon> 새로고침
+            </v-btn>
+          </div>
         </v-list>
       </v-card>
     </v-col>
@@ -30,6 +47,9 @@
         :items="applies[currentType]"
         item-key="_id"
         :loading="applyLoading"
+        :page="page"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
       >
         <template v-slot:[`item.startDate`]="{ item }">
           <span>{{ item.startDate | formatDate }}</span>
@@ -55,7 +75,7 @@
             outlined
             fab
             x-small
-            color="success"
+            :color="item.status === 'accepted' ? 'success' : 'grey'"
           >
             <v-icon>mdi-check</v-icon>
           </v-btn>
@@ -65,10 +85,18 @@
             outlined
             fab
             x-small
-            color="error"
+            :color="item.status === 'denied' ? 'error' : 'grey'"
           >
             <v-icon>mdi-cancel</v-icon>
           </v-btn>
+        </template>
+        <template v-slot:footer>
+          <v-divider></v-divider>
+          <Pagination-footer
+            v-model="page"
+            :item-count="(applies[currentType] || []).length"
+            :items-per-page.sync="itemsPerPage"
+          />
         </template>
       </v-data-table>
     </v-col>
@@ -91,18 +119,23 @@
   </v-row>
 </template>
 <script>
+import PaginationFooter from '../components/PaginationFooter.vue'
+
 import { format, parseISO } from 'date-fns'
 import leaveAPI from '../services/leave'
 
 export default {
-  components: {},
+  components: { PaginationFooter },
   data: () => ({
     rawApplies: [],
     typeSelected: 0,
     applySelected: [],
     currentDialogApply: null,
     isDialogApply: false,
-    applyLoading: false
+    applyLoading: false,
+
+    itemsPerPage: 10,
+    page: 1
   }),
   computed: {
     headers() {

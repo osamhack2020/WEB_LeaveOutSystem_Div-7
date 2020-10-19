@@ -28,28 +28,20 @@
             :items="types"
             label="종류"
             filled
-            placeholder="휴가"
           ></v-autocomplete>
           <v-autocomplete
             v-model="kind"
             :items="kinds"
             label="세부 종류"
             filled
-            placeholder="정기"
           ></v-autocomplete>
           <v-text-field
             v-model="amount"
             :disabled="isAmountDisabled"
             label="부여일수"
             filled
-            placeholder="3"
           ></v-text-field>
-          <v-text-field
-            v-model="reason"
-            label="근거"
-            filled
-            placeholder="정기 휴가"
-          ></v-text-field>
+          <v-text-field v-model="reason" label="근거" filled></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -94,7 +86,7 @@ export default {
     reason: '',
     amount: null,
     types: ['휴가', '외박', '외출'],
-    kinds: ['정기', '포상', '병가', '신병', '기타']
+    kinds: ['정기', '포상', '위로', '병가', '신병', '기타']
   }),
   computed: {
     canSubmit() {

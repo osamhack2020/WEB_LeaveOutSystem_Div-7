@@ -96,7 +96,6 @@ export default {
         password: this.password,
         division: this.division
       })
-      console.log(this.username)
       this.dialog = false
       this.username = ''
       this.password = ''

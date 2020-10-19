@@ -3,7 +3,7 @@
     <template v-slot:activator="acti">
       <slot v-bind="acti"></slot>
     </template>
-    <v-card>
+    <v-card :loading="loading">
       <v-card-title>
         출타 부여 대상자 선택
       </v-card-title>
@@ -17,12 +17,14 @@
               <v-list-item
                 v-else
                 :key="`item-${i}`"
-                :value="item"
+                :value="item.username"
                 active-class="deep-purple--text text--accent-4"
               >
                 <template v-slot:default="{ active }">
                   <v-list-item-content>
-                    <v-list-item-title v-text="item"></v-list-item-title>
+                    <v-list-item-title>
+                      {{ item.name }} ({{ item.username }})
+                    </v-list-item-title>
                   </v-list-item-content>
 
                   <v-list-item-action>
@@ -63,13 +65,7 @@ export default {
   props: {
     userList2: {
       type: Array,
-      default: () => [
-        '20-11111235',
-        '20-11111236',
-        '20-11111237',
-        '20-11111238',
-        '20-11111239'
-      ]
+      default: () => []
     },
     curLeaveTokenInfo: {
       type: Object,
@@ -112,6 +108,7 @@ export default {
   },
   methods: {
     async getUserList() {
+      this.loading = true
       const division = JSON.parse(localStorage.getItem('user')).division
       let res = await userAPI.getUsers()
       if (division) {
@@ -119,10 +116,9 @@ export default {
       } else {
         res = res.data.docs.filter(user => !user.division)
       }
-      for (let idx = 0; idx < res.length; idx++) {
-        res[idx] = res[idx].username
-      }
-      this.userList = res.sort()
+
+      this.userList = res.sort((a, b) => a.name.localeCompare(b.name))
+      this.loading = false
     },
     clickSubmit() {
       this.$emit('submit', {
