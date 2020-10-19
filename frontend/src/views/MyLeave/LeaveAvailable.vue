@@ -38,7 +38,9 @@
                   <span v-if="item.type === '휴가'">{{ item.amount }}일</span>
                 </div>
                 <v-spacer />
-                <v-btn outlined @click="clickApplyLeave(item)">사용하기</v-btn>
+                <v-btn outlined color="primary" @click="clickApplyLeave(item)"
+                  >사용하기</v-btn
+                >
               </v-card-title>
               <div class="px-5">
                 <div>
