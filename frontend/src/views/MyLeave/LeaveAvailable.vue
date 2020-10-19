@@ -10,12 +10,12 @@
             <v-tab>외출</v-tab>
             <v-tab>외박</v-tab>
           </v-tabs>
-          <KindFilter v-model="kindFilterOptions" />
+          <KindFilter v-model="kindFilterOptions" class="mx-2" />
         </v-card>
         <template v-if="availableLoading">
           <v-skeleton-loader
             v-for="i in 4"
-            class="mb-3"
+            class="mt-3"
             type="article, actions"
             :key="`loader-${i}`"
           ></v-skeleton-loader>
@@ -32,14 +32,33 @@
               :key="idx"
               class="mb-2"
             >
-              <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
-              <v-card-text>
-                <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="clickApplyLeave(item)">사용하기</v-btn>
-              </v-card-actions>
+              <v-card-title class="d-flex pb-2">
+                <div>
+                  {{ item.kind }} {{ item.type }}
+                  <span v-if="item.type === '휴가'">{{ item.amount }}일</span>
+                </div>
+                <v-spacer />
+                <v-btn outlined color="primary" @click="clickApplyLeave(item)"
+                  >사용하기</v-btn
+                >
+              </v-card-title>
+              <div class="px-5">
+                <div>
+                  {{ item.reason }}
+                </div>
+                <div>
+                  {{ item.message }}
+                </div>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip v-bind="attrs" v-on="on" small class="mt-2">
+                      {{ item.expirationDate | fromNow }} 뒤 만료
+                    </v-chip>
+                  </template>
+                  <span>{{ item.expirationDate | formatDate }}</span>
+                </v-tooltip>
+              </div>
+              <v-card-actions></v-card-actions>
             </v-card>
           </v-tab-item>
           <!-- <v-tab-item>asdf</v-tab-item>
@@ -49,7 +68,7 @@
 
       <!-- 휴가 신청 전 선택 -->
       <v-col>
-        <v-toolbar flat>
+        <v-toolbar flat class="pt-2" dense>
           <v-toolbar-title>
             {{ availableTypes[currentType].value }} 신청
           </v-toolbar-title>
@@ -85,19 +104,33 @@
           :key="`apply-card-${idx}`"
           class="mb-2"
         >
-          <v-toolbar flat>
-            <v-toolbar-title>{{ item.kind }} {{ item.type }}</v-toolbar-title>
+          <v-card-title class="d-flex pb-2">
+            <div>
+              {{ item.kind }} {{ item.type }}
+              <span v-if="item.type === '휴가'">{{ item.amount }}일</span>
+            </div>
             <v-spacer />
-            <v-btn fab text @click="deleteFromApplyList(idx, item.type)">
+            <v-btn outlined @click="deleteFromApplyList(idx, item.type)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-          </v-toolbar>
-          <v-card-text>
-            <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-          </v-card-actions>
+          </v-card-title>
+          <div class="px-5">
+            <div>
+              {{ item.reason }}
+            </div>
+            <div>
+              {{ item.message }}
+            </div>
+            <v-tooltip right>
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip v-bind="attrs" v-on="on" small class="mt-2">
+                  {{ item.expirationDate | fromNow }} 뒤 만료
+                </v-chip>
+              </template>
+              <span>{{ item.expirationDate | formatDate }}</span>
+            </v-tooltip>
+          </div>
+          <v-card-actions></v-card-actions>
         </v-card>
       </v-col>
 
@@ -110,7 +143,8 @@ import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
 import KindFilter from '../../components/myleave/KindFilter.vue'
 import DateRangeSelect from '../../components/DateRangeSelect.vue'
 import leaveAPI from '../../services/leave'
-import { format } from 'date-fns'
+import { format, parseISO, formatDistance } from 'date-fns'
+import { ko } from 'date-fns/locale'
 
 export default {
   components: {
@@ -262,6 +296,14 @@ export default {
     this.$store.dispatch('startAppLoading')
     await this.loadAvailables()
     this.$store.dispatch('endAppLoading')
+  },
+  filters: {
+    formatDate(value) {
+      return format(parseISO(value), 'yyyy년 MM월 dd일')
+    },
+    fromNow(value) {
+      return formatDistance(parseISO(value), new Date(), { locale: ko })
+    }
   }
 }
 </script>

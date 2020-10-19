@@ -69,6 +69,9 @@
         :items="users"
         :search="userSearch"
         :loading="userLoading"
+        :page="page"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
       >
         <template v-slot:[`item.role`]="{ item }">
           <v-chip outlined dense>
@@ -91,6 +94,14 @@
             mdi-delete
           </v-icon>
         </template>
+        <template v-slot:footer>
+          <v-divider></v-divider>
+          <Pagination-footer
+            v-model="page"
+            :item-count="users.length"
+            :items-per-page.sync="itemsPerPage"
+          />
+        </template>
       </v-data-table>
     </v-col>
 
@@ -108,11 +119,13 @@ import userAPI from '../services/user'
 import divisionAPI from '../services/division'
 import CreateUserDialog from '../components/CreateUserDialog.vue'
 import EditUserDialog from '../components/EditUserDialog.vue'
+import PaginationFooter from '../components/PaginationFooter.vue'
 
 export default {
   components: {
     CreateUserDialog,
-    EditUserDialog
+    EditUserDialog,
+    PaginationFooter
   },
   data: () => ({
     userLoading: false,
@@ -122,7 +135,10 @@ export default {
     rawDivisions: [],
     userSearch: '',
     isEditUserDialogOpen: false,
-    currentItem: {}
+    currentItem: {},
+
+    itemsPerPage: 10,
+    page: 1
   }),
   computed: {
     users() {
