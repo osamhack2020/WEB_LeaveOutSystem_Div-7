@@ -38,9 +38,14 @@
                   <span v-if="item.type === '휴가'">{{ item.amount }}일</span>
                 </div>
                 <v-spacer />
-                <v-btn outlined color="primary" @click="clickApplyLeave(item)"
-                  >사용하기</v-btn
+                <v-btn
+                  outlined
+                  color="primary"
+                  @click="clickApplyLeave(item)"
+                  :disabled="(applyList[item.type] || []).includes(item)"
                 >
+                  사용하기
+                </v-btn>
               </v-card-title>
               <div class="px-5">
                 <div>
@@ -61,33 +66,86 @@
               <v-card-actions></v-card-actions>
             </v-card>
           </v-tab-item>
-          <!-- <v-tab-item>asdf</v-tab-item>
-          <v-tab-item>asdf</v-tab-item> -->
-
-          <div v-if="currentType === 0" style="float:right; margin-bottom: 3%">
-            <v-chip
-              class="mr-2"
-              style="float:right;"
-              color="success"
-              @click="openHelpApplyLeaveDialog()"
-              >> 휴가 신청 도우미
-            </v-chip>
-          </div>
           <div style="clear: both;"></div>
         </v-tabs-items>
       </v-col>
-      <HelpApplyLeaveDialog
-        v-model="isHelpApplyLeaveDialogOpen"
-        @submit="clickHelpApplyLeave"
-        :availables="availables"
-      >
-      </HelpApplyLeaveDialog>
+
+      <!-- 현재 장바구니 목록 -->
+      <v-col cols="4">
+        <v-sheet class="pb-3">
+          <v-card-title>
+            선택한 {{ availableTypes[currentType].value }}
+          </v-card-title>
+          <p
+            v-if="!(applyList[availableTypes[currentType].value] || []).length"
+            class="grey--text ml-3"
+          >
+            왼쪽에서 {{ availableTypes[currentType].value }}를 선택해주세요...
+          </p>
+          <v-card
+            outlined
+            v-for="(item, idx) of applyList[availableTypes[currentType].value]"
+            :key="`apply-card-${idx}`"
+            class="ma-2"
+          >
+            <v-card-title class="d-flex pb-2">
+              <div>
+                {{ item.kind }} {{ item.type }}
+                <span v-if="item.type === '휴가'">{{ item.amount }}일</span>
+              </div>
+              <v-spacer />
+              <v-btn outlined @click="deleteFromApplyList(idx, item.type)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </v-card-title>
+            <div class="px-5">
+              <div>
+                {{ item.reason }}
+              </div>
+              <div>
+                {{ item.message }}
+              </div>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-chip v-bind="attrs" v-on="on" small class="mt-2">
+                    {{ item.expirationDate | fromNow }} 뒤 만료
+                  </v-chip>
+                </template>
+                <span>{{ item.expirationDate | formatDate }}</span>
+              </v-tooltip>
+            </div>
+            <v-card-actions></v-card-actions>
+          </v-card>
+        </v-sheet>
+      </v-col>
 
       <!-- 휴가 신청 전 선택 -->
-      <v-col>
+      <v-col cols="4">
         <v-toolbar flat class="pt-2" dense>
-          <v-toolbar-title>
-            {{ availableTypes[currentType].value }} 신청
+          <v-toolbar-title class="d-flex">
+            <div>{{ availableTypes[currentType].value }} 신청</div>
+
+            <HelpApplyLeaveDialog
+              v-model="isHelpApplyLeaveDialogOpen"
+              v-slot="{ on, attrs }"
+              @submit="clickHelpApplyLeave"
+              :availables="availables"
+            >
+              <v-fade-transition>
+                <v-btn
+                  v-if="availableTypes[currentType].value === '휴가'"
+                  class="ml-3"
+                  color="success"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+                  small
+                >
+                  <v-icon>mdi-question</v-icon>
+                  휴가 신청 도우미
+                </v-btn>
+              </v-fade-transition>
+            </HelpApplyLeaveDialog>
           </v-toolbar-title>
           <v-spacer />
         </v-toolbar>
@@ -115,43 +173,7 @@
         >
           신청 되었습니다.
         </v-alert>
-        <v-card
-          outlined
-          v-for="(item, idx) of applyList[availableTypes[currentType].value]"
-          :key="`apply-card-${idx}`"
-          class="mb-2"
-        >
-          <v-card-title class="d-flex pb-2">
-            <div>
-              {{ item.kind }} {{ item.type }}
-              <span v-if="item.type === '휴가'">{{ item.amount }}일</span>
-            </div>
-            <v-spacer />
-            <v-btn outlined @click="deleteFromApplyList(idx, item.type)">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </v-card-title>
-          <div class="px-5">
-            <div>
-              {{ item.reason }}
-            </div>
-            <div>
-              {{ item.message }}
-            </div>
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-chip v-bind="attrs" v-on="on" small class="mt-2">
-                  {{ item.expirationDate | fromNow }} 뒤 만료
-                </v-chip>
-              </template>
-              <span>{{ item.expirationDate | formatDate }}</span>
-            </v-tooltip>
-          </div>
-          <v-card-actions></v-card-actions>
-        </v-card>
       </v-col>
-
-      <v-col cols="4"> </v-col>
     </v-row>
   </div>
 </template>
@@ -286,6 +308,7 @@ export default {
           )
           this.$store.dispatch('endAppLoading')
           this.$set(this.applyList, '휴가', [])
+          this.showSuccessAlert()
         }
       } else if (type === '외출') {
         if (
@@ -304,6 +327,7 @@ export default {
           )
           this.$store.dispatch('endAppLoading')
           this.$set(this.applyList, '외출', [])
+          this.showSuccessAlert()
         }
       } else if (type === '외박') {
         if (
@@ -322,9 +346,9 @@ export default {
           )
           this.$store.dispatch('endAppLoading')
           this.$set(this.applyList, '외박', [])
+          this.showSuccessAlert()
         }
       }
-      this.showSuccessAlert()
     }
   },
   async created() {
