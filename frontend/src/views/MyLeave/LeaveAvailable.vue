@@ -35,6 +35,9 @@
               <v-card-title> {{ item.kind }} {{ item.type }} </v-card-title>
               <v-card-text>
                 <div v-if="item.type === '휴가'">{{ item.amount }}일</div>
+                <div>
+                  만료: {{ new Date(item.expirationDate).toLocaleDateString() }}
+                </div>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -44,8 +47,25 @@
           </v-tab-item>
           <!-- <v-tab-item>asdf</v-tab-item>
           <v-tab-item>asdf</v-tab-item> -->
+
+          <div v-if="currentType === 0" style="float:right; margin-bottom: 3%">
+            <v-chip
+              class="mr-2"
+              style="float:right;"
+              color="success"
+              @click="openHelpApplyLeaveDialog()"
+              >> 휴가 신청 도우미
+            </v-chip>
+          </div>
+          <div style="clear: both;"></div>
         </v-tabs-items>
       </v-col>
+      <HelpApplyLeaveDialog
+        v-model="isHelpApplyLeaveDialogOpen"
+        @submit="clickHelpApplyLeave"
+        :availables="availables"
+      >
+      </HelpApplyLeaveDialog>
 
       <!-- 휴가 신청 전 선택 -->
       <v-col>
@@ -109,6 +129,7 @@
 import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
 import KindFilter from '../../components/myleave/KindFilter.vue'
 import DateRangeSelect from '../../components/DateRangeSelect.vue'
+import HelpApplyLeaveDialog from '../../components/myleave/HelpApplyLeaveDialog.vue'
 import leaveAPI from '../../services/leave'
 import { format } from 'date-fns'
 
@@ -116,7 +137,8 @@ export default {
   components: {
     CurrentLocation,
     KindFilter,
-    DateRangeSelect
+    DateRangeSelect,
+    HelpApplyLeaveDialog
   },
   data: () => ({
     availables: [],
@@ -127,7 +149,8 @@ export default {
     applyPlan: {
       departure: format(new Date(), 'yyyy-MM-dd')
     },
-    successAlert: false
+    successAlert: false,
+    isHelpApplyLeaveDialogOpen: false
   }),
   computed: {
     location: () => [
@@ -171,7 +194,13 @@ export default {
     async loadAvailables() {
       this.availableLoading = true
       const res = await leaveAPI.getAvailables()
-      this.availables = res.data
+      this.availables = res.data.sort((a, b) =>
+        a.expirationDate > b.expirationDate
+          ? 1
+          : a.expirationDate < b.expirationDate
+          ? -1
+          : 0
+      )
       this.availableLoading = false
     },
     clickApplyLeave(item) {
@@ -193,6 +222,19 @@ export default {
       setTimeout(() => {
         this.successAlert = false
       }, 2500)
+    },
+    openHelpApplyLeaveDialog() {
+      this.isHelpApplyLeaveDialogOpen = true
+    },
+    async clickHelpApplyLeave(leaveIndex) {
+      this.applyList['휴가'] = []
+      const len = this.availables.length
+      for (let i = 0; i < len; i++) {
+        if (leaveIndex & (1 << i)) {
+          await this.clickApplyLeave(this.availables[i])
+        }
+      }
+      await this.loadAvailables()
     },
     async applyLeave(type) {
       if (type === '휴가') {
