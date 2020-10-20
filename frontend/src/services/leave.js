@@ -7,6 +7,9 @@ export default {
   async getLeaves() {
     return await axios.get('/leave/apply')
   },
+  async getLeaveHistory() {
+    return await axios.get('/leave/apply-history')
+  },
   async applyLeave(departure, tokens) {
     return await axios.post('/leave/apply', {
       departure,

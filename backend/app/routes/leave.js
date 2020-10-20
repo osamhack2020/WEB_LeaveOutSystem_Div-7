@@ -32,6 +32,7 @@ router.get(
   validate.getLeaves,
   controller.getLeaves
 )
+
 /**
  * 내 출타 신청
  */
@@ -42,6 +43,17 @@ router.post(
   trimRequest.all,
   validate.applyLeave,
   controller.applyLeave
+)
+
+/**
+ * 내 출타 히스토리 조회
+ */
+router.get(
+  '/apply-history',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.getLeaveHistory
 )
 
 router.get(

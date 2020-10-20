@@ -85,7 +85,7 @@ export default {
   methods: {
     async loadLeaves() {
       this.leaveLoading = true
-      const res = await leaveAPI.getLeaves()
+      const res = await leaveAPI.getLeaveHistory()
       this.rawLeaves = res.data.filter(
         leave => leave.user === JSON.parse(localStorage.getItem('user'))._id
       )
