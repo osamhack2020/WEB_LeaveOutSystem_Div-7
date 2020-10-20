@@ -143,6 +143,7 @@
                   v-bind="attrs"
                   v-on="on"
                   small
+                  depressed
                 >
                   <v-icon>mdi-question</v-icon>
                   휴가 신청 도우미
@@ -161,9 +162,12 @@
             :range="availableTypes[currentType].value === '휴가'"
           />
           <v-btn
+            class="mt-2"
             :disabled="totalApplyLength[availableTypes[currentType].value] < 1"
             color="primary"
             @click="applyLeave(availableTypes[currentType].value)"
+            depressed
+            block
             >신청하기</v-btn
           >
         </v-sheet>
