@@ -2,7 +2,7 @@
   <div>
     <CurrentLocation :location="location"></CurrentLocation>
     <v-sheet class="pa-3">
-      <h2 class="text-h5">확정된 출타</h2>
+      <h2 class="text-h5"><span class="success--text">승인</span>된 출타</h2>
       <LeaveInfoCard
         v-for="leave of acceptedLeaves"
         :key="`accepted-${leave._id}`"
@@ -11,7 +11,7 @@
       />
     </v-sheet>
     <v-sheet class="pa-3">
-      <h2 class="text-h5">거부된 출타</h2>
+      <h2 class="text-h5"><span class="error--text">거부</span>된 출타</h2>
       <LeaveInfoCard
         v-for="leave of deniedLeaves"
         :key="`denied-${leave._id}`"

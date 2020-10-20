@@ -1,6 +1,28 @@
 <template>
   <DashboardCard :loading="!leaves">
-    <v-card-text>
+    <template v-slot:title>
+      <div class="pt-2 px-3 d-flex">
+        <h3 class="text-h6">
+          내 달력
+        </h3>
+        <div class="flex-grow-1 px-4">
+          <v-progress-linear
+            v-if="!leaves"
+            indeterminate
+            class="align-self-center"
+          />
+        </div>
+        <span
+          v-for="(legend, idx) of legends"
+          :key="`legend-${idx}`"
+          :class="`${legend.color} white--text px-2 ml-1`"
+          style="height: 20px; margin-bottom: 1px; font-size: 12px;"
+        >
+          {{ legend.text }}
+        </span>
+      </div>
+    </template>
+    <v-card-text class="pt-0">
       <v-sheet class="d-flex justify-space-between align-center ">
         <v-btn fab text small color="grey darken-2" @click="prevMonth">
           <v-icon small>
@@ -60,7 +82,13 @@ export default {
             status: leave.status
           }
         })
-    }
+    },
+    legends: () => [
+      { text: '승인됨', color: 'success' },
+      { text: '거부됨', color: 'error' },
+      { text: '사용함', color: 'primary' },
+      { text: '대기중', color: 'grey' }
+    ]
   },
   methods: {
     dateToStr(date) {
@@ -88,8 +116,12 @@ export default {
       return 'primary'
     },
     async loadLeaves() {
-      const res = await leaveAPI.getLeaves()
-      this.leaves = res.data
+      const vals = await Promise.all([
+        leaveAPI.getLeaves(),
+        leaveAPI.getLeaveHistory()
+      ])
+      const res = [...vals[0].data, ...vals[1].data]
+      this.leaves = res
     }
   },
   async created() {
