@@ -8,53 +8,52 @@
         휴가 신청 도우미
       </v-card-title>
       <v-divider> </v-divider>
-      <v-form @submit.prevent="clickSubmit">
-      <v-card-text>
-          <v-text-field
-            v-model="leaveLength"
-            label="휴가 일수 입력"
-            filled
-            placeholder="3"
-          ></v-text-field>
-          <v-layout justify-end>
-          <v-btn
-            class="ma-n3 pa-n3"
-            type="submit"
-            color="blue darken-1"
-            @click="clickSubmit"
-            text
-          >
-            추천조회
-          </v-btn>
-          </v-layout>
-      </v-card-text>
-      </v-form>
+      <v-text-field
+        class="my-2 mx-3"
+        v-model="leaveLength"
+        label="휴가 일수 입력"
+        filled
+        placeholder="3"
+        hide-details
+      ></v-text-field>
       <v-list dense>
-      <v-subheader>추천 출타 조합!</v-subheader>
-      <v-list-item-group
-        v-model="recom"
-        color="primary"
-      >
-        <v-list-item
-          v-for="(recom, i) in recoms"
-          :key="i"
+        <v-subheader>추천 출타 조합!</v-subheader>
+        <p v-if="!(parseInt(leaveLength) > 0)" class="text-caption mx-3">
+          일수를 입력해주세요...
+        </p>
+        <p
+          v-else-if="recoms.every(r => r.num === -1)"
+          class="text-caption mx-3"
         >
-          <v-list-item-content>
-            <v-list-item-title>추천 {{i+1}}순위 </v-list-item-title>
-            {{recoms[i].str}}
-          </v-list-item-content>
-          <v-btn
-            type="submit"
-            :disabled="!canSubmit"
-            color="blue darken-1"
-            @click="clickChoose(i)"
-            text
-          >
-            선택
-          </v-btn>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
+          가능한 조합이 없습니다...
+        </p>
+        <template v-for="(recom, i) in recoms">
+          <v-list-item v-show="recom.num != -1" :key="`recom-${i}`">
+            <v-list-item-content>
+              <v-list-item-title>추천 {{ i + 1 }}순위 </v-list-item-title>
+              <div class="d-flex flex-wrap">
+                <v-chip
+                  v-for="item of recomItems(recoms[i].num)"
+                  :key="`recom-${i}-${item._id}`"
+                  class="ml-1"
+                  small
+                >
+                  {{ item.kind }} {{ item.amount }}일
+                </v-chip>
+              </div>
+            </v-list-item-content>
+            <v-btn
+              type="submit"
+              :disabled="!canSubmit"
+              color="blue darken-1"
+              @click="clickChoose(i)"
+              text
+            >
+              선택
+            </v-btn>
+          </v-list-item>
+        </template>
+      </v-list>
     </v-card>
   </v-dialog>
 </template>
@@ -64,7 +63,7 @@ export default {
     value: [Boolean, Array],
     availables: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
   data() {
@@ -72,8 +71,11 @@ export default {
       dialog: false,
       loading: false,
       leaveLength: null,
-      recom: 1,
-      recoms: [{num: -1, str: ""}, {num: -1, str: ""}, {num: -1, str: ""}],
+      recoms: [
+        { num: -1, str: '' },
+        { num: -1, str: '' },
+        { num: -1, str: '' }
+      ]
     }
   },
   computed: {
@@ -89,37 +91,60 @@ export default {
   },
   methods: {
     clickSubmit() {
-      var len = this.availables.length
-      var cnt = 0
-      this.recoms = [{num: -1, str: ""}, {num: -1, str: ""}, {num: -1, str: ""}]
-      for(var j = 0; j < (1 << len); j++){
-        var temp = 0
-        for(var k = 0; k < len; k++){
-          if(j & (1 << k)) temp += this.availables[k].amount
-        }
-        if(parseInt(temp) === parseInt(this.leaveLength)){
-          var exists = false
-          for(var k = 0; k < cnt; k++){
-            if(this.recoms[k].num == j) exists = true
+      const len = this.availables.length
+      let cnt = 0
+      this.recoms = [
+        { num: -1, str: '' },
+        { num: -1, str: '' },
+        { num: -1, str: '' }
+      ]
+      for (let j = 0; j < 1 << len; j++) {
+        let temp = 0
+        for (let k = 0; k < len; k++) {
+          if (j & (1 << k)) {
+            temp += this.availables[k].amount
           }
-          if(exists) continue
+        }
+        if (parseInt(temp) === parseInt(this.leaveLength)) {
+          let exists = false
+          for (let k = 0; k < cnt; k++) {
+            if (this.recoms[k].num === j) {
+              exists = true
+            }
+          }
+          if (exists) {
+            continue
+          }
           this.recoms[cnt].num = j
-          this.recoms[cnt].str = ""
-          for(var k = 0; k < len; k++){
-            if(j & (1 << k)) this.recoms[cnt].str += (String(this.availables[k].kind) + String(this.availables[k].amount) + "일 ")
-          } 
+          this.recoms[cnt].str = ''
+          // for (var k = 0; k < len; k++) {
+          //   if (j & (1 << k)) {
+          //     this.recoms[cnt].str += `${String(this.availables[k].kind) +
+          //       String(this.availables[k].amount)``
+          //   }
+          // }
           cnt++
         }
-        if(parseInt(cnt) === 3) break 
-      } 
-      
+        if (parseInt(cnt) === 3) {
+          break
+        }
+      }
     },
     clickChoose(i) {
-      this.$emit('submit',this.recoms[i].num)
+      this.$emit('submit', this.recoms[i].num)
       this.dialog = false
       this.leaveLength = null
       this.recoms = null
       this.recom = 1
+    },
+    recomItems(val) {
+      const ret = []
+      for (let i = 0; i < this.availables.length; i++) {
+        if (val & (1 << i)) {
+          ret.push(this.availables[i])
+        }
+      }
+      return ret
     }
   },
   watch: {
@@ -129,8 +154,11 @@ export default {
     value(val) {
       this.dialog = val
     },
-    recoms(value){
-      this.$emit('input', value)
+    // recoms(value) {
+    //   this.$emit('input', value)
+    // },
+    leaveLength(val) {
+      this.clickSubmit()
     }
   }
 }

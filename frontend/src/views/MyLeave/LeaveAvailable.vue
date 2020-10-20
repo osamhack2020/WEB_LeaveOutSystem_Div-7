@@ -129,11 +129,14 @@
               v-model="isHelpApplyLeaveDialogOpen"
               v-slot="{ on, attrs }"
               @submit="clickHelpApplyLeave"
-              :availables="availables"
+              :availables="currentAvailables['휴가']"
             >
               <v-fade-transition>
                 <v-btn
-                  v-if="availableTypes[currentType].value === '휴가'"
+                  v-if="
+                    availableTypes[currentType].value === '휴가' &&
+                      !availableLoading
+                  "
                   class="ml-3"
                   color="success"
                   dark
@@ -276,14 +279,14 @@ export default {
       this.isHelpApplyLeaveDialogOpen = true
     },
     async clickHelpApplyLeave(leaveIndex) {
-      this.applyList['휴가'] = []
-      const len = this.availables.length
+      this.$set(this.applyList, '휴가', [])
+      const availables = this.currentAvailables['휴가']
+      const len = availables.length
       for (let i = 0; i < len; i++) {
         if (leaveIndex & (1 << i)) {
-          await this.clickApplyLeave(this.availables[i])
+          await this.clickApplyLeave(availables[i])
         }
       }
-      await this.loadAvailables()
     },
     async applyLeave(type) {
       if (type === '휴가') {
