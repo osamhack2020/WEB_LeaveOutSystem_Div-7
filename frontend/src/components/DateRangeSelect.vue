@@ -24,11 +24,15 @@
       ></v-calendar>
     </v-sheet>
     <template v-if="range">
-      <div>총 {{ length }}일</div>
-      <div>{{ departure }} 부터 ~ {{ arrival }} 까지</div>
+      <div class="mt-2 text-center">
+        {{ departure }} 부터 ~ {{ arrival }} 까지
+      </div>
+      <div class="text-h5 text-center primary--text">
+        {{ length - 1 }}박 {{ length }}일
+      </div>
     </template>
     <template v-else>
-      <div>{{ departure }}</div>
+      <div class="mt-2">{{ departure }}</div>
     </template>
   </div>
 </template>

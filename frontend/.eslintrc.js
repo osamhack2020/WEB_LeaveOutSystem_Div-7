@@ -96,7 +96,8 @@ module.exports = {
 
     'func-style': ['off'],
     'vue/valid-v-slot': ['off'],
-    'max-statements': ['off']
+    'max-statements': ['off'],
+    'no-bitwise': ['off']
   },
   parserOptions: {
     parser: 'babel-eslint'
