@@ -20,7 +20,37 @@
             <span>{{ new Date(item.endDate).toLocaleDateString() }}</span>
           </template>
           <template v-slot:[`item.status`]="{ item }">
-            <span>{{ item.status | formatStatus }}</span>
+            <span :class="`${getStatusColor(item.status)}--text`">{{
+              item.status | formatStatus
+            }}</span>
+          </template>
+          <template v-slot:[`item.tokens`]="{ item }">
+            <v-tooltip
+              bottom
+              v-for="token of item.tokens"
+              :key="`leave-${item._id}-${token._id}`"
+              :disabled="!token.reason"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip
+                  class="mr-2"
+                  dense
+                  color="primary"
+                  outlined
+                  v-bind="attrs"
+                  v-on="on"
+                  small
+                >
+                  <template v-if="token.type === '휴가'">
+                    {{ token.kind }} {{ token.amount }}일
+                  </template>
+                  <template v-else>
+                    {{ token.kind }}
+                  </template>
+                </v-chip>
+              </template>
+              <span>{{ token.reason }}</span>
+            </v-tooltip>
           </template>
           <template v-slot:footer>
             <v-divider></v-divider>
@@ -78,6 +108,7 @@ export default {
       { text: '출타 종류', value: 'type', align: 'start' },
       { text: '출발 일자', value: 'startDate' },
       { text: '도착 일자', value: 'endDate' },
+      { text: '사용된 출타', value: 'tokens' },
       { text: '상태', value: 'status' },
       { text: '기타', value: 'message' }
     ]
@@ -107,6 +138,14 @@ export default {
         )
       }
       this.leaveLoading = false
+    },
+    getStatusColor(status) {
+      if (status === 'accepted') {
+        return 'success'
+      } else if (status === 'denied') {
+        return 'error'
+      }
+      return ''
     }
   },
   async created() {

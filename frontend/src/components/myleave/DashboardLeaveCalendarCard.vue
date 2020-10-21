@@ -1,5 +1,5 @@
 <template>
-  <DashboardCard :loading="!leaves">
+  <DashboardCard>
     <template v-slot:title>
       <div class="pt-2 px-3 d-flex">
         <h3 class="text-h6">
@@ -7,7 +7,7 @@
         </h3>
         <div class="flex-grow-1 px-4">
           <v-progress-linear
-            v-if="!leaves"
+            v-if="!leaves.length"
             indeterminate
             class="align-self-center"
           />

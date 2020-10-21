@@ -105,8 +105,7 @@ exports.getLeaves = utils.asyncRoute(async (req, res) => {
 // 지나간 출타 기록들을 가져옴
 exports.getLeaveHistory = utils.asyncRoute(async (req, res) => {
   const data = await Leave.find({
-    user: req.user._id,
-    startDate: { $lte: new Date() }
+    $and: [{ user: req.user._id }, { startDate: { $lte: new Date() } }]
   }).populate('tokens')
   res.status(200).json(leaveAdditionalInfo(data))
 })

@@ -8,28 +8,52 @@
         {{ leave.length }}일)</v-col
       >
       <v-col cols="4" class="d-flex">
-        <v-chip
+        <v-tooltip
+          bottom
           v-for="token of leave.tokens"
           :key="`leave-${leave._id}-${token._id}`"
-          class="mr-2"
-          dense
+          :disabled="!token.reason"
         >
-          {{ token.kind }} {{ token.amount }}일
-        </v-chip>
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip
+              class="mr-2"
+              dense
+              color="primary"
+              outlined
+              v-bind="attrs"
+              v-on="on"
+            >
+              {{ token.kind }} {{ token.amount }}일
+            </v-chip>
+          </template>
+          <span>{{ token.reason }}</span>
+        </v-tooltip>
       </v-col>
     </v-row>
     <v-row v-if="leave.tokens[0].type === '외출'" no-gutters class="pa-3">
       <v-col cols="2">외출</v-col>
       <v-col cols="6">{{ leave.startDate | formatDate }}</v-col>
       <v-col cols="4" class="d-flex">
-        <v-chip
+        <v-tooltip
+          bottom
           v-for="token of leave.tokens"
           :key="`leave-${leave._id}-${token._id}`"
-          class="mr-2"
-          dense
+          :disabled="!token.reason"
         >
-          {{ token.kind }}
-        </v-chip>
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip
+              class="mr-2"
+              dense
+              color="primary"
+              outlined
+              v-bind="attrs"
+              v-on="on"
+            >
+              {{ token.kind }}
+            </v-chip>
+          </template>
+          <span>{{ token.reason }}</span>
+        </v-tooltip>
       </v-col>
     </v-row>
     <v-row v-if="leave.tokens[0].type === '외박'" no-gutters class="pa-3">
@@ -39,14 +63,26 @@
         {{ leave.endDate | formatDate }}</v-col
       >
       <v-col cols="4" class="d-flex">
-        <v-chip
+        <v-tooltip
+          bottom
           v-for="token of leave.tokens"
           :key="`leave-${leave._id}-${token._id}`"
-          class="mr-2"
-          dense
+          :disabled="!token.reason"
         >
-          {{ token.kind }}
-        </v-chip>
+          <template v-slot:activator="{ on, attrs }">
+            <v-chip
+              class="mr-2"
+              dense
+              color="primary"
+              outlined
+              v-bind="attrs"
+              v-on="on"
+            >
+              {{ token.kind }}
+            </v-chip>
+          </template>
+          <span>{{ token.reason }}</span>
+        </v-tooltip>
       </v-col>
     </v-row>
   </v-card>

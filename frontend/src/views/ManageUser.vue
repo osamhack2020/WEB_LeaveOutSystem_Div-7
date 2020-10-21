@@ -41,7 +41,7 @@
     </v-col>
 
     <!-- 우측 리스트 -->
-    <v-col cols="9">
+    <v-col cols="9" class="pb-2">
       <v-toolbar flat>
         <v-text-field
           v-model="userSearch"
@@ -83,12 +83,14 @@
             v-if="!(item.role === 'admin' && !$store.getters.isAdmin)"
             small
             class="mr-2"
+            color="primary"
             @click="openEditUserDialog(item)"
             >mdi-pencil</v-icon
           >
           <v-icon
             v-if="!(item.role === 'admin' && !$store.getters.isAdmin)"
             small
+            color="error"
             @click="clickDeleteUser(item)"
           >
             mdi-delete

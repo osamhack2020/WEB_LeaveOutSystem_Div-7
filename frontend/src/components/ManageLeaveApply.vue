@@ -41,8 +41,23 @@
       </v-card>
     </v-col>
     <v-col cols="9">
+      <v-toolbar flat dense>
+        <v-text-field
+          v-model="search"
+          hide-details
+          prepend-icon="mdi-magnify"
+          single-line
+          dense
+          clearable
+        ></v-text-field>
+
+        <v-btn icon>
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </v-toolbar>
       <v-data-table
         v-model="applySelected"
+        :search="search"
         :headers="headers[currentType]"
         :items="applies[currentType]"
         item-key="_id"
@@ -103,16 +118,33 @@
 
     <v-dialog v-model="isDialogApply" v-if="currentDialogApply" max-width="300">
       <v-card>
+        <v-card-title>
+          사용된 출타
+        </v-card-title>
         <v-card-text>
-          <v-card
+          <v-sheet
             v-for="token of currentDialogApply.tokens"
             :key="`token-dialog-${token._id}`"
             outlined
+            class="ma-1 py-1 px-2"
           >
-            <v-card-text>
-              {{ token.kind }} {{ token.type }} {{ token.amount }} 일
-            </v-card-text>
-          </v-card>
+            <div class="d-flex">
+              <div v-if="token.type === '휴가'">
+                {{ token.kind }} {{ token.type }} {{ token.amount }} 일
+              </div>
+              <div v-else>{{ token.kind }} {{ token.type }}</div>
+              <v-spacer></v-spacer>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-chip v-bind="attrs" v-on="on" small>
+                    {{ token.expirationDate | fromNow }} 뒤 만료
+                  </v-chip>
+                </template>
+                <span>{{ token.expirationDate | formatDate }}</span>
+              </v-tooltip>
+            </div>
+            <div>{{ token.reason }}</div>
+          </v-sheet>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -121,7 +153,8 @@
 <script>
 import PaginationFooter from '../components/PaginationFooter.vue'
 
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, formatDistance } from 'date-fns'
+import { ko } from 'date-fns/locale'
 import leaveAPI from '../services/leave'
 
 export default {
@@ -133,6 +166,7 @@ export default {
     currentDialogApply: null,
     isDialogApply: false,
     applyLoading: false,
+    search: '',
 
     itemsPerPage: 10,
     page: 1
@@ -203,9 +237,9 @@ export default {
     await this.loadApplies()
   },
   filters: {
-    formatDate(value) {
-      return format(parseISO(value), 'yyyy-MM-dd')
-    },
+    // formatDate(value) {
+    //   return format(parseISO(value), 'yyyy-MM-dd')
+    // },
     formatStatus(value) {
       if (value === 'accepted') {
         return '승인됨'
@@ -217,6 +251,12 @@ export default {
         return '대기중'
       }
       return ''
+    },
+    formatDate(value) {
+      return format(parseISO(value), 'yyyy년 MM월 dd일')
+    },
+    fromNow(value) {
+      return formatDistance(parseISO(value), new Date(), { locale: ko })
     }
   }
 }
