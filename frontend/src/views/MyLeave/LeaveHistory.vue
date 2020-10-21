@@ -14,10 +14,10 @@
           hide-default-footer
         >
           <template v-slot:[`item.startDate`]="{ item }">
-            <span>{{ new Date(item.startDate).toLocaleDateString() }}</span>
+            <span>{{ item.startDate | formatDate }}</span>
           </template>
           <template v-slot:[`item.endDate`]="{ item }">
-            <span>{{ new Date(item.endDate).toLocaleDateString() }}</span>
+            <span>{{ item.endDate | formatDate }}</span>
           </template>
           <template v-slot:[`item.status`]="{ item }">
             <span :class="`${getStatusColor(item.status)}--text`">{{
@@ -70,7 +70,7 @@ import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
 import PaginationFooter from '../../components/PaginationFooter.vue'
 import leaveTokenAPI from '../../services/leaveTokenManage'
 import leaveAPI from '../../services/leave'
-import { format, add } from 'date-fns'
+import { format, add, parseISO } from 'date-fns'
 
 export default {
   components: {
@@ -117,26 +117,27 @@ export default {
     async loadLeaves() {
       this.leaveLoading = true
       const res = await leaveAPI.getLeaveHistory()
-      this.rawLeaves = res.data.filter(
-        leave => leave.user === JSON.parse(localStorage.getItem('user'))._id
-      )
+      this.rawLeaves = res.data
+      // this.rawLeaves = res.data.filter(
+      //   leave => leave.user === JSON.parse(localStorage.getItem('user'))._id
+      // )
 
-      //      const resToken = await leaveTokenAPI.getLeaveTokens()
-      //      var temp = resToken.data.filter(leaveToken => leaveToken._id == this.rawLeaves.leaveToken)
-      const temp = { type: '휴가', amount: '3' }
-      for (let i = 0; i < this.rawLeaves.length; i++) {
-        this.rawLeaves[i].type = temp.type
-        this.rawLeaves[i].endDate = new Date(
-          new Date(this.rawLeaves[i].startDate).getFullYear(),
-          new Date(this.rawLeaves[i].startDate).getMonth(),
-          new Date(this.rawLeaves[i].startDate).getDate() +
-            parseInt(temp.amount) -
-            1,
-          0,
-          0,
-          0
-        )
-      }
+      // //      const resToken = await leaveTokenAPI.getLeaveTokens()
+      // //      var temp = resToken.data.filter(leaveToken => leaveToken._id == this.rawLeaves.leaveToken)
+      // const temp = { type: '휴가', amount: '3' }
+      // for (let i = 0; i < this.rawLeaves.length; i++) {
+      //   this.rawLeaves[i].type = temp.type
+      //   this.rawLeaves[i].endDate = new Date(
+      //     new Date(this.rawLeaves[i].startDate).getFullYear(),
+      //     new Date(this.rawLeaves[i].startDate).getMonth(),
+      //     new Date(this.rawLeaves[i].startDate).getDate() +
+      //       parseInt(temp.amount) -
+      //       1,
+      //     0,
+      //     0,
+      //     0
+      //   )
+      // }
       this.leaveLoading = false
     },
     getStatusColor(status) {
@@ -154,6 +155,9 @@ export default {
     this.$store.dispatch('endAppLoading')
   },
   filters: {
+    formatDate(value) {
+      return format(parseISO(value), 'yyyy년 MM월 dd일')
+    },
     formatStatus(value) {
       if (value === 'accepted') {
         return '승인됨'

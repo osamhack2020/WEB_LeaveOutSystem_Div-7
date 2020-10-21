@@ -1,6 +1,6 @@
 <template>
   <!-- Desktop UI -->
-  <div class="d-flex align-center ma-3" v-if="$vuetify.breakpoint.mdAndUp">
+  <div class="d-flex align-center ma-3 pb-2" v-if="$vuetify.breakpoint.mdAndUp">
     <div class="side"></div>
     <div class="flex-grow-1">
       <v-pagination
@@ -26,7 +26,7 @@
   </div>
 
   <!-- Mobile UI -->
-  <div class="ma-5" v-else>
+  <div class="ma-5 pb-2" v-else>
     <v-select
       class="mt-0 pt-0"
       :value="itemsPerPage"
