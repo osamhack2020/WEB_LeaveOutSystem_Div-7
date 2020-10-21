@@ -32,13 +32,43 @@ function leaveAdditionalInfo(leaves) {
   return ret
 }
 
+async function getAvailableTokens(user) {
+  const tokens = await LeaveToken.find({ target: user.username })
+
+  const ret = []
+  for (const token of tokens) {
+    const leave = await Leave.find({
+      $and: [
+        { user: user._id }, // 해당 유저의 출타이면서
+        { tokens: token._id }, // 이 토큰을 쓰면서
+        {
+          $or: [
+            { status: { $ne: 'denied' } }, // 거부된게 아니거나
+            {
+              $and: [
+                { expirationDate: { $lt: new Date() } },
+                { effectiveDate: { $gt: new Date() } }
+              ]
+            } // 기간을 벗어나면
+          ]
+        }
+      ]
+    })
+    if (leave.length === 0) {
+      ret.push(token)
+    }
+  }
+  return ret
+}
+
 /********************
  * Public functions *
  ********************/
 
 // 현재 유저가 사용 가능한 출타들 확인
 exports.getAvailables = utils.asyncRoute(async (req, res) => {
-  const data = await LeaveToken.find({ target: req.user.username })
+  data = await getAvailableTokens(req.user)
+
   res.status(200).json(data)
 })
 
@@ -61,6 +91,23 @@ exports.applyLeave = utils.asyncRoute(async (req, res) => {
   await newleave.save()
 
   res.status(201).json(newleave)
+})
+
+// 승인, 거부, 대기중인 출타 정보들을 가져옴
+exports.getLeaves = utils.asyncRoute(async (req, res) => {
+  const data = await Leave.find({
+    user: req.user._id,
+    startDate: { $gte: new Date() }
+  }).populate('tokens')
+  res.status(200).json(leaveAdditionalInfo(data))
+})
+
+// 지나간 출타 기록들을 가져옴
+exports.getLeaveHistory = utils.asyncRoute(async (req, res) => {
+  const data = await Leave.find({
+    $and: [{ user: req.user._id }, { startDate: { $lte: new Date() } }]
+  }).populate('tokens')
+  res.status(200).json(leaveAdditionalInfo(data))
 })
 
 // 관리자가 소속 부대의 출타 신청 목록을 가져옴
@@ -86,42 +133,25 @@ exports.adminDecideApply = utils.asyncRoute(async (req, res) => {
   res.status(200).json(apply)
 })
 
-// 승인, 거부, 대기중인 출타 정보들을 가져옴
-exports.getLeaves = utils.asyncRoute(async (req, res) => {
-  const data = await Leave.find({ user: req.user._id }).populate('tokens')
-  res.status(200).json(leaveAdditionalInfo(data))
-})
-
 /**
  * 대시보드 관련 라우트
  */
 
 // 사용 가능한 출타 개수 계산
 exports.dashboardGetAvailableCount = utils.asyncRoute(async (req, res) => {
-  const tokens = await LeaveToken.find({ target: req.user.username })
   const ret = {}
+
+  const tokens = await getAvailableTokens(req.user)
+
   for (const token of tokens) {
-    try {
-      const leave = await Leave.find({
-        $and: [
-          { user: req.user._id },
-          { status: { $ne: 'pending' } },
-          { tokens: token._id }
-        ]
-      })
-      if (leave.length === 0) {
-        throw new Error()
-      }
-    } catch (error) {
-      ret[token.type] = ret[token.type] || {}
-      if (!ret[token.type][token.kind]) {
-        ret[token.type][token.kind] = { count: 1, amount: token.amount }
-      } else {
-        const { count, amount } = ret[token.type][token.kind]
-        ret[token.type][token.kind] = {
-          count: count + 1,
-          amount: amount + token.amount
-        }
+    ret[token.type] = ret[token.type] || {}
+    if (!ret[token.type][token.kind]) {
+      ret[token.type][token.kind] = { count: 1, amount: token.amount }
+    } else {
+      const { count, amount } = ret[token.type][token.kind]
+      ret[token.type][token.kind] = {
+        count: count + 1,
+        amount: amount + token.amount
       }
     }
   }
@@ -135,7 +165,11 @@ exports.dashboardGetLeaveCount = utils.asyncRoute(async (req, res) => {
   const ret = {}
   for (const status of leaveStatusEnum) {
     const count = await Leave.countDocuments({
-      $and: [{ user: req.user._id }, { status }]
+      $and: [
+        { user: req.user._id },
+        { status },
+        { startDate: { $gte: new Date() } }
+      ]
     })
     ret[status] = count
   }
@@ -149,7 +183,13 @@ exports.dashboardGetLeaveHistory = utils.asyncRoute(async (req, res) => {
   const ret = {}
 
   const leaves = leaveAdditionalInfo(
-    await Leave.find({ user: req.user._id }).populate('tokens')
+    await Leave.find({
+      $and: [
+        { user: req.user._id },
+        { status: 'accepted' },
+        { startDate: { $lte: new Date() } }
+      ]
+    }).populate('tokens')
   )
   for (const leave of leaves) {
     if (ret[leave.type] === undefined) {
@@ -158,6 +198,6 @@ exports.dashboardGetLeaveHistory = utils.asyncRoute(async (req, res) => {
     ret[leave.type].amount += leave.length
     ret[leave.type].count += 1
   }
-  
+
   res.status(200).json(ret)
 })

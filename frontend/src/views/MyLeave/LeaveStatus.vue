@@ -2,31 +2,62 @@
   <div>
     <CurrentLocation :location="location"></CurrentLocation>
     <v-sheet class="pa-3">
-      <h2 class="text-h5">확정된 출타</h2>
-      <LeaveInfoCard
-        v-for="leave of acceptedLeaves"
-        :key="`accepted-${leave._id}`"
-        :leave="leave"
-        class="mt-2"
-      />
+      <h2 class="text-h5"><span class="success--text">승인</span>된 출타</h2>
+      <template v-if="!leaveLoading">
+        <LeaveInfoCard
+          v-for="leave of acceptedLeaves"
+          :key="`accepted-${leave._id}`"
+          :leave="leave"
+          class="mt-2"
+        />
+      </template>
+      <template v-else>
+        <v-card
+          outlined
+          v-for="i in 3"
+          :key="`accepted-loading-${i}`"
+          class="mt-2"
+        >
+          <v-skeleton-loader type="list-item"></v-skeleton-loader>
+        </v-card>
+      </template>
     </v-sheet>
     <v-sheet class="pa-3">
-      <h2 class="text-h5">거부된 출타</h2>
-      <LeaveInfoCard
-        v-for="leave of deniedLeaves"
-        :key="`denied-${leave._id}`"
-        :leave="leave"
-        class="mt-2"
-      />
+      <h2 class="text-h5"><span class="error--text">거부</span>된 출타</h2>
+      <template v-if="!leaveLoading">
+        <LeaveInfoCard
+          v-for="leave of deniedLeaves"
+          :key="`denied-${leave._id}`"
+          :leave="leave"
+          class="mt-2"
+        />
+      </template>
+      <template v-else>
+        <v-card outlined v-for="i in 3" :key="`deny-loading-${i}`" class="mt-2">
+          <v-skeleton-loader type="list-item"></v-skeleton-loader>
+        </v-card>
+      </template>
     </v-sheet>
     <v-sheet class="pa-3">
       <h2 class="text-h5">승인 대기중</h2>
-      <LeaveInfoCard
-        v-for="leave of pendingLeaves"
-        :key="`pending-${leave._id}`"
-        :leave="leave"
-        class="mt-2"
-      />
+      <template v-if="!leaveLoading">
+        <LeaveInfoCard
+          v-for="leave of pendingLeaves"
+          :key="`pending-${leave._id}`"
+          :leave="leave"
+          class="mt-2"
+        />
+      </template>
+      <template v-else>
+        <v-card
+          outlined
+          v-for="i in 3"
+          :key="`pending-loading-${i}`"
+          class="mt-2"
+        >
+          <v-skeleton-loader type="list-item"></v-skeleton-loader>
+        </v-card>
+      </template>
     </v-sheet>
   </div>
 </template>

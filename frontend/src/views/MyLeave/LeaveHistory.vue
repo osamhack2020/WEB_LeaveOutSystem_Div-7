@@ -14,13 +14,43 @@
           hide-default-footer
         >
           <template v-slot:[`item.startDate`]="{ item }">
-            <span>{{ new Date(item.startDate).toLocaleDateString() }}</span>
+            <span>{{ item.startDate | formatDate }}</span>
           </template>
           <template v-slot:[`item.endDate`]="{ item }">
-            <span>{{ new Date(item.endDate).toLocaleDateString() }}</span>
+            <span>{{ item.endDate | formatDate }}</span>
           </template>
           <template v-slot:[`item.status`]="{ item }">
-            <span>{{ item.status | formatStatus }}</span>
+            <span :class="`${getStatusColor(item.status)}--text`">{{
+              item.status | formatStatus
+            }}</span>
+          </template>
+          <template v-slot:[`item.tokens`]="{ item }">
+            <v-tooltip
+              bottom
+              v-for="token of item.tokens"
+              :key="`leave-${item._id}-${token._id}`"
+              :disabled="!token.reason"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip
+                  class="mr-2"
+                  dense
+                  color="primary"
+                  outlined
+                  v-bind="attrs"
+                  v-on="on"
+                  small
+                >
+                  <template v-if="token.type === '휴가'">
+                    {{ token.kind }} {{ token.amount }}일
+                  </template>
+                  <template v-else>
+                    {{ token.kind }}
+                  </template>
+                </v-chip>
+              </template>
+              <span>{{ token.reason }}</span>
+            </v-tooltip>
           </template>
           <template v-slot:footer>
             <v-divider></v-divider>
@@ -40,7 +70,7 @@ import CurrentLocation from '../../components/myleave/CurrentLocation.vue'
 import PaginationFooter from '../../components/PaginationFooter.vue'
 import leaveTokenAPI from '../../services/leaveTokenManage'
 import leaveAPI from '../../services/leave'
-import { format, add } from 'date-fns'
+import { format, add, parseISO } from 'date-fns'
 
 export default {
   components: {
@@ -78,6 +108,7 @@ export default {
       { text: '출타 종류', value: 'type', align: 'start' },
       { text: '출발 일자', value: 'startDate' },
       { text: '도착 일자', value: 'endDate' },
+      { text: '사용된 출타', value: 'tokens' },
       { text: '상태', value: 'status' },
       { text: '기타', value: 'message' }
     ]
@@ -85,28 +116,37 @@ export default {
   methods: {
     async loadLeaves() {
       this.leaveLoading = true
-      const res = await leaveAPI.getLeaves()
-      this.rawLeaves = res.data.filter(
-        leave => leave.user === JSON.parse(localStorage.getItem('user'))._id
-      )
+      const res = await leaveAPI.getLeaveHistory()
+      this.rawLeaves = res.data
+      // this.rawLeaves = res.data.filter(
+      //   leave => leave.user === JSON.parse(localStorage.getItem('user'))._id
+      // )
 
-      //      const resToken = await leaveTokenAPI.getLeaveTokens()
-      //      var temp = resToken.data.filter(leaveToken => leaveToken._id == this.rawLeaves.leaveToken)
-      const temp = { type: '휴가', amount: '3' }
-      for (let i = 0; i < this.rawLeaves.length; i++) {
-        this.rawLeaves[i].type = temp.type
-        this.rawLeaves[i].endDate = new Date(
-          new Date(this.rawLeaves[i].startDate).getFullYear(),
-          new Date(this.rawLeaves[i].startDate).getMonth(),
-          new Date(this.rawLeaves[i].startDate).getDate() +
-            parseInt(temp.amount) -
-            1,
-          0,
-          0,
-          0
-        )
-      }
+      // //      const resToken = await leaveTokenAPI.getLeaveTokens()
+      // //      var temp = resToken.data.filter(leaveToken => leaveToken._id == this.rawLeaves.leaveToken)
+      // const temp = { type: '휴가', amount: '3' }
+      // for (let i = 0; i < this.rawLeaves.length; i++) {
+      //   this.rawLeaves[i].type = temp.type
+      //   this.rawLeaves[i].endDate = new Date(
+      //     new Date(this.rawLeaves[i].startDate).getFullYear(),
+      //     new Date(this.rawLeaves[i].startDate).getMonth(),
+      //     new Date(this.rawLeaves[i].startDate).getDate() +
+      //       parseInt(temp.amount) -
+      //       1,
+      //     0,
+      //     0,
+      //     0
+      //   )
+      // }
       this.leaveLoading = false
+    },
+    getStatusColor(status) {
+      if (status === 'accepted') {
+        return 'success'
+      } else if (status === 'denied') {
+        return 'error'
+      }
+      return ''
     }
   },
   async created() {
@@ -115,6 +155,9 @@ export default {
     this.$store.dispatch('endAppLoading')
   },
   filters: {
+    formatDate(value) {
+      return format(parseISO(value), 'yyyy년 MM월 dd일')
+    },
     formatStatus(value) {
       if (value === 'accepted') {
         return '승인됨'

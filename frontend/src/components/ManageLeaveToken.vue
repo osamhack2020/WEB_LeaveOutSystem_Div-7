@@ -34,19 +34,13 @@
           hide-details
           prepend-icon="mdi-magnify"
           single-line
+          dense
+          clearable
         ></v-text-field>
 
         <v-btn icon>
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
-
-        <!-- <v-progress-linear
-          :active="userLoading"
-          indeterminate
-          color="primary"
-          absolute
-          bottom
-        ></v-progress-linear> -->
       </v-toolbar>
 
       <!-- 유저 리스트 -->
