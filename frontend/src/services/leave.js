@@ -10,6 +10,9 @@ export default {
   async getLeaveHistory() {
     return await axios.get('/leave/apply-history')
   },
+  async getAccepted() {
+    return await axios.get('/leave/accepted')
+  },
   async applyLeave(departure, tokens) {
     return await axios.post('/leave/apply', {
       departure,

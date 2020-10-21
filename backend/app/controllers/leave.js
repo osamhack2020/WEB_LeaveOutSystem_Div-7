@@ -133,6 +133,15 @@ exports.adminDecideApply = utils.asyncRoute(async (req, res) => {
   res.status(200).json(apply)
 })
 
+// 승인된 모든 출타
+exports.getAccepted = utils.asyncRoute(async (req, res) => {
+  const data = await Leave.find({ status: 'accepted' })
+    .populate('tokens')
+    .populate('user')
+  const ret = leaveAdditionalInfo(data)
+  res.status(200).json(ret)
+})
+
 /**
  * 대시보드 관련 라우트
  */

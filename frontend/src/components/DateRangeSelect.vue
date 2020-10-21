@@ -37,8 +37,6 @@
   </div>
 </template>
 <style scoped>
-.v-event {
-}
 .cal {
   min-height: 30em;
 }

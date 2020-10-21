@@ -118,6 +118,11 @@ export default {
           show: () => this.$store.getters.isAuthed
         },
         {
+          name: '출타 달력',
+          path: '/calendar',
+          show: () => this.$store.getters.isAuthed
+        },
+        {
           name: '출타 관리',
           path: '/manage-leave',
           show: () =>

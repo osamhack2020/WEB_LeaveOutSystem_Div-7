@@ -65,6 +65,18 @@ router.get(
   controller.adminGetApplies
 )
 
+// 승인된 모든 출타
+router.get(
+  '/accepted',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.getAccepted
+)
+
+/**
+ * 출타 승인/거부
+ */
 router.post(
   '/admin/decide',
   requireAuth,
