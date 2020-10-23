@@ -76,7 +76,9 @@
           <span>{{ item.length - 1 }}박 {{ item.length }}일</span>
         </template>
         <template v-slot:[`item.status`]="{ item }">
-          <span>{{ item.status | formatStatus }}</span>
+          <span :class="`${getStatusColor(item.status)}--text`">{{
+            item.status | formatStatus
+          }}</span>
         </template>
         <template v-slot:[`item.detail`]="{ item }">
           <v-btn @click="clickViewLeaveTokens(item)" outlined small>
@@ -231,6 +233,14 @@ export default {
     clickViewLeaveTokens(apply) {
       this.currentDialogApply = apply
       this.isDialogApply = true
+    },
+    getStatusColor(status) {
+      if (status === 'accepted') {
+        return 'success'
+      } else if (status === 'denied') {
+        return 'error'
+      }
+      return ''
     }
   },
   async created() {
