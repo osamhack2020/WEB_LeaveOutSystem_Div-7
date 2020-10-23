@@ -135,7 +135,10 @@ exports.adminDecideApply = utils.asyncRoute(async (req, res) => {
 
 // 승인된 모든 출타
 exports.getAccepted = utils.asyncRoute(async (req, res) => {
-  const data = await Leave.find({ status: 'accepted' })
+  const data = await Leave.find({
+    status: 'accepted',
+    division: req.user.division
+  })
     .populate('tokens')
     .populate('user')
   const ret = leaveAdditionalInfo(data)

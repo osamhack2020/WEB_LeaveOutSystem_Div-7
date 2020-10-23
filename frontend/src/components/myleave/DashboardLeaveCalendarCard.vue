@@ -7,7 +7,7 @@
         </h3>
         <div class="flex-grow-1 px-4">
           <v-progress-linear
-            v-if="!leaves.length"
+            v-if="loading"
             indeterminate
             class="align-self-center"
           />
@@ -68,7 +68,8 @@ export default {
       year: format(new Date(), 'yyyy'),
       month: format(new Date(), 'MM')
     },
-    leaves: []
+    leaves: [],
+    loading: false
   }),
   computed: {
     events() {
@@ -116,12 +117,14 @@ export default {
       return 'primary'
     },
     async loadLeaves() {
+      this.loading = true
       const vals = await Promise.all([
         leaveAPI.getLeaves(),
         leaveAPI.getLeaveHistory()
       ])
       const res = [...vals[0].data, ...vals[1].data]
       this.leaves = res
+      this.loading = false
     }
   },
   async created() {

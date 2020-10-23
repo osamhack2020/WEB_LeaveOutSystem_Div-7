@@ -96,7 +96,7 @@ export default {
   computed: {
     location: () => [
       { text: '대시보드', path: '/myleave' },
-      { text: '출타 히스토리', path: '/myleave/leave-history' }
+      { text: '모든 내 출타', path: '/myleave/leave-history' }
     ],
     leaves() {
       return this.rawLeaves
