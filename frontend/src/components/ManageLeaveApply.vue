@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row no-gutters>
     <v-col cols="3">
       <v-card color="primary lighten-1" dark>
         <v-card-title>
@@ -40,7 +40,7 @@
         </v-list>
       </v-card>
     </v-col>
-    <v-col cols="9">
+    <v-col cols="9" class="px-2">
       <v-toolbar flat dense>
         <v-text-field
           v-model="search"

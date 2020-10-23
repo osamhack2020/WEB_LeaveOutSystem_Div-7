@@ -120,7 +120,8 @@ export default {
         {
           name: '출타 달력',
           path: '/calendar',
-          show: () => this.$store.getters.isAuthed
+          show: () =>
+            this.$store.getters.isModerator || this.$store.getters.isAdmin
         },
         {
           name: '출타 관리',

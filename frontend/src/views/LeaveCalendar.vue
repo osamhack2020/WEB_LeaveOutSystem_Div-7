@@ -1,9 +1,14 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-toolbar flat color="primary lighten-1" dark>
+      <!-- <v-toolbar flat color="primary lighten-1" dark>
         <v-toolbar-title>출타 달력</v-toolbar-title>
-      </v-toolbar>
+      </v-toolbar> -->
+      <div class="py-2 px-3 primary lighten-2">
+        <h3 class="h3 grey--text text--lighten-4">
+          출타 달력
+        </h3>
+      </div>
       <v-sheet class="pa-2">
         <v-sheet class="d-flex justify-space-between align-center">
           <v-btn fab text small color="grey darken-2" @click="prevMonth">

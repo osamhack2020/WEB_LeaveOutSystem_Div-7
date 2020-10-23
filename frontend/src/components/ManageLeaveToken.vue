@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row no-gutters>
     <!-- 좌측 액션메뉴 -->
     <v-col cols="12">
       <v-card
@@ -9,20 +9,27 @@
         color="primary lighten-1"
         dark
       >
-        <v-card-title>
+        <v-card-title class="d-flex">
           출타 관리
+          <div>
+            <CreateLeaveTokenDialog
+              @submit="submitCreateLeaveToken"
+              v-slot="{ on, attrs }"
+            >
+              <v-btn
+                color="secondary"
+                dark
+                depressed
+                class="ml-5"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-plus</v-icon>
+                출타 생성
+              </v-btn>
+            </CreateLeaveTokenDialog>
+          </div>
         </v-card-title>
-        <v-card-text>
-          <CreateLeaveTokenDialog
-            @submit="submitCreateLeaveToken"
-            v-slot="{ on, attrs }"
-          >
-            <v-btn color="secondary" dark block v-bind="attrs" v-on="on">
-              <v-icon>mdi-plus</v-icon>
-              출타 생성
-            </v-btn>
-          </CreateLeaveTokenDialog>
-        </v-card-text>
       </v-card>
     </v-col>
 
@@ -79,11 +86,11 @@
         <template v-slot:[`item.target`]="{ item }">
           <v-chip
             class="mr-2"
-            :color="item.target.length === 0 ? '' : 'secondary'"
+            :color="item.target && item.target.length === 0 ? '' : 'secondary'"
             @click="openAssignLeaveTokenDialog(item)"
             label
           >
-            {{ item.target.length }}명
+            {{ item.target ? item.target.length : '0' }}명
           </v-chip>
         </template>
         <template v-slot:footer>
