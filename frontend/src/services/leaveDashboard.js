@@ -9,5 +9,8 @@ export default {
   },
   async getHistoryCount() {
     return await axios.get('/leave/dashboard/leave-history-count')
+  },
+  async getLeaveStat() {
+    return await axios.get('/leave/dashboard/leave-stat')
   }
 }

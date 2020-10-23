@@ -213,3 +213,25 @@ exports.dashboardGetLeaveHistory = utils.asyncRoute(async (req, res) => {
 
   res.status(200).json(ret)
 })
+
+// 유저용 부대 출타 통계
+
+exports.dashboardGetLeaveStat = utils.asyncRoute(async (req, res) => {
+  const statusCount = {}
+
+  for (const type of ['휴가', '외출', '외박']) {
+    statusCount[type] = {}
+
+    for (const status of leaveStatusEnum) {
+      statusCount[type][status] = leaveAdditionalInfo(
+        await Leave.find({
+          division: req.user.division,
+          startDate: { $gte: new Date() },
+          status
+        }).populate('tokens')
+      ).filter((leave) => leave.type === type).length
+    }
+  }
+
+  res.status(200).json({ statusCount })
+})

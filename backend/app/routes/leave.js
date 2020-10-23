@@ -115,4 +115,13 @@ router.get(
   controller.dashboardGetLeaveHistory
 )
 
+// 유저용 출타 통계 조회
+router.get(
+  '/dashboard/leave-stat',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  controller.dashboardGetLeaveStat
+)
+
 module.exports = router

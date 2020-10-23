@@ -9,10 +9,15 @@
       <v-col cols="4">
         <DashboardLeaveStatusCard to="/myleave/leave-status"
       /></v-col>
-      <v-col cols="4"
-        ><DashboardLeaveHistoryCard to="/myleave/leave-history"
-      /></v-col>
-      <v-col cols="8"><DashboardLeaveCalendar /></v-col>
+      <v-col cols="4">
+        <DashboardLeaveHistoryCard to="/myleave/leave-history" />
+      </v-col>
+      <v-col cols="8">
+        <DashboardLeaveCalendar />
+      </v-col>
+      <v-col cols="4">
+        <DashboardLeaveStatCard />
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -22,6 +27,7 @@ import DashboardLeaveTokenCard from '../../components/myleave/DashboardLeaveToke
 import DashboardLeaveStatusCard from '../../components/myleave/DashboardLeaveStatusCard.vue'
 import DashboardLeaveHistoryCard from '../../components/myleave/DashboardLeaveHistoryCard.vue'
 import DashboardLeaveCalendar from '../../components/myleave/DashboardLeaveCalendarCard.vue'
+import DashboardLeaveStatCard from '../../components/myleave/DashboardLeaveStatCard.vue'
 
 export default {
   components: {
@@ -29,7 +35,8 @@ export default {
     DashboardLeaveTokenCard,
     DashboardLeaveStatusCard,
     DashboardLeaveHistoryCard,
-    DashboardLeaveCalendar
+    DashboardLeaveCalendar,
+    DashboardLeaveStatCard
   },
   data: () => ({}),
   computed: {
