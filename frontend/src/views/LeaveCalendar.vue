@@ -76,7 +76,18 @@
     </v-col>
 
     <v-col cols="3">
-      <v-sheet color="primary lighten-1">
+      <v-sheet color="primary lighten-2">
+        <div class="d-flex justify-space-between pa-4">
+          <h5 class="text-h6 white--text">{{ current }} 출타율</h5>
+          <v-fade-transition>
+            <p
+              v-if="stat !== null"
+              class="text-body-1 secondary--text text--lighten-1 align-self-center my-0"
+            >
+              {{ stat.rates[getDate(current) - 1] | toFixed(2) }}%
+            </p>
+          </v-fade-transition>
+        </div>
         <MonthlyLeaveGraph
           :year="parseInt(currentDate.year)"
           :month="parseInt(currentDate.month) - 1"
@@ -84,10 +95,31 @@
           :title="`${currentDate.month}월 출타 인원수`"
           :status="['accepted']"
         />
-        <div v-if="stat !== null">
-          <div>평균 출타율 : {{ stat.monthRateMean }}</div>
-          <div>표준편차 : {{ stat.stDev }}</div>
-          <div>{{ current }} : {{ stat.rates[getDate(current)] }}</div>
+        <div class="pa-4">
+          <div class="d-flex justify-space-between">
+            <h5 class="text-h6 white--text">
+              {{ currentDate.month }}월 평균 출타율
+            </h5>
+            <v-fade-transition>
+              <p
+                v-if="stat !== null"
+                class="text-body-1 secondary--text text--lighten-1 align-self-center my-0"
+              >
+                {{ stat.monthRateMean | toFixed(2) }}%
+              </p>
+            </v-fade-transition>
+          </div>
+          <div class="d-flex justify-space-between">
+            <h5 class="text-h6 white--text">표준편차</h5>
+            <v-fade-transition>
+              <p
+                v-if="stat !== null"
+                class="text-body-1 secondary--text text--lighten-1 align-self-center my-0"
+              >
+                {{ stat.stDev | toFixed(2) }}
+              </p>
+            </v-fade-transition>
+          </div>
         </div>
       </v-sheet>
     </v-col>
@@ -210,6 +242,14 @@ export default {
   },
   watch: {
     current() {}
+  },
+  filters: {
+    toFixed(val, param) {
+      if (val === undefined) {
+        return ''
+      }
+      return val.toFixed(param)
+    }
   }
 }
 </script>
