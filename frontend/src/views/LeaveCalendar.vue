@@ -76,7 +76,7 @@
     </v-col>
 
     <v-col cols="3">
-      <div>
+      <v-sheet color="primary lighten-1">
         <MonthlyLeaveGraph
           :year="parseInt(currentDate.year)"
           :month="parseInt(currentDate.month) - 1"
@@ -84,14 +84,12 @@
           :title="`${currentDate.month}월 출타 인원수`"
           :status="['accepted']"
         />
-        <MonthlyLeaveGraph
-          :year="parseInt(currentDate.year)"
-          :month="parseInt(currentDate.month) - 1"
-          background="primary lighten-2"
-          :title="`${currentDate.month}월 신청 대기 인원수`"
-          :status="['pending']"
-        />
-      </div>
+        <div v-if="stat !== null">
+          <div>평균 출타율 : {{ stat.monthRateMean }}</div>
+          <div>표준편차 : {{ stat.stDev }}</div>
+          <div>{{ current }} : {{ stat.rates[getDate(current)] }}</div>
+        </div>
+      </v-sheet>
     </v-col>
   </v-row>
 </template>
@@ -103,8 +101,9 @@
 <script>
 import MonthlyLeaveGraph from '../components/MonthlyLeaveGraph.vue'
 
-import { format, parse, addDays, parseISO } from 'date-fns'
+import { format, parse, addDays, parseISO, getDate } from 'date-fns'
 import leaveAPI from '../services/leave'
+import leaveStatAPI from '../services/leaveStat'
 import _ from 'lodash'
 
 export default {
@@ -134,7 +133,8 @@ export default {
     ],
     selectedEvent: {},
     selectedElement: null,
-    selectedOpen: false
+    selectedOpen: false,
+    stat: null
   }),
   computed: {
     events() {
@@ -156,14 +156,18 @@ export default {
     strToDate(str) {
       return parse(str, 'yyyy-MM-dd', new Date())
     },
+    getDate(date) {
+      return getDate(parseISO(date))
+    },
     prevMonth() {
       this.$refs.calendar.prev()
     },
     nextMonth() {
       this.$refs.calendar.next()
     },
-    monthChanged({ year, month }) {
+    async monthChanged({ year, month }) {
       this.currentDate = { year, month }
+      await this.loadStats()
     },
     getEventColor(event) {
       return event.color
@@ -190,11 +194,19 @@ export default {
       this.loading = true
       this.leaves = (await leaveAPI.getAccepted()).data
       this.loading = false
+    },
+    async loadStats() {
+      const res = await leaveStatAPI.getMonthly(
+        this.currentDate.year,
+        this.currentDate.month - 1
+      )
+      this.stat = res.data
     }
   },
 
   async created() {
     await this.loadLeaves()
+    await this.loadStats()
   },
   watch: {
     current() {}

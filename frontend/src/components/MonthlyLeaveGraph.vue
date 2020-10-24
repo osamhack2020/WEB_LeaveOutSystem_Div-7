@@ -150,7 +150,7 @@ export default {
   methods: {
     async loadData() {
       // this.statData = null
-      const res = await leaveStatAPI.getMonthly(
+      const res = await leaveStatAPI.getMonthlyCount(
         this.year,
         this.month,
         this.status
