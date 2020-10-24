@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-sparkline radius="5" :value="points" line-width="1.5"></v-sparkline>
+    <v-sparkline
+      radius="5"
+      :value="points"
+      line-width="1.5"
+      smooth="3"
+    ></v-sparkline>
   </div>
 </template>
 <script>
@@ -27,11 +32,12 @@ export default {
       if (this.statData) {
         return this.statData.flatMap(x => x)
       }
-      return [1, 2, 1, 4]
+      return [0, 0, 0]
     }
   },
   methods: {
     async loadData() {
+      this.statData = null
       const res = await leaveStatAPI.getMonthly(this.year, this.month)
       this.statData = res.data
     }
