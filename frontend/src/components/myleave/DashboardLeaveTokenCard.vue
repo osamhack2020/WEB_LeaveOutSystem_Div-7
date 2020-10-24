@@ -2,9 +2,9 @@
   <DashboardCard :loading="loading" title="보유한 출타">
     <v-row class="mx-3 main-area">
       <template v-if="tokenCount">
-        <v-col>
+        <v-col v-if="tokenCount['휴가']">
           <h3 class="text-h6 primary--text text--lighten-2">휴가</h3>
-          <template v-if="tokenCount['휴가']">
+          <template>
             <div
               v-for="kind of Object.keys(tokenCount['휴가'])"
               :key="`leave-${kind}`"

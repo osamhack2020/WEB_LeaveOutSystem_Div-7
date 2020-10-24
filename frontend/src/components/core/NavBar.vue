@@ -115,19 +115,20 @@ export default {
         {
           name: '내 출타',
           path: '/myleave',
-          show: () => this.$store.getters.isAuthed
+          show: () =>
+            this.$store.getters.isAuthed && !this.$store.getters.isAdmin
         },
         {
           name: '출타 달력',
           path: '/calendar',
           show: () =>
-            this.$store.getters.isModerator || this.$store.getters.isAdmin
+            this.$store.getters.isModerator && !this.$store.getters.isAdmin
         },
         {
           name: '출타 관리',
           path: '/manage-leave',
           show: () =>
-            this.$store.getters.isModerator || this.$store.getters.isAdmin
+            this.$store.getters.isModerator && !this.$store.getters.isAdmin
         },
         {
           name: '유저 관리',
