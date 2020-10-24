@@ -74,6 +74,26 @@ router.get(
   controller.getAccepted
 )
 
+// 날짜별 출타수 데이터 생성
+router.get(
+  '/statistics/monthly-count',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  validate.getMonthlyCountStatistics,
+  controller.getMonthlyCountStatistics
+)
+
+// 월별 출타 통계 생성
+router.get(
+  '/statistics/monthly',
+  requireAuth,
+  AuthController.roleAuthorization(['user', 'moderator', 'admin']),
+  trimRequest.all,
+  validate.getMonthlyStatistics,
+  controller.getMonthlyStatistics
+)
+
 /**
  * 출타 승인/거부
  */

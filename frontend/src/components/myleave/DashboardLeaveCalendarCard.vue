@@ -106,6 +106,7 @@ export default {
     },
     monthChanged({ year, month }) {
       this.currentDate = { year, month }
+      this.$emit('monthChanged', { year, month })
     },
     getEventColor(event) {
       if (event.status === 'pending') {

@@ -1,9 +1,18 @@
 const LeaveToken = require('../models/leaveToken')
 const Leave = require('../models/leave')
+const User = require('../models/user')
 const utils = require('../middleware/utils')
 const { matchedData } = require('express-validator')
-const parse = require('date-fns/parse')
-const addDays = require('date-fns/addDays')
+const {
+  parse,
+  addDays,
+  addMonths,
+  endOfMonth,
+  getDaysInMonth,
+  eachDayOfInterval,
+  getDate,
+  differenceInCalendarMonths
+} = require('date-fns')
 
 const _ = require('lodash')
 
@@ -143,6 +152,87 @@ exports.getAccepted = utils.asyncRoute(async (req, res) => {
     .populate('user')
   const ret = leaveAdditionalInfo(data)
   res.status(200).json(ret)
+})
+
+// 날짜별 출타 수 통계
+exports.getMonthlyCountStatistics = utils.asyncRoute(async (req, res) => {
+  const data = matchedData(req)
+
+  const start = new Date(data.year, data.month, 1)
+  const end = endOfMonth(addMonths(start, 1))
+
+  const leaves = leaveAdditionalInfo(
+    await Leave.find({
+      division: req.user.division,
+      startDate: { $gte: start, $lte: end },
+      status: { $in: data.status.split('|') }
+    }).populate('tokens')
+  )
+
+  const countData = [...new Array(2)].map((__, index) => {
+    return [...new Array(getDaysInMonth(addMonths(start, index)))].map(() => 0)
+  })
+
+  for (const leave of leaves) {
+    for (const day of eachDayOfInterval({
+      start: leave.startDate,
+      end: leave.endDate
+    })) {
+      const monthIdx = differenceInCalendarMonths(day, start)
+      if (monthIdx >= 0 && monthIdx < 2) {
+        countData[monthIdx][getDate(day) - 1]++
+      }
+    }
+  }
+
+  res.status(200).json(countData)
+})
+
+// 월별 출타 통계
+exports.getMonthlyStatistics = utils.asyncRoute(async (req, res) => {
+  const data = matchedData(req)
+
+  const start = new Date(data.year, data.month, 1)
+  const end = endOfMonth(start)
+
+  const leaves = leaveAdditionalInfo(
+    await Leave.find({
+      division: req.user.division,
+      startDate: { $gte: start, $lte: end },
+      status: 'accepted'
+    }).populate('tokens')
+  )
+
+  const totalCount = await User.countDocuments({ division: req.user.division })
+
+  const days = [...new Array(getDaysInMonth(start))].map(() => 0)
+
+  for (const leave of leaves) {
+    for (const day of eachDayOfInterval({
+      start: leave.startDate,
+      end: leave.endDate
+    })) {
+      const monthIdx = differenceInCalendarMonths(day, start)
+      if (monthIdx === 0) {
+        days[getDate(day) - 1]++
+      }
+    }
+  }
+
+  const rates = days.map((cnt) => (cnt * 100) / totalCount)
+
+  const monthRateMean =
+    ((days.reduce((acc, cnt) => acc + cnt, 0) / getDaysInMonth(start)) * 100) /
+    totalCount
+
+  const stDev = Math.sqrt(
+    rates.reduce(
+      (acc, cnt) => acc + (cnt - monthRateMean) * (cnt - monthRateMean),
+      0
+    ) / getDaysInMonth(start)
+  )
+
+  res.status(200).json({ monthRateMean, stDev, days, rates })
 })
 
 /**

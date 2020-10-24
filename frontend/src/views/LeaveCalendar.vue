@@ -1,14 +1,13 @@
 <template>
-  <v-row>
+  <v-row no-gutters>
     <v-col cols="12">
-      <!-- <v-toolbar flat color="primary lighten-1" dark>
-        <v-toolbar-title>출타 달력</v-toolbar-title>
-      </v-toolbar> -->
       <div class="py-2 px-3 primary lighten-2">
         <h3 class="h3 grey--text text--lighten-4">
           출타 달력
         </h3>
       </div>
+    </v-col>
+    <v-col cols="9">
       <v-sheet class="pa-2">
         <v-sheet class="d-flex justify-space-between align-center">
           <v-btn fab text small color="grey darken-2" @click="prevMonth">
@@ -75,6 +74,55 @@
         </v-card>
       </v-menu>
     </v-col>
+
+    <v-col cols="3">
+      <v-sheet color="primary lighten-2">
+        <div class="d-flex justify-space-between pa-4">
+          <h5 class="text-h6 white--text">{{ current }} 출타율</h5>
+          <v-fade-transition>
+            <p
+              v-if="stat !== null"
+              class="text-body-1 secondary--text text--lighten-1 align-self-center my-0"
+            >
+              {{ stat.rates[getDate(current) - 1] | toFixed(2) }}%
+            </p>
+          </v-fade-transition>
+        </div>
+        <MonthlyLeaveGraph
+          :year="parseInt(currentDate.year)"
+          :month="parseInt(currentDate.month) - 1"
+          background="primary lighten-2"
+          :title="`${currentDate.month}월 출타 인원수`"
+          :status="['accepted']"
+        />
+        <div class="pa-4">
+          <div class="d-flex justify-space-between">
+            <h5 class="text-h6 white--text">
+              {{ currentDate.month }}월 평균 출타율
+            </h5>
+            <v-fade-transition>
+              <p
+                v-if="stat !== null"
+                class="text-body-1 secondary--text text--lighten-1 align-self-center my-0"
+              >
+                {{ stat.monthRateMean | toFixed(2) }}%
+              </p>
+            </v-fade-transition>
+          </div>
+          <div class="d-flex justify-space-between">
+            <h5 class="text-h6 white--text">표준편차</h5>
+            <v-fade-transition>
+              <p
+                v-if="stat !== null"
+                class="text-body-1 secondary--text text--lighten-1 align-self-center my-0"
+              >
+                {{ stat.stDev | toFixed(2) }}
+              </p>
+            </v-fade-transition>
+          </div>
+        </div>
+      </v-sheet>
+    </v-col>
   </v-row>
 </template>
 <style scoped>
@@ -83,12 +131,16 @@
 }
 </style>
 <script>
-import { format, parse, addDays, parseISO } from 'date-fns'
+import MonthlyLeaveGraph from '../components/MonthlyLeaveGraph.vue'
+
+import { format, parse, addDays, parseISO, getDate } from 'date-fns'
 import leaveAPI from '../services/leave'
+import leaveStatAPI from '../services/leaveStat'
 import _ from 'lodash'
 
 export default {
-  components: {},
+  props: {},
+  components: { MonthlyLeaveGraph },
   data: () => ({
     current: format(new Date(), 'yyyy-MM-dd'),
     currentDate: {
@@ -104,11 +156,17 @@ export default {
       'cyan',
       'green',
       'orange',
-      'grey darken-1'
+      'teal',
+      'light-blue',
+      'lime',
+      'amber',
+      'brown',
+      'purple lighten-3'
     ],
     selectedEvent: {},
     selectedElement: null,
-    selectedOpen: false
+    selectedOpen: false,
+    stat: null
   }),
   computed: {
     events() {
@@ -130,14 +188,18 @@ export default {
     strToDate(str) {
       return parse(str, 'yyyy-MM-dd', new Date())
     },
+    getDate(date) {
+      return getDate(parseISO(date))
+    },
     prevMonth() {
       this.$refs.calendar.prev()
     },
     nextMonth() {
       this.$refs.calendar.next()
     },
-    monthChanged({ year, month }) {
+    async monthChanged({ year, month }) {
       this.currentDate = { year, month }
+      await this.loadStats()
     },
     getEventColor(event) {
       return event.color
@@ -164,14 +226,30 @@ export default {
       this.loading = true
       this.leaves = (await leaveAPI.getAccepted()).data
       this.loading = false
+    },
+    async loadStats() {
+      const res = await leaveStatAPI.getMonthly(
+        this.currentDate.year,
+        this.currentDate.month - 1
+      )
+      this.stat = res.data
     }
   },
 
   async created() {
     await this.loadLeaves()
+    await this.loadStats()
   },
   watch: {
     current() {}
+  },
+  filters: {
+    toFixed(val, param) {
+      if (val === undefined) {
+        return ''
+      }
+      return val.toFixed(param)
+    }
   }
 }
 </script>

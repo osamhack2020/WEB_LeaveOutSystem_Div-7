@@ -1,5 +1,5 @@
 const { validationResult } = require('../middleware/utils')
-const { body } = require('express-validator')
+const { body, check } = require('express-validator')
 const _ = require('lodash')
 
 exports.applyLeave = [
@@ -39,3 +39,45 @@ exports.adminDecideApply = [
 ]
 
 exports.getLeaves = []
+
+exports.getMonthlyCountStatistics = [
+  check('year')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('month')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('status')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  (req, res, next) => {
+    validationResult(req, res, next)
+  }
+]
+
+exports.getMonthlyStatistics = [
+  check('year')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('month')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  (req, res, next) => {
+    validationResult(req, res, next)
+  }
+]
