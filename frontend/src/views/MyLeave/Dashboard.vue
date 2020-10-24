@@ -41,7 +41,7 @@ export default {
   },
   data: () => ({
     curyear: getYear(new Date()),
-    curmonth: getMonth(new Date())
+    curmonth: getMonth(new Date()) + 1
   }),
   computed: {
     location: () => [{ text: '대시보드', path: '/myleave' }]

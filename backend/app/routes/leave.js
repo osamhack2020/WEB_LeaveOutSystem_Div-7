@@ -76,12 +76,12 @@ router.get(
 
 // 날짜별 출타수 데이터 생성
 router.get(
-  '/statistics/monthly',
+  '/statistics/monthly-count',
   requireAuth,
   AuthController.roleAuthorization(['user', 'moderator', 'admin']),
   trimRequest.all,
-  validate.getMonthlyStatistics,
-  controller.getMonthlyStatistics
+  validate.getMonthlyCountStatistics,
+  controller.getMonthlyCountStatistics
 )
 
 /**

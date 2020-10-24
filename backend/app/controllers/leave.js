@@ -154,7 +154,7 @@ exports.getAccepted = utils.asyncRoute(async (req, res) => {
   res.status(200).json(ret)
 })
 
-exports.getMonthlyStatistics = utils.asyncRoute(async (req, res) => {
+exports.getMonthlyCountStatistics = utils.asyncRoute(async (req, res) => {
   const data = matchedData(req)
 
   const start = new Date(data.year, data.month, 1)

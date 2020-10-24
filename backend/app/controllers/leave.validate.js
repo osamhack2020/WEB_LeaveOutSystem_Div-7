@@ -40,7 +40,7 @@ exports.adminDecideApply = [
 
 exports.getLeaves = []
 
-exports.getMonthlyStatistics = [
+exports.getMonthlyCountStatistics = [
   check('year')
     .exists()
     .withMessage('MISSING')
