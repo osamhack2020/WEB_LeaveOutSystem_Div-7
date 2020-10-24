@@ -1,14 +1,13 @@
 <template>
-  <v-row>
+  <v-row no-gutters>
     <v-col cols="12">
-      <!-- <v-toolbar flat color="primary lighten-1" dark>
-        <v-toolbar-title>출타 달력</v-toolbar-title>
-      </v-toolbar> -->
       <div class="py-2 px-3 primary lighten-2">
         <h3 class="h3 grey--text text--lighten-4">
           출타 달력
         </h3>
       </div>
+    </v-col>
+    <v-col cols="8">
       <v-sheet class="pa-2">
         <v-sheet class="d-flex justify-space-between align-center">
           <v-btn fab text small color="grey darken-2" @click="prevMonth">
@@ -75,6 +74,19 @@
         </v-card>
       </v-menu>
     </v-col>
+
+    <v-col cols="4">
+      <div>
+        {{ current }}
+        {{ currentDate }}
+      </div>
+      <div>
+        <MonthlyLeaveGraph
+          :year="parseInt(currentDate.year)"
+          :month="parseInt(currentDate.month) - 1"
+        />
+      </div>
+    </v-col>
   </v-row>
 </template>
 <style scoped>
@@ -83,12 +95,15 @@
 }
 </style>
 <script>
+import MonthlyLeaveGraph from '../components/MonthlyLeaveGraph.vue'
+
 import { format, parse, addDays, parseISO } from 'date-fns'
 import leaveAPI from '../services/leave'
 import _ from 'lodash'
 
 export default {
-  components: {},
+  props: {},
+  components: { MonthlyLeaveGraph },
   data: () => ({
     current: format(new Date(), 'yyyy-MM-dd'),
     currentDate: {
@@ -104,7 +119,12 @@ export default {
       'cyan',
       'green',
       'orange',
-      'grey darken-1'
+      'teal',
+      'light-blue',
+      'lime',
+      'amber',
+      'brown',
+      'purple lighten-3'
     ],
     selectedEvent: {},
     selectedElement: null,

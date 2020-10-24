@@ -2,8 +2,17 @@ const LeaveToken = require('../models/leaveToken')
 const Leave = require('../models/leave')
 const utils = require('../middleware/utils')
 const { matchedData } = require('express-validator')
-const parse = require('date-fns/parse')
-const addDays = require('date-fns/addDays')
+const {
+  parse,
+  addDays,
+  addMonths,
+  endOfMonth,
+  getDaysInMonth,
+  getMonth,
+  eachDayOfInterval,
+  getDate,
+  differenceInCalendarMonths
+} = require('date-fns')
 
 const _ = require('lodash')
 
@@ -142,6 +151,38 @@ exports.getAccepted = utils.asyncRoute(async (req, res) => {
     .populate('tokens')
     .populate('user')
   const ret = leaveAdditionalInfo(data)
+  res.status(200).json(ret)
+})
+
+exports.getMonthlyStatistics = utils.asyncRoute(async (req, res) => {
+  const data = matchedData(req)
+
+  const start = new Date(data.year, data.month, 1)
+  const end = endOfMonth(addMonths(start, 1))
+
+  const leaves = leaveAdditionalInfo(
+    await Leave.find({
+      division: req.user.division,
+      startDate: { $gte: start, $lte: end }
+    }).populate('tokens')
+  )
+
+  const ret = [...new Array(2)].map((__, index) => {
+    return [...new Array(getDaysInMonth(addMonths(start, index)))].map(() => 0)
+  })
+
+  for (const leave of leaves) {
+    for (const day of eachDayOfInterval({
+      start: leave.startDate,
+      end: leave.endDate
+    })) {
+      const monthIdx = differenceInCalendarMonths(day, start)
+      if (monthIdx >= 0 && monthIdx < 2) {
+        ret[monthIdx][getDate(day) - 1]++
+      }
+    }
+  }
+
   res.status(200).json(ret)
 })
 
