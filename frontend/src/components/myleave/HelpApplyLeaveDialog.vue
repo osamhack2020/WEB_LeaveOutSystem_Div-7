@@ -5,7 +5,8 @@
     </template>
     <v-card>
       <v-card-title>
-        휴가 신청 도우미
+        <v-icon class="mr-2">mdi-robot</v-icon>
+        추천 조합 찾아드릴게요!
       </v-card-title>
       <v-divider> </v-divider>
       <v-text-field

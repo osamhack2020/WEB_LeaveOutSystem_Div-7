@@ -145,8 +145,8 @@
                   small
                   depressed
                 >
-                  <v-icon>mdi-question</v-icon>
-                  휴가 신청 도우미
+                  <v-icon class="mr-2">mdi-robot</v-icon>
+                  도와드릴게요!
                 </v-btn>
               </v-fade-transition>
             </HelpApplyLeaveDialog>
