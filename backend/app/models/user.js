@@ -56,9 +56,6 @@ const UserSchema = new mongoose.Schema(
     phone: {
       type: String
     },
-    city: {
-      type: String
-    },
     urlTwitter: {
       type: String,
       validate: {
