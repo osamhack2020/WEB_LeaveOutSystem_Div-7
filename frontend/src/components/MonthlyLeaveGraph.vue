@@ -1,11 +1,13 @@
 <template>
   <v-sheet :color="background">
-    <div class="py-2 px-3">
+    <div class="py-2 px-3 text-center">
       <h3 class="h3 grey--text text--lighten-4">
-        {{ month + 1 }}월 출타 인원수
+        {{ title }}
       </h3>
     </div>
-    <LineChart class="ma-4" :chartData="chartData" :options="options" />
+    <div class="px-4 pb-4">
+      <LineChart :chartData="chartData" :options="options" />
+    </div>
   </v-sheet>
 </template>
 <script>
@@ -28,6 +30,18 @@ export default {
     background: {
       type: String,
       default: 'primary lighten-1'
+    },
+    line: {
+      type: String,
+      default: '#f9aa33'
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    status: {
+      type: Array,
+      default: () => ['accepted']
     }
   },
 
@@ -45,7 +59,7 @@ export default {
             gridLines: {
               color: 'rgba(255, 255, 255, 0.2)',
               display: true,
-              drawBorder: true,
+              drawBorder: false,
               drawOnChartArea: false
             },
             ticks: {
@@ -59,7 +73,7 @@ export default {
                   tick[1] === '15일' ||
                   index === array.length - 1
                 ) {
-                  return tick
+                  return `${parseInt(tick[0])}/${parseInt(tick[1])}`
                 }
                 return ''
               }
@@ -107,7 +121,7 @@ export default {
       for (const monthIdx in data) {
         for (const dayIdx in data[monthIdx]) {
           ret.push([
-            `${this.month + parseInt(monthIdx) + 1}월`,
+            `${((this.month + parseInt(monthIdx)) % 12) + 1}월`,
             `${parseInt(dayIdx) + 1}일`
           ])
         }
@@ -121,7 +135,7 @@ export default {
           {
             label: '',
             data: this.points !== null ? this.points : this.dummyPoints,
-            borderColor: '#f9aa33',
+            borderColor: this.line,
             fill: false,
             pointRadius: 1,
             lineTension: 0
@@ -136,7 +150,11 @@ export default {
   methods: {
     async loadData() {
       // this.statData = null
-      const res = await leaveStatAPI.getMonthly(this.year, this.month)
+      const res = await leaveStatAPI.getMonthly(
+        this.year,
+        this.month,
+        this.status
+      )
       this.statData = res.data
     }
   },

@@ -53,6 +53,12 @@ exports.getMonthlyStatistics = [
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),
+  check('status')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
   (req, res, next) => {
     validationResult(req, res, next)
   }

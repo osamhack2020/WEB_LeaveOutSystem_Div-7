@@ -7,7 +7,7 @@
         </h3>
       </div>
     </v-col>
-    <v-col cols="8">
+    <v-col cols="9">
       <v-sheet class="pa-2">
         <v-sheet class="d-flex justify-space-between align-center">
           <v-btn fab text small color="grey darken-2" @click="prevMonth">
@@ -75,12 +75,21 @@
       </v-menu>
     </v-col>
 
-    <v-col cols="4">
+    <v-col cols="3">
       <div>
         <MonthlyLeaveGraph
           :year="parseInt(currentDate.year)"
           :month="parseInt(currentDate.month) - 1"
-          background="primary lighten-1"
+          background="primary lighten-2"
+          :title="`${currentDate.month}월 출타 인원수`"
+          :status="['accepted']"
+        />
+        <MonthlyLeaveGraph
+          :year="parseInt(currentDate.year)"
+          :month="parseInt(currentDate.month) - 1"
+          background="primary lighten-2"
+          :title="`${currentDate.month}월 신청 대기 인원수`"
+          :status="['pending']"
         />
       </div>
     </v-col>

@@ -163,7 +163,8 @@ exports.getMonthlyStatistics = utils.asyncRoute(async (req, res) => {
   const leaves = leaveAdditionalInfo(
     await Leave.find({
       division: req.user.division,
-      startDate: { $gte: start, $lte: end }
+      startDate: { $gte: start, $lte: end },
+      status: { $in: data.status.split('|') }
     }).populate('tokens')
   )
 
