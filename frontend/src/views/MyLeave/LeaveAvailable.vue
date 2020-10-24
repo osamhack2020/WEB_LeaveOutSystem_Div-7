@@ -316,6 +316,7 @@ export default {
           this.$store.dispatch('endAppLoading')
           this.$set(this.applyList, '휴가', [])
           this.showSuccessAlert()
+          await this.loadAvailables()
         }
       } else if (type === '외출') {
         if (
@@ -335,6 +336,7 @@ export default {
           this.$store.dispatch('endAppLoading')
           this.$set(this.applyList, '외출', [])
           this.showSuccessAlert()
+          await this.loadAvailables()
         }
       } else if (type === '외박') {
         if (
@@ -354,6 +356,7 @@ export default {
           this.$store.dispatch('endAppLoading')
           this.$set(this.applyList, '외박', [])
           this.showSuccessAlert()
+          await this.loadAvailables()
         }
       }
     }
