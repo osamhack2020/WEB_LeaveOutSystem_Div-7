@@ -1,7 +1,7 @@
 {
   "name": "vocat",
   "version": "8.1.5",
-  "description": "https://github.com/davellanedam/node-express-mongodb-jwt-rest-api-skeleton",
+  "description": "",
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=production pm2 start server.js",
