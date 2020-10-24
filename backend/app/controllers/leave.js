@@ -167,7 +167,7 @@ exports.getMonthlyStatistics = utils.asyncRoute(async (req, res) => {
     }).populate('tokens')
   )
 
-  const ret = [...new Array(2)].map((__, index) => {
+  const countData = [...new Array(2)].map((__, index) => {
     return [...new Array(getDaysInMonth(addMonths(start, index)))].map(() => 0)
   })
 
@@ -178,12 +178,12 @@ exports.getMonthlyStatistics = utils.asyncRoute(async (req, res) => {
     })) {
       const monthIdx = differenceInCalendarMonths(day, start)
       if (monthIdx >= 0 && monthIdx < 2) {
-        ret[monthIdx][getDate(day) - 1]++
+        countData[monthIdx][getDate(day) - 1]++
       }
     }
   }
 
-  res.status(200).json(ret)
+  res.status(200).json(countData)
 })
 
 /**

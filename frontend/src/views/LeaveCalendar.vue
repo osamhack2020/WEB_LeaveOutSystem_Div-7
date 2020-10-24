@@ -77,13 +77,10 @@
 
     <v-col cols="4">
       <div>
-        {{ current }}
-        {{ currentDate }}
-      </div>
-      <div>
         <MonthlyLeaveGraph
           :year="parseInt(currentDate.year)"
           :month="parseInt(currentDate.month) - 1"
+          background="primary lighten-1"
         />
       </div>
     </v-col>
