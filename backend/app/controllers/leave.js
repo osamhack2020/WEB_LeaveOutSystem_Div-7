@@ -107,7 +107,9 @@ exports.getLeaves = utils.asyncRoute(async (req, res) => {
   const data = await Leave.find({
     user: req.user._id,
     startDate: { $gte: new Date() }
-  }).populate('tokens')
+  })
+    .populate('tokens')
+    .sort('-startDate')
   res.status(200).json(leaveAdditionalInfo(data))
 })
 
@@ -124,6 +126,7 @@ exports.adminGetApplies = utils.asyncRoute(async (req, res) => {
   const leaves = await Leave.find({ division: req.user.division })
     .populate('tokens')
     .populate('user')
+    .sort('-startDate')
 
   const ret = leaveAdditionalInfo(leaves)
 
@@ -150,6 +153,7 @@ exports.getAccepted = utils.asyncRoute(async (req, res) => {
   })
     .populate('tokens')
     .populate('user')
+    .sort('-startDate')
   const ret = leaveAdditionalInfo(data)
   res.status(200).json(ret)
 })

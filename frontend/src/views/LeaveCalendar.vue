@@ -223,8 +223,10 @@ export default {
       nativeEvent.stopPropagation()
     },
     async loadLeaves() {
+      this.$store.dispatch('startAppLoading')
       this.loading = true
       this.leaves = (await leaveAPI.getAccepted()).data
+      this.$store.dispatch('endAppLoading')
       this.loading = false
     },
     async loadStats() {
