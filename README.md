@@ -40,12 +40,12 @@ Backend Server 조건:
 
 ## 기술 스택 (Technique Used)
 
-### Server(back-end)
+### Backend Server
 
 - [Node.js](https://nodejs.org) + [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
 
-### front-end
+### Frontend
 
 - [Vue.js](https://vuejs.org/)
 - [Vuetify.js](https://vuetifyjs.com/)
