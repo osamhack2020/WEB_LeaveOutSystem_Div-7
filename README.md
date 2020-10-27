@@ -31,23 +31,28 @@
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
+Frontend Browser 조건:
 - ECMAScript 6 지원 브라우저 사용
 - 권장: Google Chrome 버젼 77 이상
 
+Backend Server 조건:
+- Node v12.13.0 이상
+
 ## 기술 스택 (Technique Used)
 
-### Server(back-end)
+### Backend Server
 
-- Node.js + Express
-- MongoDB
+- [Node.js](https://nodejs.org) + [Express](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
 
-### front-end
+### Frontend
 
-- Vue.js
+- [Vue.js](https://vuejs.org/)
+- [Vuetify.js](https://vuetifyjs.com/)
 
 ## 설치 안내 (Installation Process)
 
-- Nodejs, yarn, docker와 git 설치 후 다음 명령들을 실행
+- `Node.js`, `yarn`, `docker`와 `git` 설치 후 다음 명령들을 실행
 
 ```bash
 $ git clone https://github.com/osamhack2020/WEB_LeaveOutSystem_Div-7
