@@ -59,6 +59,8 @@
   </v-dialog>
 </template>
 <script>
+import { compareAsc, parseISO } from 'date-fns'
+
 export default {
   props: {
     value: [Boolean, Array],
@@ -88,11 +90,24 @@ export default {
       //        formValid.expirationDate(this.expirationDate) &&
       //      formValid.reason(this.curLeaveTokenInfo.reason)
       return check
+    },
+    tokenItems() {
+      const ret = [...this.availables]
+        .sort((a, b) =>
+          compareAsc(parseISO(a.expirationDate), parseISO(b.expirationDate))
+        )
+        .sort((a, b) => b.amount - a.amount)
+      for (let i = 0; i < ret.length - 1; i++) {
+        if (Math.floor(Math.random() * 3) === 0) {
+          ;[ret[i], ret[i + 1]] = [ret[i + 1], ret[i]]
+        }
+      }
+      return ret
     }
   },
   methods: {
     clickSubmit() {
-      const len = this.availables.length
+      const len = this.tokenItems.length
       let cnt = 0
       this.recoms = [
         { num: -1, str: '' },
@@ -103,7 +118,7 @@ export default {
         let temp = 0
         for (let k = 0; k < len; k++) {
           if (j & (1 << k)) {
-            temp += this.availables[k].amount
+            temp += this.tokenItems[k].amount
           }
         }
         if (parseInt(temp) === parseInt(this.leaveLength)) {
@@ -118,12 +133,6 @@ export default {
           }
           this.recoms[cnt].num = j
           this.recoms[cnt].str = ''
-          // for (var k = 0; k < len; k++) {
-          //   if (j & (1 << k)) {
-          //     this.recoms[cnt].str += `${String(this.availables[k].kind) +
-          //       String(this.availables[k].amount)``
-          //   }
-          // }
           cnt++
         }
         if (parseInt(cnt) === 3) {
@@ -140,9 +149,9 @@ export default {
     },
     recomItems(val) {
       const ret = []
-      for (let i = 0; i < this.availables.length; i++) {
+      for (let i = 0; i < this.tokenItems.length; i++) {
         if (val & (1 << i)) {
-          ret.push(this.availables[i])
+          ret.push(this.tokenItems[i])
         }
       }
       return ret
