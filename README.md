@@ -2,7 +2,7 @@
 
 출타 신청시의 *소통의 어려움*과 *작업의 불편함*을 해결하는 **자동화된 시스템**
 
-### [시연영상 (YouTube)](https://youtu.be/Hc-uen8y0mc)
+### 시연영상 [![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://youtu.be/Hc-uen8y0mc)](https://youtu.be/Hc-uen8y0mc) 
 
 ## 프로젝트 소개
 
