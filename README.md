@@ -1,40 +1,44 @@
 <p align="center"><img src="LeaveOut-logo.png"></p>
+<p align="center">
+<img alt="GitHub closed pull requests" src="https://img.shields.io/github/issues-pr-closed/osamhack2020/WEB_LeaveOutSystem_Div-7?style=for-the-badge">
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/osamhack2020/WEB_LeaveOutSystem_Div-7?style=for-the-badge">
+<a href="LICENSE.md"><img src="https://img.shields.io/github/license/osamhack2020/WEB_LeaveOutSystem_Div-7?style=for-the-badge" alt="License"></a>
+</p>
+
 
 출타 신청시의 *소통의 어려움*과 *작업의 불편함*을 해결하는 **자동화된 시스템**
 
 ### 시연영상 [![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://youtu.be/Hc-uen8y0mc)](https://youtu.be/Hc-uen8y0mc) 
 
-## 프로젝트 소개
+## 왜 만들었나요?
 
-**기존 출타 종합 과정의 문제점**
+### 행정계원의 단순 노동
 
-1. 출타 종합 시마다 비효율적인 반복 작업을 수행
+2020년에 손으로 써서 신청하고 엑셀로 정리하여 종합합니다. 행정계원 1명이 중대용사 100명분을!
 
-- 2020년에 손으로 써서 신청하고 엑셀로 정리하여 종합합니다. 계원 1명이 중대용사 100명분을!
+### 용사가 보유한 출타 확인불가
 
-2. 용사 본인이 보유한 출타를 확인할 수 없음
+본인이 휴가가 정확히 얼마나 있는지 모릅니다!
 
-- 본인도, 계원도, 중대장도 휴가가 정확히 얼마나 있는지 모릅니다!
+### 출타 승인 여부를 확인할 수 없음
 
-3. 출타 승인 여부를 확인할 수 없음
+신청한 휴가가 혹시 잘렸는지 모두가 하루 세네번씩 행정계원에게 물어봅니다! 계원은 괴롭습니다!
 
-- 신청한 휴가가 혹시 잘렸는지 모두가 하루 세네번씩 계원에게 물어봅니다!
+## 이 체계를 사용하면 뭐가 좋나요?
 
-**새로운 출타관리체계를 사용하면...**
+### 엑셀 노가다는 그만
 
-1. 엑셀 노가다는 그만
+출타 부여, 신청, 승인 등 모든 작업이 자동화된 체계 내에서 동작합니다!
 
-- 출타 부여, 신청, 승인 등 모든 작업이 자동화된 체계 내에서 동작합니다!
+### 계원 찾아 삼만리도 그만
 
-2. 계원 찾아 삼만리도 그만
+로그인 한 번에 보유한 출타, 출타 신청 현황, 승인 여부 등 모든 정보를 확인 가능합니다!
 
-- 로그인 한 번에 보유한 출타, 출타 신청 현황, 승인 여부 등 모든 정보를 확인 가능합니다!
+### 언제 어디서나 나의 출타계획 도우미와 함께
 
-3. 언제 어디서나 나의 출타계획 도우미와 함께
+휴가조합 추천 AI와 출타 통계 기능을 통해 많은 출타 고민들을 용사 대신 해줍니다!
 
-- 휴가조합 추천 AI와 출타 통계 기능을 통해 많은 출타 고민들을 용사 대신 해줍니다!
-
-## 기능 설계
+# 기능 설계
 
 **[Oven](https://ovenapp.io/view/PCf6ZCxAgq8ROY5VMIlacoo4sQgquEBH/Pnctr)**
 
