@@ -5,20 +5,21 @@
 <a href="LICENSE.md"><img src="https://img.shields.io/github/license/osamhack2020/WEB_LeaveOutSystem_Div-7?style=for-the-badge" alt="License"></a>
 </p>
 
-
 출타 신청시의 *소통의 어려움*과 *작업의 불편함*을 해결하는 **자동화된 시스템**
 
-### 시연영상 [![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://youtu.be/Hc-uen8y0mc)](https://youtu.be/Hc-uen8y0mc) 
+## 시연영상
+
+[![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://youtu.be/Hc-uen8y0mc)](https://youtu.be/Hc-uen8y0mc)
 
 ## 왜 만들었나요?
-
-### 행정계원의 단순 노동
-
-2020년에 손으로 써서 신청하고 엑셀로 정리하여 종합합니다. 행정계원 1명이 중대용사 100명분을!
 
 ### 용사가 보유한 출타 확인불가
 
 본인이 휴가가 정확히 얼마나 있는지 모릅니다!
+
+### 행정계원의 단순 노동
+
+2020년에 손으로 써서 신청하고 엑셀로 정리하여 종합합니다. 행정계원 1명이 중대용사 100명분을!
 
 ### 출타 승인 여부를 확인할 수 없음
 
@@ -42,9 +43,10 @@
 
 **[Oven](https://ovenapp.io/view/PCf6ZCxAgq8ROY5VMIlacoo4sQgquEBH/Pnctr)**
 
-#### 페이지 구성
+## 페이지 구성
 
 - **대시보드 페이지**
+
   - 본인의 출타에 관한 모든 정보가 요약되어 한 화면에 표시됩니다. 대시보드는 다음의 5개 영역으로 구성되어 있습니다.
     - 보유한 출타: 본인의 잔여 출타들이 종류별로 분류되어 보유 출타 일수가 표시됩니다.
     - 출타신청 진행 현황: 본인이 신청한 출타들의 상태(승인/거부/대기)가 상태별로 분류되어 그 개수가 표시됩니다.
@@ -53,6 +55,7 @@
     - 출타율 그래프: 내 달력과 연동되어, 최근 2개월의 날짜별 출타율 정보가 꺾은선 그래프로 표시됩니다. 용사들이 출타신청시 언제 출타를 나갈 수 있을지 예측할 때 유용합니다.
 
 - **출타신청 페이지**
+
   - 대시보드의 '보유한 출타' 영역 우측 하단의 자세히 보기 버튼을 클릭하면 표시됩니다.
   - 사용하려는 출타들을 선택하고, 달력에서 출발일을 선택하고 신청하기 버튼을 클릭하면 출타가 신청됩니다.
   - 만료일과 출타길이를 기반으로 조합별 점수를 매겨 최상의 휴가 조합 3개를 추천해주는 **휴가 추천 시스템**을 이용해 출타일수만 결정하면 더 이상의 고민 없이 즉시 신청 가능합니다.
@@ -95,45 +98,55 @@
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
-Frontend Browser 조건:
+#### 브라우저 권장 사항
 
 - ECMAScript 6 지원 브라우저 사용
 - 권장: Google Chrome 버젼 77 이상
 
-Backend Server 조건:
+#### Backend 서버 권장 사항
 
-- Node v12.13.0 이상
+- Node.js v12.13.0 이상
 
-## 기술 스택 (Technique Used)
+## 주요 기술 스택
 
 ### Backend Server
 
-- [Node.js](https://nodejs.org) + [Express](https://expressjs.com/)
+- [Node.js](https://nodejs.org)
+- [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
+- [Passport.js](http://www.passportjs.org/)
 
 ### Frontend
 
 - [Vue.js](https://vuejs.org/)
 - [Vuetify.js](https://vuetifyjs.com/)
+- [Webpack](https://webpack.js.org/)
+- [Chart.js](https://www.chartjs.org/)
 
-## 설치 안내 (Installation Process)
+## 설치 안내
 
-- `Node.js`, `yarn`, `docker`와 `git` 설치 후 다음 명령들을 실행
+1. `node.js`, `yarn`, `docker`, `git` 를 설치
+2. `git clone https://github.com/osamhack2020/WEB_LeaveOutSystem_Div-7` 명령으로 리포지토리를 클론
+3. `/utils` 디렉토리에서 `$ . setup.sh` 명령을 실행
+4. `backend` 디렉토리의 .env 파일의 설정을 변경
+
+## 프로젝트 사용법
+
+#### Backend 실행
 
 ```bash
-$ git clone https://github.com/osamhack2020/WEB_LeaveOutSystem_Div-7
-$ cd util
-$ ./setup.sh
+$ cd backend
+$ yarn dev
 ```
 
-## 프로젝트 사용법 (Getting Started)
+#### Frontend 실행
 
 ```bash
-$ cd util
-$ ./runBack.sh & ./runFront.sh
+$ cd frontend
+$ yarn serve
 ```
 
-## 팀 정보 (Team Information)
+## 팀 정보
 
 박건영 (tekiter8@gmail.com)<br>
 <a href="https://github.com/Tekiter"><img src="https://img.shields.io/badge/Github-Tekiter-green?style=flat&logo=github" alt="Tekiter"></a>
