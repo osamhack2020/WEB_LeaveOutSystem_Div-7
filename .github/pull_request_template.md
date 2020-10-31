@@ -2,30 +2,20 @@
 <!-- PULL REQUEST TEMPLATE -->
 <!-- (Update "[ ]" to "[x]" to check a box) -->
 
-**What kind of change does this PR introduce?** (check at least one)
+**요청하시는 PR은 다음 중 어떤 종류에 해당합니까?** (적어도 한 개는 반드시 선택해 주십시오.)
 
-- [ ] Bugfix
-- [ ] Feature
-- [ ] Code style update
-- [ ] Refactor
-- [ ] Build-related changes
-- [ ] Other, please describe:
+- [ ] 버그 수정
+- [ ] 기능 도입
+- [ ] 코딩 스타일 개선
+- [ ] 소스코드 재작성 (Refactoring)
+- [ ] 빌드 관련 수정
+- [ ] 기타: 어떤 종류의 수정인지 작성해 주십시오.
 
-**Does this PR introduce a breaking change?** (check one)
+**요청하시는 PR이 본 프로젝트에 미치는 영향이 막대합니까?** (한 개만 선택해 주십시오.)
 
-- [ ] Yes
-- [ ] No
+- [ ] 예
+- [ ] 아니오
 
-If yes, please describe the impact and migration path for existing applications:
+'예'를 선택하셨다면, 요청하시는 PR이 본 프로젝트에 미치는 영향을 간략하게 설명해 주십시오.
 
-**The PR fulfills these requirements:**
-
-- [ ] It's submitted to the `dev` branch for v2.x (or to a previous version branch), _not_ the `master` branch
-- [ ] When resolving a specific issue, it's referenced in the PR's title (e.g. `fix #xxx[,#xxx]`, where "xxx" is the issue number)
-- [ ] All tests are passing: https://github.com/vuejs/vue/blob/dev/.github/CONTRIBUTING.md#development-setup
-- [ ] New/updated tests are included
-
-If adding a **new feature**, the PR's description includes:
-- [ ] A convincing reason for adding this feature (to avoid wasting your time, it's best to open a suggestion issue first and wait for approval before working on it)
-
-**Other information:**
+**기타 정보:**
