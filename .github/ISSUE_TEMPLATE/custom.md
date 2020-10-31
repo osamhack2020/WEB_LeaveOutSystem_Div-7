@@ -1,9 +1,9 @@
 ---
 name: Custom issue template
-about: Describe this issue template's purpose here.
+about: 기타 이슈 요청을 해 주십시오.
 title: ''
 labels: ''
-assignees: ''
+assignees: ask-to-answer
 
 ---
 
