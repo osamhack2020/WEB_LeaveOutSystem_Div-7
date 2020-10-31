@@ -41,7 +41,9 @@
 
 # 기능 설계
 
-**[Oven](https://ovenapp.io/view/PCf6ZCxAgq8ROY5VMIlacoo4sQgquEBH/Pnctr)**
+[Material Design](https://material.io/design)을 구현하는 [Vuetify](https://vuetifyjs.com/) 프레임워크의 컴포넌트를 기능 설계에 적극 반영했습니다.
+
+화면 프로토타이핑 : **[Oven](https://ovenapp.io/project/Ssz5u13m47E8z9oT43z7yPoOLxuVUejD#UxmBb)**
 
 ## 유저 페이지 구성
 
@@ -236,11 +238,11 @@
 # 팀 정보
 
 박건영 (tekiter8@gmail.com)<br>
-<a href="https://github.com/Tekiter"><img src="https://img.shields.io/badge/Github-Tekiter-green?style=flat&logo=github" alt="Tekiter"></a>
+<a href="https://github.com/Tekiter"><img src="https://img.shields.io/badge/Github-Tekiter-green?style=flat&logo=github&color=blue" alt="Tekiter"></a>
 
 백도원 (bkdo1006@naver.com)<br>
-<a href="https://github.com/ask-to-answer"><img src="https://img.shields.io/badge/Github-ask--to--answer-green?style=flat&logo=github" alt="ask-to-answer"></a>
+<a href="https://github.com/ask-to-answer"><img src="https://img.shields.io/badge/Github-ask--to--answer-green?style=flat&logo=github&color=blue" alt="ask-to-answer"></a>
 
 # 저작권 및 사용권 정보 (Copyleft / End User License)
 
-<a href="LICENSE.md"><img src="https://img.shields.io/github/license/osamhack2020/WEB_LeaveOutSystem_Div-7?label=%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4" alt="License"></a>
+<a href="LICENSE.md"><img src="https://img.shields.io/github/license/osamhack2020/WEB_LeaveOutSystem_Div-7?label=%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4&" alt="License"></a>
