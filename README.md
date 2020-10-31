@@ -98,12 +98,6 @@
 
 ![Status](documentation/screenshots/Status.PNG)
 
-## 관리자 페이지 구성
-
-### 출타신청 현황 조회
-
-![CheckApply](documentation/screenshots/CheckApply.PNG)
-
 대시보드의 '출타신청 현황' 영역 우측 하단의 자세히 보기 버튼을 클릭하면 표시됩니다.
 
 본인이 신청한 출타들의 상태가 상태별로(승인/거부/대기) 분류되어 조회됩니다.
@@ -112,8 +106,28 @@
 
 <table>
    <tbody>
-<tr><td>신청한 모든 출타의 상세 정보를 조회</td></tr>
+<tr><td>본인이 신청한 모든 출타의 상세 정보를 조회</td></tr>
 <tr><td>승인된, 거부된, 승인대기중인 출타들의 목록을 각각 조회</td></tr>
+   </tbody>
+</table>
+
+## 관리자 페이지 구성
+
+### 출타신청 현황 조회
+
+![CheckApply](documentation/screenshots/CheckApply.PNG)
+
+상단 바의 출타관리 탭을 클릭한 후 출타승인 탭을 선택하면 표시되는 페이지입니다.
+
+관리자 소속 부대의 용사들이 신청한 모든 출타가 조회되며, 각각의 출타를 승인 또는 거부할 수 있습니다.
+
+#### 기능
+
+<table>
+   <tbody>
+<tr><td>관리자 소속 부대의 용사들이 신청한 모든 출타의 상세 정보를 조회</td></tr>
+<tr><td>특정 용사가 신청한 출타를 검색</td></tr>
+<tr><td>각각의 출타를 승인 또는 거부</td></tr>
    </tbody>
 </table>
 
@@ -121,9 +135,37 @@
 
 ![LeaveToken](documentation/screenshots/LeaveToken.PNG)
 
+상단 바의 출타관리 탭을 클릭한 후 출타부여 탭을 선택하면 표시되는 페이지입니다.
+
+새 출타를 생성할 수 있으며, 생성된 출타를 관리자 소속 부대의 용사들에게 부여할 수 있습니다.
+
+#### 기능
+
+<table>
+   <tbody>
+<tr><td>새 출타를 생성</td></tr>
+<tr><td>생성된 출타 정보를 수정 또는 삭제</td></tr>
+<tr><td>출타를 관리자 소속 부대의 용사들에게 부여</td></tr>
+   </tbody>
+</table>
+
 ### 출타 달력
 
 ![Calendar](documentation/screenshots/Calendar.PNG)
+
+상단 바의 출타달력 탭을 선택하면 표시되는 페이지입니다.
+
+관리자 소속 부대 용사들의 모든 출타 일정이 달력에 조회되며, 날짜별 출타율 변화 추이 그래프와 함께 표시됩니다.
+
+#### 기능
+
+<table>
+   <tbody>
+<tr><td>관리자 소속 부대 용사들의 모든 출타 일정 조회</td></tr>
+<tr><td>용사들의 각 출타에 대한 상세 정보(특정 출타의 근거 등) 조회</td></tr>
+<tr><td>날짜별 출타율 변화 추이 그래프 조회</td></tr>
+   </tbody>
+</table>
 
 # 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
