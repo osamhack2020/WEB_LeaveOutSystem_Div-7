@@ -13,29 +13,29 @@
 
 ## 왜 만들었나요?
 
-### 용사가 보유한 출타 확인불가
+#### 용사가 보유한 출타 확인불가
 
 본인이 휴가가 정확히 얼마나 있는지 모릅니다!
 
-### 행정계원의 단순 노동
+#### 행정계원의 단순 노동
 
 2020년에 손으로 써서 신청하고 엑셀로 정리하여 종합합니다. 행정계원 1명이 중대용사 100명분을!
 
-### 출타 승인 여부를 확인할 수 없음
+#### 출타 승인 여부를 확인할 수 없음
 
 신청한 휴가가 혹시 잘렸는지 모두가 하루 세네번씩 행정계원에게 물어봅니다! 계원은 괴롭습니다!
 
 ## 뭐가 좋나요?
 
-### 엑셀 노가다는 그만
+#### 엑셀 노가다는 그만
 
 출타 부여, 신청, 승인 등 모든 작업이 자동화된 체계 내에서 동작합니다!
 
-### 계원 찾아 삼만리도 그만
+#### 계원 찾아 삼만리도 그만
 
 로그인 한 번에 보유한 출타, 출타 신청 현황, 승인 여부 등 모든 정보를 확인 가능합니다!
 
-### 언제 어디서나 나의 출타계획 도우미와 함께
+#### 언제 어디서나 나의 출타계획 도우미와 함께
 
 휴가조합 추천 AI와 출타 통계 기능을 통해 많은 출타 고민들을 용사 대신 해줍니다!
 
@@ -125,7 +125,7 @@
 
 ![Calendar](documentation/screenshots/Calendar.PNG)
 
-## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
+# 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
 #### 브라우저 권장 사항
 
@@ -136,7 +136,7 @@
 
 - Node.js v12.13.0 이상
 
-## 주요 기술 스택
+# 주요 기술 스택
 
 ### Backend Server
 
@@ -152,7 +152,7 @@
 - [Webpack](https://webpack.js.org/)
 - [Chart.js](https://www.chartjs.org/)
 
-## 설치 안내
+# 설치 안내
 
 1. `node.js`, `yarn`, `docker`, `git` 를 설치
 2. `$ git clone https://github.com/osamhack2020/WEB_LeaveOutSystem_Div-7` 명령으로 리포지토리를 클론
@@ -161,7 +161,7 @@
 
 자세한 정보는 [Startup Guide](documentation/startup_guide.md) 문서를 참고하세요.
 
-## 프로젝트 사용법
+# 프로젝트 사용법
 
 #### Backend 실행
 
@@ -177,7 +177,7 @@ $ cd frontend
 $ yarn serve
 ```
 
-## 팀 정보
+# 팀 정보
 
 박건영 (tekiter8@gmail.com)<br>
 <a href="https://github.com/Tekiter"><img src="https://img.shields.io/badge/Github-Tekiter-green?style=flat&logo=github" alt="Tekiter"></a>
@@ -185,6 +185,6 @@ $ yarn serve
 백도원 (bkdo1006@naver.com)<br>
 <a href="https://github.com/ask-to-answer"><img src="https://img.shields.io/badge/Github-ask--to--answer-green?style=flat&logo=github" alt="ask-to-answer"></a>
 
-## 저작권 및 사용권 정보 (Copyleft / End User License)
+# 저작권 및 사용권 정보 (Copyleft / End User License)
 
 <a href="LICENSE.md"><img src="https://img.shields.io/github/license/osamhack2020/WEB_LeaveOutSystem_Div-7?label=%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4" alt="License"></a>
