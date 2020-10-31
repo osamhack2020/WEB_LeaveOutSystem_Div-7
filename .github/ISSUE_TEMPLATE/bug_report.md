@@ -1,4 +1,10 @@
 ---
-제목:
-설명: 신고하려는 오류의 내용을 상세하게 작성해 주십시오.
+name: 
+about: 
+title: 
+labels: 
+assignees: 
+
 ---
+
+
