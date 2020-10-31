@@ -75,3 +75,14 @@ $ cp -r frontend/dist backend/public
 ```bash
 $ yarn start
 ```
+
+## 유의사항
+
+초기 어드민계정 정보는 다음과 같습니다.
+
+```
+username: admin
+password: 12345
+```
+
+사용전에 비밀번호를 변경하는것을 추천합니다.

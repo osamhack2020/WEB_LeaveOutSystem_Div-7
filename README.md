@@ -152,6 +152,38 @@
 - [Webpack](https://webpack.js.org/)
 - [Chart.js](https://www.chartjs.org/)
 
+# 프로젝트 구조
+
+```
+├── backend                   // 백엔드 디렉터리
+│   ├── app
+│   │   ├── controllers       // route 구현 코드
+│   │   ├── middleware        // route helper 코드
+│   │   ├── models            // DB 모델 정의
+│   │   └── routes            // route 정의
+│   ├── config
+│   ├── data                  // 초기 설정된
+│   ├── public                // 빌드된 frontend 위치
+│   ├── test
+│   └── views
+├── frontend                  // 프론트엔드 디렉터리
+│   ├── public
+│   └── src
+│       ├── assets
+│       ├── components        // 컴포넌트
+│       │   ├── core          // 공통으로 사용되는 컴포넌트
+│       │   └── myleave       // 내 출타 페이지의 컴포넌트
+│       ├── plugins
+│       ├── router
+│       │   └── routes        // 페이지 route 정의
+│       ├── services          // API helper 코드
+│       ├── store             // Vuex 상태 코드
+│       │   └── modules
+│       ├── utils
+│       └── views             // 페이지
+│           └── MyLeave       // 내 출타 페이지
+```
+
 # 설치 안내
 
 1. `node.js`, `yarn`, `docker`, `git` 를 설치
