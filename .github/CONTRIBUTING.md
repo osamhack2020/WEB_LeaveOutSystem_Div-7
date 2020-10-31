@@ -4,12 +4,23 @@
 
 시작하기 전에 [기여자 행동 강령 규약](CODE_OF_CONDUCT)에 대해 읽어보시길 바랍니다.
 
+## Issue
+
+기능제안, 버그, 불만사항 어떤것이든 괜찮습니다! 편하게 이슈를 제안해주세요.
+[이슈 템플릿](https://github.com/osamhack2020/WEB_LeaveOutSystem_Div-7/tree/master/.github/ISSUE_TEMPLATE)을 참고해 이슈를 만들면 됩니다..
+
 ## Pull Request
 
 - master 브랜치에는 항상 바로 사용 가능한 안정된 버전이 올라와 있어야합니다. Pull Request 하기 전 완성된 코드인지 확인해야 합니다.
 - 한 기능 단위당 한 Pull Request 여야 합니다.
 - `yarn lint` 명령으로 lint 되어있는 코드여야합니다.
 - 기능을 추가할 땐, 파일 구조가 다른 파일들과 조화로워야 합니다.
+- [Pull Request 템플릿](https://github.com/osamhack2020/WEB_LeaveOutSystem_Div-7/blob/master/.github/pull_request_template.md) 을 참고하세요.
+
+## API 문서
+
+백엔드에 사용된 API가 문서화되어 있습니다.
+[출타관리체계 REST API 문서](/documentation/API.md)를 참고하세요.
 
 ## 빠른 개발환경 세팅
 
