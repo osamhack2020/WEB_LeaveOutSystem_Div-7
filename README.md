@@ -43,7 +43,7 @@
 
 [Material Design](https://material.io/design)을 구현하는 [Vuetify](https://vuetifyjs.com/) 프레임워크의 컴포넌트를 기능 설계에 적극 반영했습니다.
 
-화면 프로토타이핑 : **[Oven](https://ovenapp.io/project/Ssz5u13m47E8z9oT43z7yPoOLxuVUejD#UxmBb)**
+화면 프로토타이핑 : **[Oven](https://ovenapp.io/project/Ssz5u13m47E8z9oT43z7yPoOLxuVUejD#Pnctr)**
 
 ## 유저 페이지 구성
 
