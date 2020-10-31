@@ -145,7 +145,7 @@
    <tbody>
 <tr><td>새 출타를 생성</td></tr>
 <tr><td>생성된 출타 정보를 수정 또는 삭제</td></tr>
-<tr><td>출타를 관리자 소속 부대의 용사들에게 부여</td></tr>
+<tr><td>관리자 소속 부대의 용사들에게 출타를 부여</td></tr>
    </tbody>
 </table>
 
@@ -166,6 +166,42 @@
 <tr><td>날짜별 출타율 변화 추이 그래프 조회</td></tr>
    </tbody>
 </table>
+
+### 유저 관리
+
+![User](documentation/screenshots/User.PNG)
+
+상단 바의 유저관리 탭을 선택하면 표시되는 페이지입니다.
+
+관리자 소속 부대 용사들의 유저 정보를 추가, 수정, 삭제할 수 있습니다.
+
+#### 기능
+
+<table>
+   <tbody>
+<tr><td>관리자 소속 부대 용사들의 유저 정보 추가, 수정, 삭제</td></tr>
+   </tbody>
+</table>
+
+## 총관리자 페이지 구성
+
+### 부대 관리
+
+![Division](documentation/screenshots/Division.PNG)
+
+상단 바의 부대관리 탭을 선택하면 표시되는 페이지입니다.
+
+부대 정보를 추가, 수정, 삭제할 수 있습니다.
+
+#### 기능
+
+<table>
+   <tbody>
+<tr><td>부대 정보 추가, 수정, 삭제</td></tr>
+<tr><td>각 부대의 관리자 및 소속 인원수 조회</td></tr>
+   </tbody>
+</table>
+
 
 # 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
