@@ -169,7 +169,7 @@
 
 ### 유저 관리
 
-![User](documentation/screenshots/User.PNG)
+![ManageUser](documentation/screenshots/ManageUser.PNG)
 
 상단 바의 유저관리 탭을 선택하면 표시되는 페이지입니다.
 
@@ -187,7 +187,7 @@
 
 ### 부대 관리
 
-![Division](documentation/screenshots/Division.PNG)
+![ManageDivision](documentation/screenshots/ManageDivision.PNG)
 
 상단 바의 부대관리 탭을 선택하면 표시되는 페이지입니다.
 
@@ -201,7 +201,6 @@
 <tr><td>각 부대의 관리자 및 소속 인원수 조회</td></tr>
    </tbody>
 </table>
-
 
 # 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
@@ -230,62 +229,9 @@
 - [Webpack](https://webpack.js.org/)
 - [Chart.js](https://www.chartjs.org/)
 
-# 프로젝트 구조
+# 설치 안내 & 프로젝트 사용법
 
-```
-├── backend                   // 백엔드 디렉터리
-│   ├── app
-│   │   ├── controllers       // route 구현 코드
-│   │   ├── middleware        // route helper 코드
-│   │   ├── models            // DB 모델 정의
-│   │   └── routes            // route 정의
-│   ├── config
-│   ├── data                  // 초기 설정된
-│   ├── public                // 빌드된 frontend 위치
-│   ├── test
-│   └── views
-├── frontend                  // 프론트엔드 디렉터리
-│   ├── public
-│   └── src
-│       ├── assets
-│       ├── components        // 컴포넌트
-│       │   ├── core          // 공통으로 사용되는 컴포넌트
-│       │   └── myleave       // 내 출타 페이지의 컴포넌트
-│       ├── plugins
-│       ├── router
-│       │   └── routes        // 페이지 route 정의
-│       ├── services          // API helper 코드
-│       ├── store             // Vuex 상태 코드
-│       │   └── modules
-│       ├── utils
-│       └── views             // 페이지
-│           └── MyLeave       // 내 출타 페이지
-```
-
-# 설치 안내
-
-1. `node.js`, `yarn`, `docker`, `git` 를 설치
-2. `$ git clone https://github.com/osamhack2020/WEB_LeaveOutSystem_Div-7` 명령으로 리포지토리를 클론
-3. `/utils` 디렉토리에서 `$ . setup.sh` 명령을 실행
-4. `backend` 디렉토리의 .env 파일의 설정을 변경
-
-자세한 정보는 [Startup Guide](documentation/startup_guide.md) 문서를 참고하세요.
-
-# 프로젝트 사용법
-
-#### Backend 실행
-
-```bash
-$ cd backend
-$ yarn dev
-```
-
-#### Frontend 실행
-
-```bash
-$ cd frontend
-$ yarn serve
-```
+[기여 가이드](.github/CONTRIBUTING.md) 문서를 참고하세요.
 
 # 팀 정보
 
