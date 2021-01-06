@@ -29,7 +29,7 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-prettier": "^6.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.10.0",
     "eslint-config-formidable": "^4.0.0",
