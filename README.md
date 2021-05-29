@@ -1,3 +1,7 @@
+본 프로젝트는 [2020 군장병 공개SW 온라인 해커톤](https://osam.kr/main/page.jsp?pid=offline.offline19)에 출품했던 프로젝트입니다.
+
+----------
+
 <p align="center"><img src="LeaveOut-logo.png"></p>
 <p align="center">
 <img alt="GitHub closed pull requests" src="https://img.shields.io/github/issues-pr-closed/osamhack2020/WEB_LeaveOutSystem_Div-7?style=for-the-badge">
